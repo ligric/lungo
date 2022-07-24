@@ -3,9 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32427.441
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Latte.Wpf", "src\Latte.Wpf\Latte.Wpf.csproj", "{91924F20-6576-4173-A407-C70BB5F9F517}"
+EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Latte.Wpf.Shared", "src\Latte.Wpf.Shared\Latte.Wpf.Shared.shproj", "{92947F5D-8BF2-4F00-8C21-01A6F0C74EEF}"
 EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{91924F20-6576-4173-A407-C70BB5F9F517}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91924F20-6576-4173-A407-C70BB5F9F517}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91924F20-6576-4173-A407-C70BB5F9F517}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91924F20-6576-4173-A407-C70BB5F9F517}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
@@ -13,6 +25,7 @@ Global
 		SolutionGuid = {31C0B654-F611-4FA4-AD53-348F9B5EB0C3}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\Latte.Wpf.Shared\Latte.Wpf.Shared.projitems*{91924f20-6576-4173-a407-c70bb5f9f517}*SharedItemsImports = 5
 		src\Latte.Wpf.Shared\Latte.Wpf.Shared.projitems*{92947f5d-8bf2-4f00-8c21-01a6f0c74eef}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal
