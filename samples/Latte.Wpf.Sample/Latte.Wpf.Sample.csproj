@@ -20,6 +20,10 @@
 		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\..\src\Latte.Wpf\Latte.Wpf.csproj" />
+	</ItemGroup>
+
 	<Import Project="..\Latte.Wpf.Sample.Shared\Latte.Wpf.Sample.Shared.projitems" Label="Shared" />
 
 </Project>
