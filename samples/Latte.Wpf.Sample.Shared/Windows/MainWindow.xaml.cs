@@ -8,5 +8,10 @@ namespace Latte.Wpf.Sample.Windows
         {
             this.InitializeComponent();
         }
+
+        private void OnTestButtonClicked(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
