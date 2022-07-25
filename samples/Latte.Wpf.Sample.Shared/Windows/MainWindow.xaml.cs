@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Media;
 
 namespace Latte.Wpf.Sample.Windows
 {
@@ -11,7 +12,7 @@ namespace Latte.Wpf.Sample.Windows
 
         private void OnTestButtonClicked(object sender, RoutedEventArgs e)
         {
-
+            Border0.SetResourceReference(BackgroundProperty, "Light");
         }
     }
 }
