@@ -8,11 +8,72 @@
             <SolidColorBrush x:Key="Light">#cac4b8</SolidColorBrush>
         </ResourceDictionary>
     </Window.Resources>
-    
+
     <Grid>
         <UniformGrid Columns="4" Background="#1e1e1e">
-            <Border x:Name="Border0" Background="{StaticResource Dark}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
-                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+            <Border x:Name="Border0" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
+                    ap:SolarEclipse.ThemeChangingSubscribe="True">
+                <Border.Background>
+                    <DrawingBrush>
+                        <DrawingBrush.Drawing>
+                            <DrawingGroup>
+
+                                <!-- Old Backgroud -->
+                                <GeometryDrawing Brush="Red">
+                                    <GeometryDrawing.Geometry>
+                                        <RectangleGeometry x:Name="backgorundRectangle" Rect="0,0,100,100" />
+                                    </GeometryDrawing.Geometry>
+                                </GeometryDrawing>
+
+                                <GeometryDrawing Brush="Yellow">
+                                    <GeometryDrawing.Geometry>
+                                        <PathGeometry>
+                                            <PathGeometry.Figures>
+                                                <PathFigureCollection>
+
+                                                    <!-- [100,0] to [0,0] -->
+                                                    <PathFigure x:Name="topRightToLeftPint" StartPoint="100,0">
+                                                        <PathFigure.Segments>
+                                                            <PathSegmentCollection>
+                                                                <LineSegment Point="100,0"/>
+
+                                                                <!-- [100,0] to [100,100] -->
+                                                                <LineSegment x:Name="rightUpToDownPoint" Point="100,100"/>
+
+
+                                                                <!-- [100, upToDownPoint.Y] -> [100,100] to [0,100] -->
+                                                                <LineSegment x:Name="downRightToLeftPoint" Point="100,100"/>
+                                                                
+                                                                <!--<BezierSegment Point1="0,100"/>-->
+                                                            </PathSegmentCollection>
+                                                        </PathFigure.Segments>
+                                                    </PathFigure>
+                                                </PathFigureCollection>
+                                            </PathGeometry.Figures>
+                                        </PathGeometry>
+                                    </GeometryDrawing.Geometry>
+                                </GeometryDrawing>
+
+
+                            </DrawingGroup>
+                        </DrawingBrush.Drawing>
+                    </DrawingBrush>
+                </Border.Background>
+
+                <Border.Triggers>
+                    <EventTrigger RoutedEvent="Border.MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <PointAnimation Storyboard.TargetProperty="(PathFigure.StartPoint)"
+                                                Storyboard.TargetName="topRightToLeftPint"
+                                                Duration="0:0:2" From="100,0" To="0,0"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Border.Triggers>
+
+            </Border>
+
             <Border x:Name="Border1" Background="{StaticResource Dark}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
                     ap:SolarEclipse.ThemeChangingSubscribe="True"/>
             <Border x:Name="Border2" Background="{StaticResource Dark}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
@@ -21,24 +82,11 @@
                     ap:SolarEclipse.ThemeChangingSubscribe="True"/>
             <Border x:Name="Border4" Background="{StaticResource Dark}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
                     ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-            <Border x:Name="Border5" Background="{StaticResource Dark}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
+            <Border x:Name="Border5" Background="{StaticResource Light}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
                     ap:SolarEclipse.ThemeChangingSubscribe="True"/>
         </UniformGrid>
 
         <Button Width="100" Height="100" Margin="20" Click="OnTestButtonClicked"
-                HorizontalAlignment="Right" VerticalAlignment="Top">
-            <Button.Triggers>
-                <EventTrigger RoutedEvent="Button.MouseLeave">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <ColorAnimation To="Green" 
-                                    Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)" 
-                                    FillBehavior="Stop" 
-                                    Duration="0:0:1"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </Button.Triggers>
-        </Button>
+                HorizontalAlignment="Right" VerticalAlignment="Top"/>
     </Grid>
 </Window>
