@@ -11,7 +11,7 @@
 
     <Grid>
         <UniformGrid Columns="4" Background="#1e1e1e">
-            <Border x:Name="Border0" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
+            <Border x:Name="Border0" CornerRadius="10" Margin="10" BorderThickness="1"
                     ap:SolarEclipse.ThemeChangingSubscribe="True">
                 <Border.Background>
                     <DrawingBrush>
@@ -19,9 +19,13 @@
                             <DrawingGroup>
 
                                 <!-- Old Backgroud -->
-                                <GeometryDrawing Brush="Red">
+                                <GeometryDrawing>
+                                    <GeometryDrawing.Brush>
+                                        <SolidColorBrush x:Name="backgroundBrush" Color="Orange" />
+                                    </GeometryDrawing.Brush>
+                                    
                                     <GeometryDrawing.Geometry>
-                                        <RectangleGeometry x:Name="backgorundRectangle" Rect="0,0,100,100" />
+                                        <RectangleGeometry Rect="0,0,100,100" />
                                     </GeometryDrawing.Geometry>
                                 </GeometryDrawing>
 
@@ -38,13 +42,16 @@
                                                                 <LineSegment Point="100,0"/>
 
                                                                 <!-- [100,0] to [100,100] -->
-                                                                <LineSegment x:Name="rightUpToDownPoint" Point="100,100"/>
+                                                                <LineSegment x:Name="rightUpToDownPoint" Point="100,0"/>
 
 
                                                                 <!-- [100, upToDownPoint.Y] -> [100,100] to [0,100] -->
                                                                 <LineSegment x:Name="downRightToLeftPoint" Point="100,100"/>
-                                                                
-                                                                <!--<BezierSegment Point1="0,100"/>-->
+
+                                                                <!-- [100, downRightToLeftPoint.Y] -> [100,0] to [0,100] -->
+                                                                <!-- [100, downRightToLeftPoint.Y] -> [100,0] to [0,0] -->
+                                                                <!-- [100, downRightToLeftPoint.Y] -> [100,0] to [0,0] -->
+                                                                <BezierSegment x:Name="sezierSegment" Point1="100,0" Point2="100,0" Point3="100,0"/>
                                                             </PathSegmentCollection>
                                                         </PathFigure.Segments>
                                                     </PathFigure>
@@ -53,7 +60,6 @@
                                         </PathGeometry>
                                     </GeometryDrawing.Geometry>
                                 </GeometryDrawing>
-
 
                             </DrawingGroup>
                         </DrawingBrush.Drawing>
@@ -66,7 +72,40 @@
                             <Storyboard>
                                 <PointAnimation Storyboard.TargetProperty="(PathFigure.StartPoint)"
                                                 Storyboard.TargetName="topRightToLeftPint"
-                                                Duration="0:0:2" From="100,0" To="0,0"/>
+                                                Duration="0:0:4"
+                                                From="100,0" To="0,0"/>
+
+                                <PointAnimation Storyboard.TargetProperty="(LineSegment.Point)"
+                                                Storyboard.TargetName="rightUpToDownPoint"
+                                                Duration="0:0:2" 
+                                                From="100,0" To="100,100"/>
+
+                                <PointAnimation Storyboard.TargetProperty="(LineSegment.Point)"
+                                                Storyboard.TargetName="downRightToLeftPoint"
+                                                BeginTime="0:0:2" Duration="0:0:4" 
+                                                From="100,100" To="0,100"/>
+
+
+
+                                <PointAnimation Storyboard.TargetProperty="(BezierSegment.Point1)"
+                                                Storyboard.TargetName="sezierSegment"
+                                                BeginTime="0:0:2" Duration="0:0:4"
+                                                From="100,0" To="0,100"/>
+
+                                <PointAnimation Storyboard.TargetProperty="(BezierSegment.Point2)"
+                                                Storyboard.TargetName="sezierSegment"
+                                                BeginTime="0:0:1" Duration="0:0:2" 
+                                                From="100,0" To="0,0"/>
+
+                                <PointAnimation Storyboard.TargetProperty="(BezierSegment.Point3)"
+                                                Storyboard.TargetName="sezierSegment"
+                                                Duration="0:0:1" 
+                                                From="100,0" To="0,0"/>
+
+                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="Color"
+                                                              Storyboard.TargetName="backgroundBrush" Duration="0:0:3">
+                                    <EasingColorKeyFrame Value="Green"/>
+                                </ColorAnimationUsingKeyFrames>
                             </Storyboard>
                         </BeginStoryboard>
                     </EventTrigger>
