@@ -103,8 +103,8 @@
                                                 From="100,0" To="0,0"/>
 
                                 <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="Color"
-                                                              Storyboard.TargetName="backgroundBrush" Duration="0:0:3">
-                                    <EasingColorKeyFrame Value="Green"/>
+                                                              Storyboard.TargetName="backgroundBrush" Duration="0:0:2">
+                                    <EasingColorKeyFrame Value="#2b2731"/>
                                 </ColorAnimationUsingKeyFrames>
                             </Storyboard>
                         </BeginStoryboard>
