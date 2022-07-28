@@ -4,126 +4,73 @@
 
     <Window.Resources>
         <ResourceDictionary>
+            <!-- =============================================================================== -->
+
             <SolidColorBrush x:Key="Dark">#161e28</SolidColorBrush>
+            
             <SolidColorBrush x:Key="Light">#cac4b8</SolidColorBrush>
 
-
-
-            <SolidColorBrush x:Key="backgroundBrush" Color="Orange" />
-            <BezierSegment x:Key="sezierSegment" Point1="100,0" Point2="100,0" Point3="100,0"/>
-            <LineSegment x:Key="downRightToLeftPoint" Point="100,100"/>
-            <LineSegment x:Key="rightUpToDownPoint" Point="100,0"/>
-
+            <!-- =============================================================================== -->
+            
+            <BezierSegment x:Key="SezierSegment" Point1="100,0" Point2="100,0" Point3="100,0"/>
+            
+            <LineSegment x:Key="DownRightToLeftPoint" Point="100,100"/>
+            
+            <LineSegment x:Key="RightUpToDownPoint" Point="100,0"/>
+            
+            <SolidColorBrush x:Key="BackgroundBrush">Orange</SolidColorBrush>
+            
             <!-- [100,0] to [0,0] -->
-            <PathFigure x:Key="topRightToLeftPint" StartPoint="100,0">
+            <PathFigure x:Key="TopRightToLeftPoint" StartPoint="100,0">
                 <PathFigure.Segments>
                     <PathSegmentCollection>
                         <LineSegment Point="100,0"/>
-
                         <!--[100,0] to [100,100]-->
-                        <StaticResourceExtension ResourceKey="rightUpToDownPoint"/>
-
-
+                        <StaticResource ResourceKey="RightUpToDownPoint"/>
                         <!--[100, upToDownPoint.Y] -> [100,100] to [0,100]-->
-                        <StaticResourceExtension ResourceKey="downRightToLeftPoint"/>
-
+                        <StaticResource ResourceKey="DownRightToLeftPoint"/>
                         <!--[100, downRightToLeftPoint.Y] -> [100,0] to [0,100]-->
                         <!--[100, downRightToLeftPoint.Y] -> [100,0] to [0,0]-->
                         <!--[100, downRightToLeftPoint.Y] -> [100,0] to [0,0]-->
-                        <StaticResource ResourceKey="sezierSegment"/>
+                        <StaticResource ResourceKey="SezierSegment"/>
                     </PathSegmentCollection>
                 </PathFigure.Segments>
             </PathFigure>
 
+            <GeometryDrawing x:Key="BackgroundGeometryDrawing" Brush="{DynamicResource BackgroundBrush}">
+                <GeometryDrawing.Geometry>
+                    <RectangleGeometry Rect="0,0,100,100" />
+                </GeometryDrawing.Geometry>
+            </GeometryDrawing>
 
-
-            <DrawingBrush x:Key="TestDrowingBrush">
+            <DrawingBrush x:Key="BurntLeafDrowingBrush">
                 <DrawingBrush.Drawing>
                     <DrawingGroup>
-
-                        <!-- Old Backgroud -->
-                        <GeometryDrawing>
-                            <GeometryDrawing.Brush>
-                                <StaticResourceExtension ResourceKey="backgroundBrush"/>
-                            </GeometryDrawing.Brush>
-
-                            <GeometryDrawing.Geometry>
-                                <RectangleGeometry Rect="0,0,100,100" />
-                            </GeometryDrawing.Geometry>
-                        </GeometryDrawing>
-
+                        <StaticResource ResourceKey="BackgroundGeometryDrawing"/>
+                        
                         <GeometryDrawing Brush="Yellow">
                             <GeometryDrawing.Geometry>
                                 <PathGeometry>
                                     <PathGeometry.Figures>
                                         <PathFigureCollection>
-                                            <StaticResource ResourceKey="topRightToLeftPint"/>
+                                            <StaticResource ResourceKey="TopRightToLeftPoint"/>
                                         </PathFigureCollection>
                                     </PathGeometry.Figures>
                                 </PathGeometry>
                             </GeometryDrawing.Geometry>
                         </GeometryDrawing>
-
                     </DrawingGroup>
                 </DrawingBrush.Drawing>
             </DrawingBrush>
-
-
-
-
+            
+            <!-- =============================================================================== -->
         </ResourceDictionary>
     </Window.Resources>
 
     <Grid>
         <UniformGrid Columns="4" Background="#1e1e1e">
             <Border x:Name="Border0" CornerRadius="10" Margin="10" BorderThickness="1"
-                    ap:SolarEclipse.ThemeChangingSubscribe="True" Background="{StaticResource TestDrowingBrush}">
-
-                <Border.Triggers>
-                    <EventTrigger RoutedEvent="Border.MouseEnter">
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <PointAnimation Storyboard.TargetProperty="(PathFigure.StartPoint)"
-                                                Storyboard.TargetName="topRightToLeftPint"
-                                                Duration="0:0:4"
-                                                From="100,0" To="0,0"/>
-
-                                <PointAnimation Storyboard.TargetProperty="(LineSegment.Point)"
-                                                Storyboard.TargetName="rightUpToDownPoint"
-                                                Duration="0:0:2" 
-                                                From="100,0" To="100,100"/>
-
-                                <PointAnimation Storyboard.TargetProperty="(LineSegment.Point)"
-                                                Storyboard.TargetName="downRightToLeftPoint"
-                                                BeginTime="0:0:2" Duration="0:0:4" 
-                                                From="100,100" To="0,100"/>
-
-
-
-                                <PointAnimation Storyboard.TargetProperty="(BezierSegment.Point1)"
-                                                Storyboard.TargetName="sezierSegment"
-                                                BeginTime="0:0:2" Duration="0:0:4"
-                                                From="100,0" To="0,100"/>
-
-                                <PointAnimation Storyboard.TargetProperty="(BezierSegment.Point2)"
-                                                Storyboard.TargetName="sezierSegment"
-                                                BeginTime="0:0:1" Duration="0:0:2" 
-                                                From="100,0" To="0,0"/>
-
-                                <PointAnimation Storyboard.TargetProperty="(BezierSegment.Point3)"
-                                                Storyboard.TargetName="sezierSegment"
-                                                Duration="0:0:1" 
-                                                From="100,0" To="0,0"/>
-
-                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="Color"
-                                                              Storyboard.TargetName="backgroundBrush" Duration="0:0:2">
-                                    <EasingColorKeyFrame Value="#2b2731"/>
-                                </ColorAnimationUsingKeyFrames>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                </Border.Triggers>
-            </Border>
+                    ap:SolarEclipse.ThemeChangingSubscribe="True" Background="{DynamicResource BurntLeafDrowingBrush}"/>
 
             <Border x:Name="Border1" Background="{StaticResource Dark}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
                     ap:SolarEclipse.ThemeChangingSubscribe="True"/>
