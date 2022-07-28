@@ -6,9 +6,10 @@
     <SharedGUID>92947f5d-8bf2-4f00-8c21-01a6f0c74eef</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Latte.Wpf.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Latte.Wpf</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AttachedProperties\SolarEclipse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TargetPropertyDescriptor.cs" />
   </ItemGroup>
 </Project>
