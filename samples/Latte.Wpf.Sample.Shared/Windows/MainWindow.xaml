@@ -5,12 +5,14 @@
     <Window.Resources>
         <ResourceDictionary>
             <!-- =============================================================================== -->
-            <SolidColorBrush x:Key="BackgroundBrush">Orange</SolidColorBrush>
+            <Color x:Key="Dark">#161e28</Color>
 
-            <SolidColorBrush x:Key="Dark">#161e28</SolidColorBrush>
-            
-            <SolidColorBrush x:Key="Light">#cac4b8</SolidColorBrush>
+            <Color x:Key="Light">#cac4b8</Color>
 
+
+            <SolidColorBrush x:Key="BackgroundBrushBack" Color="{DynamicResource Light}"/>
+
+            <SolidColorBrush x:Key="BackgroundBrushFront" Color="{DynamicResource Light}"/>
             <!-- =============================================================================== -->
             
             <BezierSegment x:Key="SezierSegment" Point1="100,0" Point2="100,0" Point3="100,0"/>
@@ -36,7 +38,7 @@
                 </PathFigure.Segments>
             </PathFigure>
 
-            <GeometryDrawing x:Key="BackgroundGeometryDrawing" Brush="{StaticResource Light}">
+            <GeometryDrawing x:Key="BackgroundGeometryDrawing" Brush="{DynamicResource BackgroundBrushBack}">
                 <GeometryDrawing.Geometry>
                     <RectangleGeometry Rect="0,0,100,100" />
                 </GeometryDrawing.Geometry>
@@ -46,8 +48,7 @@
                 <DrawingBrush.Drawing>
                     <DrawingGroup>
                         <StaticResource ResourceKey="BackgroundGeometryDrawing"/>
-
-                        <GeometryDrawing Brush="{StaticResource Dark}">
+                        <GeometryDrawing Brush="{DynamicResource BackgroundBrushFront}">
                             <GeometryDrawing.Geometry>
                                 <PathGeometry>
                                     <PathGeometry.Figures>
@@ -69,18 +70,18 @@
     <Grid>
         <UniformGrid Columns="4" Background="#1e1e1e">
             <Border x:Name="Border0" CornerRadius="10" Margin="10" BorderThickness="1"
-                    ap:SolarEclipse.ThemeChangingSubscribe="True" Background="{StaticResource BurntLeafDrowingBrush}"/>
+                    ap:SolarEclipse.ThemeChangingSubscribe="True" Background="{DynamicResource BurntLeafDrowingBrush}"/>
 
-            <Border x:Name="Border1" Background="{StaticResource Dark}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
-                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-            <Border x:Name="Border2" Background="{StaticResource Dark}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
-                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-            <Border x:Name="Border3" Background="{StaticResource Dark}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
-                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-            <Border x:Name="Border4" Background="{StaticResource Dark}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
-                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-            <Border x:Name="Border5" Background="{StaticResource Light}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
+            <!--<Border x:Name="Border1" Background="{DynamicResource BackgroundBrushFront}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
                     ap:SolarEclipse.ThemeChangingSubscribe="False"/>
+            <Border x:Name="Border2" Background="{DynamicResource BackgroundBrushFront}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
+                    ap:SolarEclipse.ThemeChangingSubscribe="False"/>
+            <Border x:Name="Border3" Background="{DynamicResource BackgroundBrushFront}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
+                    ap:SolarEclipse.ThemeChangingSubscribe="False"/>
+            <Border x:Name="Border4" Background="{DynamicResource BackgroundBrushFront}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
+                    ap:SolarEclipse.ThemeChangingSubscribe="False"/>
+            <Border x:Name="Border5" Background="{DynamicResource BackgroundBrushFront}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
+                    ap:SolarEclipse.ThemeChangingSubscribe="False"/>-->
         </UniformGrid>
 
         <Button Width="100" Height="100" Margin="20" Click="OnTestButtonClicked"

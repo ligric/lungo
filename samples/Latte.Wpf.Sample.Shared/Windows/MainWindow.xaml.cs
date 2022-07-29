@@ -1,10 +1,5 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls.Primitives;
+﻿using System.Windows;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Latte.Wpf.Sample.Windows
 {
@@ -17,22 +12,20 @@ namespace Latte.Wpf.Sample.Windows
             //rectangle.Visibility = Visibility.Hidden;
         }
 
+        private bool isDarkTheme = false;
         private void OnTestButtonClicked(object sender, RoutedEventArgs e)
         {
-            //EllipseGeometry ellipse = new EllipseGeometry();
-            //Border0.Background = ellipse;
+            if (isDarkTheme)
+            {
+                SolarEclipseService.ChangeTheme((Color)FindResource("Light"));
+            }
+            else
+            {
+                SolarEclipseService.ChangeTheme((Color)FindResource("Dark"));
+            }
 
-            //Border5.SetResourceReference(BackgroundProperty, "Dark");
+            isDarkTheme = !isDarkTheme;
         }
-
-
-
-        private static Storyboard AddEllipsGeometryBackground(FrameworkElement element)
-        {
-
-            return null;
-        }
-
 
 
 

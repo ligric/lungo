@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace Latte.Wpf.Sample
 {
-    public partial class App
+    public partial class App : Application
     {
         private void OnAppStartup(object sender, StartupEventArgs args)
         {
