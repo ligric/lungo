@@ -5,6 +5,8 @@ namespace Latte.Wpf;
 
 public static class SolarEclipse
 {
+    private static readonly SolarEclipseService solarEclipseService = new SolarEclipseService();
+
     public static bool GetThemeChangingSubscribe(FrameworkElement element)
     {
         return (bool)element.GetValue(ThemeChangingSubscribeProperty);
@@ -31,14 +33,11 @@ public static class SolarEclipse
 
         if (!isNewValueSubscribeNew)
         {
-            SolarEclipseService.Elements.Remove(element);
+            solarEclipseService.RemoveElement(element);
         }
         else
         {
-            if (SolarEclipseService.Elements.Contains(element))
-                throw new ArgumentException("The element already exist.");
-
-            SolarEclipseService.Elements.Add(element);
+            solarEclipseService.AddElement(element);
         }
     }
 }

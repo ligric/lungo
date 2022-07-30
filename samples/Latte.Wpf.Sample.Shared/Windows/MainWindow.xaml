@@ -2,75 +2,10 @@
         Width="750" Height="500" WindowStartupLocation="CenterScreen"
         xmlns:ap="clr-namespace:Latte.Wpf;assembly=Latte">
 
-    <Window.Resources>
-        <ResourceDictionary>
-            <!-- =============================================================================== -->
-            <Color x:Key="Dark">#161e28</Color>
-
-            <Color x:Key="Light">#cac4b8</Color>
-
-
-            <SolidColorBrush x:Key="BackgroundBrushBack" Color="{DynamicResource Light}"/>
-
-            <SolidColorBrush x:Key="BackgroundBrushFront" Color="{DynamicResource Light}"/>
-            <!-- =============================================================================== -->
-            
-            <BezierSegment x:Key="SezierSegment" Point1="100,0" Point2="100,0" Point3="100,0"/>
-            
-            <LineSegment x:Key="DownRightToLeftPoint" Point="100,100"/>
-
-            <LineSegment x:Key="RightUpToDownPoint" Point="100,0"/>
-
-            <!-- [100,0] to [0,0] -->
-            <PathFigure x:Key="TopRightToLeftPoint" StartPoint="100,0">
-                <PathFigure.Segments>
-                    <PathSegmentCollection>
-                        <LineSegment Point="100,0"/>
-                        <!--[100,0] to [100,100]-->
-                        <StaticResource ResourceKey="RightUpToDownPoint"/>
-                        <!--[100, upToDownPoint.Y] -> [100,100] to [0,100]-->
-                        <StaticResource ResourceKey="DownRightToLeftPoint"/>
-                        <!--[100, downRightToLeftPoint.Y] -> [100,0] to [0,100]-->
-                        <!--[100, downRightToLeftPoint.Y] -> [100,0] to [0,0]-->
-                        <!--[100, downRightToLeftPoint.Y] -> [100,0] to [0,0]-->
-                        <StaticResource ResourceKey="SezierSegment"/>
-                    </PathSegmentCollection>
-                </PathFigure.Segments>
-            </PathFigure>
-
-            <GeometryDrawing x:Key="BackgroundGeometryDrawing" Brush="{DynamicResource BackgroundBrushBack}">
-                <GeometryDrawing.Geometry>
-                    <RectangleGeometry Rect="0,0,100,100" />
-                </GeometryDrawing.Geometry>
-            </GeometryDrawing>
-
-            <DrawingBrush x:Key="BurntLeafDrowingBrush">
-                <DrawingBrush.Drawing>
-                    <DrawingGroup>
-                        <StaticResource ResourceKey="BackgroundGeometryDrawing"/>
-                        <GeometryDrawing Brush="{DynamicResource BackgroundBrushFront}">
-                            <GeometryDrawing.Geometry>
-                                <PathGeometry>
-                                    <PathGeometry.Figures>
-                                        <PathFigureCollection>
-                                            <StaticResource ResourceKey="TopRightToLeftPoint"/>
-                                        </PathFigureCollection>
-                                    </PathGeometry.Figures>
-                                </PathGeometry>
-                            </GeometryDrawing.Geometry>
-                        </GeometryDrawing>
-                    </DrawingGroup>
-                </DrawingBrush.Drawing>
-            </DrawingBrush>
-            
-            <!-- =============================================================================== -->
-        </ResourceDictionary>
-    </Window.Resources>
-
     <Grid>
         <UniformGrid Columns="4" Background="#1e1e1e">
             <Border x:Name="Border0" CornerRadius="10" Margin="10" BorderThickness="1"
-                    ap:SolarEclipse.ThemeChangingSubscribe="True" Background="{DynamicResource BurntLeafDrowingBrush}"/>
+                    ap:SolarEclipse.ThemeChangingSubscribe="True" IsHitTestVisible="False"/>
 
             <!--<Border x:Name="Border1" Background="{DynamicResource BackgroundBrushFront}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
                     ap:SolarEclipse.ThemeChangingSubscribe="False"/>
