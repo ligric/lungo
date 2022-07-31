@@ -5,7 +5,7 @@
     <Grid>
         <UniformGrid Columns="4" Background="#1e1e1e">
             <Border x:Name="Border0" CornerRadius="10" Margin="10" BorderThickness="1"
-                    ap:SolarEclipse.ThemeChangingSubscribe="True" IsHitTestVisible="False"/>
+                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
 
             <!--<Border x:Name="Border1" Background="{DynamicResource BackgroundBrushFront}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
                     ap:SolarEclipse.ThemeChangingSubscribe="False"/>

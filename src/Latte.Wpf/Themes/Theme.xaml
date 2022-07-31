@@ -4,7 +4,7 @@
 
     <Color x:Key="Light">#cac4b8</Color>
     <!-- =============================================================================== -->
-    <DrawingBrush x:Key="BurntLeafDrowingBrush">
+    <!--<DrawingBrush x:Key="BurntLeafDrowingBrush">
         <DrawingBrush.Drawing>
             <DrawingGroup>
                 <GeometryDrawing x:Name="BackgroundGeometryDrawing">
@@ -25,18 +25,18 @@
                         <PathGeometry>
                             <PathGeometry.Figures>
                                 <PathFigureCollection>
-                                    <!-- [100,0] to [0,0] -->
+                                    --><!-- [100,0] to [0,0] --><!--
                                     <PathFigure x:Name="TopRightToLeftPoint" StartPoint="100,0">
                                         <PathFigure.Segments>
                                             <PathSegmentCollection>
                                                 <LineSegment Point="100,0"/>
-                                                <!--[100,0] to [100,100]-->
+                                                --><!--[100,0] to [100,100]--><!--
                                                 <LineSegment x:Name="RightUpToDownPoint" Point="100,0"/>
-                                                <!--[100, upToDownPoint.Y] -> [100,100] to [0,100]-->
+                                                --><!--[100, upToDownPoint.Y] -> [100,100] to [0,100]--><!--
                                                 <LineSegment x:Name="DownRightToLeftPoint" Point="100,100"/>
-                                                <!--[100, downRightToLeftPoint.Y] -> [100,0] to [0,100]-->
+                                                --><!--[100, downRightToLeftPoint.Y] -> [100,0] to [0,100]-->
                                                 <!--[100, downRightToLeftPoint.Y] -> [100,0] to [0,0]-->
-                                                <!--[100, downRightToLeftPoint.Y] -> [100,0] to [0,0]-->
+                                                <!--[100, downRightToLeftPoint.Y] -> [100,0] to [0,0]--><!--
                                                 <BezierSegment x:Name="SezierSegment" Point1="100,0" Point2="100,0" Point3="100,0"/>
                                             </PathSegmentCollection>
                                         </PathFigure.Segments>
@@ -48,6 +48,6 @@
                 </GeometryDrawing>
             </DrawingGroup>
         </DrawingBrush.Drawing>
-    </DrawingBrush>
+    </DrawingBrush>-->
     <!-- =============================================================================== -->
 </ResourceDictionary>
