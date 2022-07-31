@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 
 namespace Latte.Wpf;
 
@@ -70,7 +69,7 @@ public class SolarEclipseService
 
     public void RemoveElement(FrameworkElement element)
     {
-
+        throw new NotImplementedException();
     }
 
 
@@ -91,27 +90,15 @@ internal static class LatteBackgroudAnimationsHalper
 
     public static void BurntLeafDrowingBrush(this FrameworkElement element, BackgroundInfo backgroundInfo, Color testNewColor)
     {
-        ((SolidColorBrush)backgroundInfo.InsideElements["BackgroundBrushBack"]).Color = testNewColor;
-
-        //var testBackground = test.Drawing.FindChild<DependencyObject>("BackgroundGeometryDrawing");
-
-
-        //PathFigure topRightToLeftPoint = (PathFigure)element.FindResource("TopRightToLeftPoint");
-        //LineSegment rightUpToDownPoint = (LineSegment)element.FindResource("RightUpToDownPoint");
-        //LineSegment downRightToLeftPoint = (LineSegment)element.FindResource("DownRightToLeftPoint");
-        //BezierSegment sezierSegment = (BezierSegment)element.FindResource("SezierSegment");
-
-
-        //GeometryDrawing backgroundGeometryDrawing = (GeometryDrawing)element.FindResource("BackgroundGeometryDrawing");
-        //((SolidColorBrush)(backgroundGeometryDrawing.Brush)).Color = testNewColor;        
-
-
-        //var backgroundGeometryDrawing = element.FindResource("BackgroundBrushBack");
-        //((SolidColorBrush)(backgroundGeometryDrawing.Brush)).Color = testNewColor;
-
-        //SolidColorBrush backgroundBrushBack = (SolidColorBrush)element.FindResource("BackgroundBrushBack");
-        //SolidColorBrush fackgroundBrushFront = (SolidColorBrush)element.FindResource("BackgroundBrushFront");
-        //fackgroundBrushFront.Color = testNewColor;
+        
+        PathFigure topRightToLeftPoint = (PathFigure)backgroundInfo.InsideElements["TopRightToLeftPoint"];
+        LineSegment rightUpToDownPoint = (LineSegment)backgroundInfo.InsideElements["RightUpToDownPoint"];
+        LineSegment downRightToLeftPoint = (LineSegment)backgroundInfo.InsideElements["DownRightToLeftPoint"];
+        BezierSegment sezierSegment = (BezierSegment)backgroundInfo.InsideElements["SezierSegment"];
+        SolidColorBrush backgroundBrushBack = (SolidColorBrush)backgroundInfo.InsideElements["BackgroundBrushBack"];
+        SolidColorBrush backgroundBrushFront = (SolidColorBrush)backgroundInfo.InsideElements["BackgroundBrushFront"];
+        
+        backgroundBrushFront.Color = testNewColor;
 
 
         //var topRightToLeftPointAnimation =  new PointAnimation()
