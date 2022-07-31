@@ -101,127 +101,99 @@ internal static class LatteBackgroudAnimationsHalper
 
         //// ------------------------------------------------------------------------------------------
 
-        //backgroundBrushFront.Color = testNewColor;
+        sezierSegment.IsStroked = true;
+
+        backgroundBrushFront.Color = testNewColor;
 
         //// ------------------------------------------------------------------------------------------
 
-        //#region topRightToLeftPointAnimation
+        #region topRightToLeftPointAnimation
 
-        //var topRightToLeftPointAnimation = new PointAnimation()
-        //{
-        //    Duration = TimeSpan.FromSeconds(fullSeconds),
-        //    From = new Point { X = 100, Y = 0 },
-        //    To = new Point { X = 0, Y = 0 }
-        //};
-
-        //Storyboard.SetTarget(topRightToLeftPointAnimation, topRightToLeftPoint);
-        //Storyboard.SetTargetProperty(topRightToLeftPointAnimation, new PropertyPath(PathFigure.StartPointProperty));
-
-        //#endregion
-
-        //#region rightUpToDownPointAnimation
-
-        //var rightUpToDownPointAnimation = new PointAnimation()
-        //{
-        //    Duration = TimeSpan.FromSeconds(fullSeconds / 2),
-        //    From = new Point { X = 100, Y = 0 },
-        //    To = new Point { X = 100, Y = 100 }
-        //};
-
-        //Storyboard.SetTarget(rightUpToDownPointAnimation, rightUpToDownPoint);
-        //Storyboard.SetTargetProperty(rightUpToDownPointAnimation, new PropertyPath(LineSegment.PointProperty));
-
-        //#endregion
-
-        //#region downRightToLeftPointAnimation
-
-        //var downRightToLeftPointAnimation = new PointAnimation()
-        //{
-        //    BeginTime = TimeSpan.FromSeconds(fullSeconds / 2),
-        //    Duration = TimeSpan.FromSeconds(fullSeconds),
-        //    From = new Point { X = 100, Y = 100 },
-        //    To = new Point { X = 0, Y = 100 }
-        //};
-
-        //Storyboard.SetTarget(downRightToLeftPointAnimation, downRightToLeftPoint);
-        //Storyboard.SetTargetProperty(downRightToLeftPointAnimation, new PropertyPath(LineSegment.PointProperty));
-
-        //#endregion
-
-        //// ------------------------------------------------------------------------------------------
-
-        //#region sezierSegment1Animation
-
-        //var sezierSegment1Animation = new PointAnimation()
-        //{
-        //    BeginTime = TimeSpan.FromSeconds(fullSeconds / 2),
-        //    Duration = TimeSpan.FromSeconds(fullSeconds),
-        //    From = new Point { X = 100, Y = 0 },
-        //    To = new Point { X = 0, Y = 100 }
-        //};
-
-        //Storyboard.SetTarget(sezierSegment1Animation, sezierSegment);
-        //Storyboard.SetTargetProperty(sezierSegment1Animation, new PropertyPath(BezierSegment.Point1Property));
-
-        //#endregion
-
-        //#region sezierSegment2Animation
-
-        //var sezierSegment2Animation = new PointAnimation()
-        //{
-        //    BeginTime = TimeSpan.FromSeconds(fullSeconds / 4),
-        //    Duration = TimeSpan.FromSeconds(fullSeconds / 2),
-        //    From = new Point { X = 100, Y = 0 },
-        //    To = new Point { X = 0, Y = 0 }
-        //};
-
-        //Storyboard.SetTarget(sezierSegment2Animation, sezierSegment);
-        //Storyboard.SetTargetProperty(sezierSegment2Animation, new PropertyPath(BezierSegment.Point2Property));
-
-        //#endregion
-
-        //#region sezierSegment3Animation
-
-        //var sezierSegment3Animation = new PointAnimation()
-        //{
-        //    Duration = TimeSpan.FromSeconds(fullSeconds / 4),
-        //    From = new Point { X = 100, Y = 0 },
-        //    To = new Point { X = 0, Y = 0 }
-        //};
-
-        //Storyboard.SetTarget(sezierSegment3Animation, sezierSegment);
-        //Storyboard.SetTargetProperty(sezierSegment3Animation, new PropertyPath("Point3"));
-
-        //#endregion
-
-        // ------------------------------------------------------------------------------------------
-        var colorAnimationUsingKeyFrames = new ColorAnimationUsingKeyFrames();
-        colorAnimationUsingKeyFrames.KeyFrames.Add(new DiscreteColorKeyFrame()
+        var topRightToLeftPointAnimation = new PointAnimation()
         {
-            Value = testNewColor,
-            KeyTime = TimeSpan.FromSeconds(1)
-        });
-
-        Storyboard.SetTarget(colorAnimationUsingKeyFrames, backgroundBrushBack);
-        Storyboard.SetTargetProperty(colorAnimationUsingKeyFrames, new PropertyPath(SolidColorBrush.ColorProperty));
-
-        //backgroundBrushBack.BeginAnimation(SolidColorBrush.ColorProperty, colorAnimationUsingKeyFrames);
-
-        Storyboard storyboard = new Storyboard();
-
-        //storyboard.Children.Add(topRightToLeftPointAnimation);
-        //storyboard.Children.Add(rightUpToDownPointAnimation);
-        //storyboard.Children.Add(downRightToLeftPointAnimation);
-
-        //storyboard.Children.Add(sezierSegment1Animation);
-        //storyboard.Children.Add(sezierSegment2Animation);
-        //storyboard.Children.Add(sezierSegment3Animation);
-        storyboard.Completed += (s, e) =>
-        {
-
+            Duration = TimeSpan.FromSeconds(fullSeconds),
+            From = new Point { X = 100, Y = 0 },
+            To = new Point { X = 0, Y = 0 }
         };
-        storyboard.Children.Add(colorAnimationUsingKeyFrames);
 
-        Application.Current.Dispatcher.BeginInvoke(() => storyboard.Begin());
+        topRightToLeftPoint.BeginAnimation(PathFigure.StartPointProperty, topRightToLeftPointAnimation);
+
+        #endregion
+
+        #region rightUpToDownPointAnimation
+
+        var rightUpToDownPointAnimation = new PointAnimation()
+        {
+            Duration = TimeSpan.FromSeconds(fullSeconds/2),
+            From = new Point { X = 100, Y = 0 },
+            To = new Point { X = 100, Y = 100 }
+        };
+
+        rightUpToDownPoint.BeginAnimation(LineSegment.PointProperty, rightUpToDownPointAnimation);
+
+        #endregion
+
+        #region downRightToLeftPointAnimation
+
+        var downRightToLeftPointAnimation = new PointAnimation()
+        {
+            BeginTime = TimeSpan.FromSeconds(fullSeconds/2),
+            Duration = TimeSpan.FromSeconds(fullSeconds),
+            From = new Point { X = 100, Y = 100 },
+            To = new Point { X = 0, Y = 100 }
+        };
+
+        downRightToLeftPoint.BeginAnimation(LineSegment.PointProperty, downRightToLeftPointAnimation);
+
+        #endregion
+
+        //// ------------------------------------------------------------------------------------------
+
+        #region sezierSegment1Animation
+
+        var sezierSegment1Animation = new PointAnimation()
+        {
+            BeginTime = TimeSpan.FromSeconds(fullSeconds / 2),
+            Duration = TimeSpan.FromSeconds(fullSeconds),
+            From = new Point { X = 100, Y = 0 },
+            To = new Point { X = 0, Y = 100 }
+        };
+
+        sezierSegment1Animation.Completed += (s, e) =>
+        {
+            backgroundBrushBack.Color = testNewColor;
+        };
+
+        sezierSegment.BeginAnimation(BezierSegment.Point1Property, sezierSegment1Animation);
+
+        #endregion
+
+        #region sezierSegment2Animation
+
+        var sezierSegment2Animation = new PointAnimation()
+        {
+            BeginTime = TimeSpan.FromSeconds(fullSeconds / 4),
+            Duration = TimeSpan.FromSeconds(fullSeconds / 2),
+            From = new Point { X = 100, Y = 0 },
+            To = new Point { X = 0, Y = 0 }
+        };
+
+        sezierSegment.BeginAnimation(BezierSegment.Point2Property, sezierSegment2Animation);
+
+        #endregion
+
+        #region sezierSegment3Animation
+
+        var sezierSegment3Animation = new PointAnimation()
+        {
+            Duration = TimeSpan.FromSeconds(fullSeconds / 4),
+            From = new Point { X = 100, Y = 0 },
+            To = new Point { X = 0, Y = 0 }
+        };
+
+        sezierSegment.BeginAnimation(BezierSegment.Point3Property, sezierSegment3Animation);
+
+        #endregion
+
     }
 }
