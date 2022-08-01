@@ -67,7 +67,14 @@ public class SolarEclipseService
 
         backgroundInfos.Add(element, new BackgroundInfo(burntLeafDrowingBrush, insideElements));
 
-        ((Border)element).Background = burntLeafDrowingBrush;
+        if (element is Panel border)
+        {
+            border.Background = burntLeafDrowingBrush;
+        }
+        else
+        {
+            ((Border)element).Background = burntLeafDrowingBrush;
+        }
     }
 
     public void RemoveElement(FrameworkElement element)
@@ -99,7 +106,7 @@ public class SolarEclipseService
 
             element.BurntLeafDrowingBrush(info, testNewColor);
 
-            await Task.Delay(300);
+            await Task.Delay(100);
         }
     }
 }
@@ -108,7 +115,7 @@ internal static class LatteBackgroudAnimationsHalper
 {
     public static void BurntLeafDrowingBrush(this FrameworkElement element, BackgroundInfo backgroundInfo, Color testNewColor)
     {
-        double fullSeconds = 0.5;
+        double fullSeconds = 0.2;
 
         PathFigure topRightToLeftPoint = (PathFigure)backgroundInfo.InsideElements["TopRightToLeftPoint"];
         LineSegment rightUpToDownPoint = (LineSegment)backgroundInfo.InsideElements["RightUpToDownPoint"];

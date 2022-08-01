@@ -2,8 +2,10 @@
         Width="750" Height="500" WindowStartupLocation="CenterScreen"
         xmlns:ap="clr-namespace:Latte.Wpf;assembly=Latte">
 
-    <Grid>
-        <UniformGrid Columns="4" Background="#1e1e1e">
+    <Grid Background="#1e1e1e"
+          ap:SolarEclipse.ThemeChangingSubscribe="False">
+        
+        <UniformGrid Columns="4">
             <Border x:Name="Border0" CornerRadius="10" Margin="10" BorderThickness="1"
                     ap:SolarEclipse.ThemeChangingSubscribe="True"/>
 
@@ -19,7 +21,7 @@
                     ap:SolarEclipse.ThemeChangingSubscribe="True"/>
         </UniformGrid>
 
-        <Button x:Name="button" Width="100" Height="100" Margin="20" Click="OnTestButtonClicked"
+        <Button x:Name="button" Width="50" Height="50" Margin="20" Click="OnTestButtonClicked"
                 HorizontalAlignment="Right" VerticalAlignment="Top"/>
     </Grid>
 </Window>
