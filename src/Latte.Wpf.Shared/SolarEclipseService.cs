@@ -90,7 +90,7 @@ internal static class LatteBackgroudAnimationsHalper
 {
     public static void BurntLeafDrowingBrush(this FrameworkElement element, BackgroundInfo backgroundInfo, Color testNewColor)
     {
-        int fullSeconds = 4;
+        double fullSeconds = 0.5;
 
         PathFigure topRightToLeftPoint = (PathFigure)backgroundInfo.InsideElements["TopRightToLeftPoint"];
         LineSegment rightUpToDownPoint = (LineSegment)backgroundInfo.InsideElements["RightUpToDownPoint"];
@@ -100,10 +100,10 @@ internal static class LatteBackgroudAnimationsHalper
         SolidColorBrush backgroundBrushFront = (SolidColorBrush)backgroundInfo.InsideElements["BackgroundBrushFront"];
 
         //// ------------------------------------------------------------------------------------------
-
-        sezierSegment.IsStroked = true;
-
         backgroundBrushFront.Color = testNewColor;
+        sezierSegment.Point1 = new Point(100, 0);
+        sezierSegment.Point2 = new Point(100, 0);
+        downRightToLeftPoint.Point = new Point(100,100);
 
         //// ------------------------------------------------------------------------------------------
 
@@ -159,13 +159,6 @@ internal static class LatteBackgroudAnimationsHalper
             To = new Point { X = 0, Y = 100 }
         };
 
-        sezierSegment1Animation.Completed += (s, e) =>
-        {
-            backgroundBrushBack.Color = testNewColor;
-        };
-
-        sezierSegment.BeginAnimation(BezierSegment.Point1Property, sezierSegment1Animation);
-
         #endregion
 
         #region sezierSegment2Animation
@@ -195,5 +188,14 @@ internal static class LatteBackgroudAnimationsHalper
 
         #endregion
 
+        sezierSegment1Animation.Completed += (s, e) =>
+        {
+            backgroundBrushBack.Color = testNewColor;
+            sezierSegment.BeginAnimation(BezierSegment.Point1Property, null);
+            sezierSegment.BeginAnimation(BezierSegment.Point2Property, null);
+            downRightToLeftPoint.BeginAnimation(LineSegment.PointProperty, null);
+        };
+
+        sezierSegment.BeginAnimation(BezierSegment.Point1Property, sezierSegment1Animation);
     }
 }
