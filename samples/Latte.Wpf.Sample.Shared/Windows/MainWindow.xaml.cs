@@ -8,20 +8,21 @@ namespace Latte.Wpf.Sample.Windows
         public MainWindow()
         {
             this.InitializeComponent();
-            //grid.Children.Add(rectangle);
-            //rectangle.Visibility = Visibility.Hidden;
         }
 
         private bool isDarkTheme = false;
         private void OnTestButtonClicked(object sender, RoutedEventArgs e)
         {
+            GeneralTransform generalTransform = button.TransformToVisual((Visual)button.Parent);
+            Rect rect = generalTransform.TransformBounds(new Rect(new Point(button.Margin.Left, button.Margin.Top), button.RenderSize));
+
             if (isDarkTheme)
             {
-                SolarEclipseService.ChangeTheme((Color)FindResource("Light"));
+                SolarEclipseService.ChangeTheme(rect, (Color)FindResource("Light"));
             }
             else
             {
-                SolarEclipseService.ChangeTheme((Color)FindResource("Dark"));
+                SolarEclipseService.ChangeTheme(rect, (Color)FindResource("Dark"));
             }
 
             isDarkTheme = !isDarkTheme;

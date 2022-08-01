@@ -7,19 +7,19 @@
             <Border x:Name="Border0" CornerRadius="10" Margin="10" BorderThickness="1"
                     ap:SolarEclipse.ThemeChangingSubscribe="True"/>
 
-            <!--<Border x:Name="Border1" Background="{DynamicResource BackgroundBrushFront}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
-                    ap:SolarEclipse.ThemeChangingSubscribe="False"/>
-            <Border x:Name="Border2" Background="{DynamicResource BackgroundBrushFront}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
-                    ap:SolarEclipse.ThemeChangingSubscribe="False"/>
-            <Border x:Name="Border3" Background="{DynamicResource BackgroundBrushFront}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
-                    ap:SolarEclipse.ThemeChangingSubscribe="False"/>
-            <Border x:Name="Border4" Background="{DynamicResource BackgroundBrushFront}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
-                    ap:SolarEclipse.ThemeChangingSubscribe="False"/>
-            <Border x:Name="Border5" Background="{DynamicResource BackgroundBrushFront}" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
-                    ap:SolarEclipse.ThemeChangingSubscribe="False"/>-->
+            <Border x:Name="Border1" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
+                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+            <Border x:Name="Border2" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
+                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+            <Border x:Name="Border3" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
+                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+            <Border x:Name="Border4" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
+                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+            <Border x:Name="Border5" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
+                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
         </UniformGrid>
 
-        <Button Width="100" Height="100" Margin="20" Click="OnTestButtonClicked"
+        <Button x:Name="button" Width="100" Height="100" Margin="20" Click="OnTestButtonClicked"
                 HorizontalAlignment="Right" VerticalAlignment="Top"/>
     </Grid>
 </Window>

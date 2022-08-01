@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -73,15 +75,31 @@ public class SolarEclipseService
         throw new NotImplementedException();
     }
 
-
-    public static void ChangeTheme(Color testNewColor)
+    public static async void ChangeTheme(Rect fromElementRect, Color testNewColor)
     {
-        foreach (var backgroundInfo in backgroundInfos)
+        //Point fromElemenCenter = new Point(fromElementRect.Right - ((fromElementRect.Right - fromElementRect.Left) / 2),
+        //                                 fromElementRect.Bottom - ((fromElementRect.Bottom - fromElementRect.Top) / 2));
+
+        List<FrameworkElementPoint> frameworkElementPoints = new List<FrameworkElementPoint>();
+        foreach (var item in backgroundInfos.Keys)
         {
-            var element = backgroundInfo.Key;
-            var info = backgroundInfo.Value;
+            GeneralTransform generalTransform = item.TransformToVisual((Visual)item.Parent);
+            Rect rect = generalTransform.TransformBounds(new Rect(new Point(item.Margin.Left, item.Margin.Top), item.RenderSize));
+
+            frameworkElementPoints.Add(new FrameworkElementPoint(item, rect.TopRight));
+        }
+
+        IOrderedEnumerable<FrameworkElementPoint> sorted = frameworkElementPoints.OrderByDescending(obj => obj.Point.X)
+                                                                                 .ThenBy(obj => obj.Point.Y);
+
+        foreach (FrameworkElementPoint item in sorted)
+        {
+            var element = item.Element;
+            var info = backgroundInfos[element];
 
             element.BurntLeafDrowingBrush(info, testNewColor);
+
+            await Task.Delay(300);
         }
     }
 }
@@ -197,5 +215,17 @@ internal static class LatteBackgroudAnimationsHalper
         };
 
         sezierSegment.BeginAnimation(BezierSegment.Point1Property, sezierSegment1Animation);
+    }
+}
+
+internal class FrameworkElementPoint
+{
+    public FrameworkElement Element { get; }
+    public Point Point { get; }
+
+    public FrameworkElementPoint(FrameworkElement frameworkElement, Point point)
+    {
+        Element = frameworkElement;
+        Point = point;
     }
 }
