@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32427.441
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{8575811A-9F44-4974-B39D-DA848729B77E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Executable", "Executable", "{8EE70B47-8749-4040-8A51-8733C713C588}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Lungo.Wpf.Shared", "src\Lungo.Wpf.Shared\Lungo.Wpf.Shared.shproj", "{92947F5D-8BF2-4F00-8C21-01A6F0C74EEF}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Lungo.Wpf.Sample.Shared", "samples\Lungo.Wpf.Sample.Shared\Lungo.Wpf.Sample.Shared.shproj", "{A9C7AB73-6B2E-4BB3-AB03-349695011068}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lungo.Wpf", "src\Lungo.Wpf\Lungo.Wpf.csproj", "{8E5B502D-B9D3-4C4C-ABC1-B33F62C71E6C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lungo.Wpf.Sample", "samples\Lungo.Wpf.Sample\Lungo.Wpf.Sample.csproj", "{36B5F04B-B988-4C7C-B2B3-473702C67591}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8E5B502D-B9D3-4C4C-ABC1-B33F62C71E6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E5B502D-B9D3-4C4C-ABC1-B33F62C71E6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E5B502D-B9D3-4C4C-ABC1-B33F62C71E6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E5B502D-B9D3-4C4C-ABC1-B33F62C71E6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36B5F04B-B988-4C7C-B2B3-473702C67591}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36B5F04B-B988-4C7C-B2B3-473702C67591}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36B5F04B-B988-4C7C-B2B3-473702C67591}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36B5F04B-B988-4C7C-B2B3-473702C67591}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{92947F5D-8BF2-4F00-8C21-01A6F0C74EEF} = {8575811A-9F44-4974-B39D-DA848729B77E}
+		{A9C7AB73-6B2E-4BB3-AB03-349695011068} = {8575811A-9F44-4974-B39D-DA848729B77E}
+		{8E5B502D-B9D3-4C4C-ABC1-B33F62C71E6C} = {8EE70B47-8749-4040-8A51-8733C713C588}
+		{36B5F04B-B988-4C7C-B2B3-473702C67591} = {8EE70B47-8749-4040-8A51-8733C713C588}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {31C0B654-F611-4FA4-AD53-348F9B5EB0C3}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		samples\Lungo.Wpf.Sample.Shared\Lungo.Wpf.Sample.Shared.projitems*{36b5f04b-b988-4c7c-b2b3-473702c67591}*SharedItemsImports = 5
+		src\Lungo.Wpf.Shared\Lungo.Wpf.Shared.projitems*{8e5b502d-b9d3-4c4c-abc1-b33f62c71e6c}*SharedItemsImports = 5
+	EndGlobalSection
+EndGlobal

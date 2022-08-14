@@ -1,11 +1,12 @@
 <Project>
     <PropertyGroup>
         <UseWPF>true</UseWPF>
-        <Version>0.0.0.0</Version>
-        <FileVersion>0.0.0.0</FileVersion>
-        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+        <Version>0.0.1.0</Version>
+        <FileVersion>0.0.1.0</FileVersion>
+        <AssemblyVersion>0.0.1.0</AssemblyVersion>
         <LangVersion>latest</LangVersion>
-        <Copyright>Copyright © limeniye 2022-2023</Copyright>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Copyright>Copyright © limeniye 2022</Copyright>
         <Authors>limeniye</Authors>
         <RepositoryUrl>https://github.com/ligric/latte</RepositoryUrl>
     </PropertyGroup>

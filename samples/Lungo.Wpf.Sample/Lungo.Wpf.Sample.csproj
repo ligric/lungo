@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>		
+		<AssemblyName>Lungo.Wpf.Sample</AssemblyName>
+		<RootNamespace>Lungo.Wpf.Sample</RootNamespace>
+		<TargetFrameworks>netcoreapp3.0;netcoreapp3.1;net451;net452;net46;net461;net462;net47;net471;net472;net48;net5.0-windows;net6.0-windows</TargetFrameworks>
+		<NoWarn>0108;MSB3026;MSB3061</NoWarn>
+		<MSBuildWarningsAsMessages>NETSDK1138</MSBuildWarningsAsMessages>
+		<ApplicationManifest>..\Lungo.Wpf.Sample.Shared\app.manifest</ApplicationManifest>
+	</PropertyGroup>
+
+	<ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
+		<Reference Include="Microsoft.CSharp" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\Lungo.Wpf.Sample.Shared\Properties\App.config">
+			<Link>Properties\App.config</Link>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\src\Lungo.Wpf\Lungo.Wpf.csproj" />
+	</ItemGroup>
+
+	<Import Project="..\Lungo.Wpf.Sample.Shared\Lungo.Wpf.Sample.Shared.projitems" Label="Shared" />
+
+</Project>
