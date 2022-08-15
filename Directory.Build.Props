@@ -1,9 +1,9 @@
 <Project>
     <PropertyGroup>
         <UseWPF>true</UseWPF>
-        <Version>0.0.1.0</Version>
-        <FileVersion>0.0.1.0</FileVersion>
-        <AssemblyVersion>0.0.1.0</AssemblyVersion>
+        <Version>0.0.2</Version>
+        <FileVersion>0.0.2</FileVersion>
+        <AssemblyVersion>0.0.2</AssemblyVersion>
         <LangVersion>latest</LangVersion>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Copyright>Copyright © limeniye 2022</Copyright>
