@@ -25,7 +25,7 @@ Global
 		SolutionGuid = {31C0B654-F611-4FA4-AD53-348F9B5EB0C3}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		src\Lungo.Wpf.Shared\Latte.Wpf.Shared.projitems*{92947f5d-8bf2-4f00-8c21-01a6f0c74eef}*SharedItemsImports = 13
+		src\Lungo.Wpf.Shared\Lungo.Wpf.Shared.projitems*{92947f5d-8bf2-4f00-8c21-01a6f0c74eef}*SharedItemsImports = 13
 		src\Lungo.Wpf.Shared\Lungo.Wpf.Shared.projitems*{b6521703-2db9-4625-8e3c-2eaa84866420}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

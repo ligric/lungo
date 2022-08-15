@@ -8,6 +8,6 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Copyright>Copyright © limeniye 2022</Copyright>
         <Authors>limeniye</Authors>
-        <RepositoryUrl>https://github.com/ligric/latte</RepositoryUrl>
+        <RepositoryUrl>https://github.com/ligric/lungo</RepositoryUrl>
     </PropertyGroup>
 </Project>

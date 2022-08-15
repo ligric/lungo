@@ -45,5 +45,7 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		samples\Lungo.Wpf.Sample.Shared\Lungo.Wpf.Sample.Shared.projitems*{36b5f04b-b988-4c7c-b2b3-473702c67591}*SharedItemsImports = 5
 		src\Lungo.Wpf.Shared\Lungo.Wpf.Shared.projitems*{8e5b502d-b9d3-4c4c-abc1-b33f62c71e6c}*SharedItemsImports = 5
+		src\Lungo.Wpf.Shared\Lungo.Wpf.Shared.projitems*{92947f5d-8bf2-4f00-8c21-01a6f0c74eef}*SharedItemsImports = 13
+		samples\Lungo.Wpf.Sample.Shared\Lungo.Wpf.Sample.Shared.projitems*{a9c7ab73-6b2e-4bb3-ab03-349695011068}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

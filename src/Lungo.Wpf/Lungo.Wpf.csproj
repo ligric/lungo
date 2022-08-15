@@ -16,7 +16,7 @@
 	    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>-->
 
 		<PackageTags>WPF C# Controls Control Attached Themes</PackageTags>
-		<PackageReleaseNotes>Changes are detailed at https://github.com/ligric/latte/releases</PackageReleaseNotes>
+		<PackageReleaseNotes>Changes are detailed at https://github.com/ligric/lungo/releases</PackageReleaseNotes>
 		<RepositoryType>git</RepositoryType>
 
 		<!--<SharedPath>..\Lungo.Wpf.Shared\Themes</SharedPath>-->
