@@ -20,6 +20,27 @@ internal class BackgroundInfo
     }
 }
 
+internal enum Side
+{
+    TopLeft,
+    TopRight,
+
+    BottomLeft,
+    BottomRight
+}
+
+internal class LengthSide
+{
+    public double Length { get; }
+    public Side Side { get; }
+
+    public LengthSide(double length, Side side)
+    {
+        Length = length;
+        Side = side;
+    }
+}
+
 public class SolarEclipseService
 {
     private static readonly Dictionary<FrameworkElement, BackgroundInfo> backgroundInfos = new Dictionary<FrameworkElement, BackgroundInfo>();
@@ -82,78 +103,72 @@ public class SolarEclipseService
 
     public static async void ChangeTheme(Rect fromElementRect, Color testNewColor)
     {
-        //Point fromElemenCenter = new Point(fromElementRect.Right - ((fromElementRect.Right - fromElementRect.Left) / 2),
-        //                                 fromElementRect.Bottom - ((fromElementRect.Bottom - fromElementRect.Top) / 2));
-
         foreach (var element in backgroundInfos.Keys)
         {
             GeneralTransform generalTransform = element.TransformToVisual((Visual)element.Parent);
             Rect rectTo = generalTransform.TransformBounds(new Rect(element.RenderSize));
 
-            System.Diagnostics.Debug.WriteLine($"{element.Name} -- {GetLengthFrom(fromElementRect, rectTo)}");
+            if (fromElementRect.Top >= rectTo.Bottom)
+            {
+                var testRes = GetLengthFromAbove(fromElementRect, rectTo);
+                System.Diagnostics.Debug.WriteLine($"{element.Name} -- {testRes.Length} -- {testRes.Side}");
+            }
+            else
+            {
+                var testRes = GetLengthFromUnder(fromElementRect, rectTo);
+                System.Diagnostics.Debug.WriteLine($"{element.Name} -- {testRes.Length} -- {testRes.Side}");
+            }
         }
     }
 
-    private static double GetLengthFrom(Rect rectFrom, Rect rectTo)
-    {
-        if (rectFrom.Top >= rectTo.Bottom)
-        {
-            return GetLengthFromAbove(rectFrom, rectTo);
-        }
-        else
-        {
-            return GetLengthFromUnder(rectFrom, rectTo);
-        }
-    }
-
-    private static double GetLengthFromAbove(Rect rectFrom, Rect rectTo)
+    private static LengthSide GetLengthFromAbove(Rect rectFrom, Rect rectTo)
     {
         if (rectTo.Left <= rectFrom.Left)
         {
             if (rectTo.Right >= rectFrom.Left)
             {
-                return rectFrom.Top - rectTo.Bottom; 
+                return new LengthSide(rectFrom.Top - rectTo.Bottom, Side.BottomRight); 
             }
             else
             {
-                return Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2));
+                return new LengthSide(Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), Side.BottomRight);
             }
         }
         else
         {
             if (rectTo.Left <= rectFrom.Right)
             {
-                return rectFrom.Top - rectTo.Bottom;
+                return new LengthSide(rectFrom.Top - rectTo.Bottom, Side.BottomLeft);
             }
             else
             {
-                return Math.Sqrt(Math.Pow(rectFrom.TopRight.X - rectTo.BottomLeft.X, 2) + Math.Pow(rectFrom.TopRight.Y - rectTo.BottomLeft.Y, 2));
+                return new LengthSide(Math.Sqrt(Math.Pow(rectFrom.TopRight.X - rectTo.BottomLeft.X, 2) + Math.Pow(rectFrom.TopRight.Y - rectTo.BottomLeft.Y, 2)), Side.BottomLeft);
             }
         }
     }
 
-    private static double GetLengthFromUnder(Rect rectFrom, Rect rectTo)
+    private static LengthSide GetLengthFromUnder(Rect rectFrom, Rect rectTo)
     {
         if (rectTo.Left <= rectFrom.Left)
         {
             if (rectTo.Right >= rectFrom.Left)
             {
-                return rectTo.Top - rectFrom.Bottom;
+                return new LengthSide(rectTo.Top - rectFrom.Bottom, Side.TopRight);
             }
             else
             {
-                return Math.Sqrt(Math.Pow(rectTo.TopRight.X - rectFrom.BottomLeft.X, 2) + Math.Pow(rectTo.TopRight.Y - rectFrom.BottomLeft.Y, 2));
+                return new LengthSide(Math.Sqrt(Math.Pow(rectTo.TopRight.X - rectFrom.BottomLeft.X, 2) + Math.Pow(rectTo.TopRight.Y - rectFrom.BottomLeft.Y, 2)), Side.TopRight);
             }
         }
         else
         {
             if (rectTo.Left <= rectFrom.Right)
             {
-                return rectTo.Top - rectFrom.Bottom;
+                return new LengthSide(rectTo.Top - rectFrom.Bottom, Side.TopLeft);
             }
             else
             {
-                return Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2));
+                return new LengthSide(Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), Side.TopLeft);
             }
         }
     }
