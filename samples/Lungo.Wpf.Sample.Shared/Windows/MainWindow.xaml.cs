@@ -14,7 +14,7 @@ namespace Lungo.Wpf.Sample.Windows
         private void OnTestButtonClicked(object sender, RoutedEventArgs e)
         {
             GeneralTransform generalTransform = button.TransformToVisual((Visual)button.Parent);
-            Rect rect = generalTransform.TransformBounds(new Rect(new Point(button.Margin.Left, button.Margin.Top), button.RenderSize));
+            Rect rect = generalTransform.TransformBounds(new Rect(button.RenderSize));
 
             if (isDarkTheme)
             {

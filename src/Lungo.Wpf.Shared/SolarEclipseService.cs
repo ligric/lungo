@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -87,26 +85,76 @@ public class SolarEclipseService
         //Point fromElemenCenter = new Point(fromElementRect.Right - ((fromElementRect.Right - fromElementRect.Left) / 2),
         //                                 fromElementRect.Bottom - ((fromElementRect.Bottom - fromElementRect.Top) / 2));
 
-        List<FrameworkElementPoint> frameworkElementPoints = new List<FrameworkElementPoint>();
-        foreach (var item in backgroundInfos.Keys)
+        foreach (var element in backgroundInfos.Keys)
         {
-            GeneralTransform generalTransform = item.TransformToVisual((Visual)item.Parent);
-            Rect rect = generalTransform.TransformBounds(new Rect(new Point(item.Margin.Left, item.Margin.Top), item.RenderSize));
+            GeneralTransform generalTransform = element.TransformToVisual((Visual)element.Parent);
+            Rect rectTo = generalTransform.TransformBounds(new Rect(element.RenderSize));
 
-            frameworkElementPoints.Add(new FrameworkElementPoint(item, rect.TopRight));
+            System.Diagnostics.Debug.WriteLine($"{element.Name} -- {GetLengthFrom(fromElementRect, rectTo)}");
         }
+    }
 
-        IOrderedEnumerable<FrameworkElementPoint> sorted = frameworkElementPoints.OrderByDescending(obj => obj.Point.X)
-                                                                                 .ThenBy(obj => obj.Point.Y);
-
-        foreach (FrameworkElementPoint item in sorted)
+    private static double GetLengthFrom(Rect rectFrom, Rect rectTo)
+    {
+        if (rectFrom.Top >= rectTo.Bottom)
         {
-            var element = item.Element;
-            var info = backgroundInfos[element];
+            return GetLengthFromAbove(rectFrom, rectTo);
+        }
+        else
+        {
+            return GetLengthFromUnder(rectFrom, rectTo);
+        }
+    }
 
-            element.BurntLeafDrowingBrush(info, testNewColor);
+    private static double GetLengthFromAbove(Rect rectFrom, Rect rectTo)
+    {
+        if (rectTo.Left <= rectFrom.Left)
+        {
+            if (rectTo.Right >= rectFrom.Left)
+            {
+                return rectFrom.Top - rectTo.Bottom; 
+            }
+            else
+            {
+                return Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2));
+            }
+        }
+        else
+        {
+            if (rectTo.Left <= rectFrom.Right)
+            {
+                return rectFrom.Top - rectTo.Bottom;
+            }
+            else
+            {
+                return Math.Sqrt(Math.Pow(rectFrom.TopRight.X - rectTo.BottomLeft.X, 2) + Math.Pow(rectFrom.TopRight.Y - rectTo.BottomLeft.Y, 2));
+            }
+        }
+    }
 
-            await Task.Delay(100);
+    private static double GetLengthFromUnder(Rect rectFrom, Rect rectTo)
+    {
+        if (rectTo.Left <= rectFrom.Left)
+        {
+            if (rectTo.Right >= rectFrom.Left)
+            {
+                return rectTo.Top - rectFrom.Bottom;
+            }
+            else
+            {
+                return Math.Sqrt(Math.Pow(rectTo.TopRight.X - rectFrom.BottomLeft.X, 2) + Math.Pow(rectTo.TopRight.Y - rectFrom.BottomLeft.Y, 2));
+            }
+        }
+        else
+        {
+            if (rectTo.Left <= rectFrom.Right)
+            {
+                return rectTo.Top - rectFrom.Bottom;
+            }
+            else
+            {
+                return Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2));
+            }
         }
     }
 }
@@ -225,14 +273,14 @@ internal static class LungoBackgroudAnimationsHalper
     }
 }
 
-internal class FrameworkElementPoint
+internal class ElementDistance
 {
     public FrameworkElement Element { get; }
-    public Point Point { get; }
+    public double DistanceLength { get; }
 
-    public FrameworkElementPoint(FrameworkElement frameworkElement, Point point)
+    public ElementDistance(FrameworkElement frameworkElement, double distanceLength)
     {
         Element = frameworkElement;
-        Point = point;
+        DistanceLength = distanceLength;
     }
 }

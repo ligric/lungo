@@ -6,22 +6,22 @@
           ap:SolarEclipse.ThemeChangingSubscribe="False">
         
         <UniformGrid Columns="4">
-            <Border x:Name="Border0" CornerRadius="10" Margin="10" BorderThickness="1"
+            <Border x:Name="Border0" CornerRadius="10" Margin="20" BorderThickness="1"
                     ap:SolarEclipse.ThemeChangingSubscribe="True"/>
 
-            <Border x:Name="Border1" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
+            <Border x:Name="Border1" CornerRadius="10" Margin="20" BorderThickness="1" BorderBrush="Red"
                     ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-            <Border x:Name="Border2" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
+            <Border x:Name="Border2" CornerRadius="10" Margin="20" BorderThickness="1" BorderBrush="Red"
                     ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-            <Border x:Name="Border3" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
+            <Border x:Name="Border3" CornerRadius="10" Margin="20" BorderThickness="1" BorderBrush="Red"
                     ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-            <Border x:Name="Border4" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
+            <Border x:Name="Border4" CornerRadius="10" Margin="20" BorderThickness="1" BorderBrush="Red"
                     ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-            <Border x:Name="Border5" CornerRadius="10" Margin="10" BorderThickness="1" BorderBrush="Red"
+            <Border x:Name="Border5" CornerRadius="10" Margin="20" BorderThickness="1" BorderBrush="Red"
                     ap:SolarEclipse.ThemeChangingSubscribe="True"/>
         </UniformGrid>
 
-        <Button x:Name="button" Width="50" Height="50" Margin="20" Click="OnTestButtonClicked"
-                HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <Button x:Name="button" Width="25" Height="25" Margin="10" Click="OnTestButtonClicked"
+                HorizontalAlignment="Center" VerticalAlignment="Center"/>
     </Grid>
 </Window>
