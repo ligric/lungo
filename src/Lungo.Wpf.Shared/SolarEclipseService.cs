@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -103,22 +105,29 @@ public class SolarEclipseService
 
     public static async void ChangeTheme(Rect fromElementRect, Color testNewColor)
     {
-        foreach (var element in backgroundInfos.Keys)
+        List<LengthSide> elementLength = new List<LengthSide>();
+
+        foreach (var elementKeyValuePair in backgroundInfos)
         {
+            FrameworkElement element = elementKeyValuePair.Key;
+            BackgroundInfo backgroundInfo = elementKeyValuePair.Value;
+
             GeneralTransform generalTransform = element.TransformToVisual((Visual)element.Parent);
             Rect rectTo = generalTransform.TransformBounds(new Rect(element.RenderSize));
 
             if (fromElementRect.Top >= rectTo.Bottom)
             {
-                var testRes = GetLengthFromAbove(fromElementRect, rectTo);
-                System.Diagnostics.Debug.WriteLine($"{element.Name} -- {testRes.Length} -- {testRes.Side}");
+                elementLength.Add(GetLengthFromAbove(fromElementRect, rectTo));
             }
             else
             {
-                var testRes = GetLengthFromUnder(fromElementRect, rectTo);
-                System.Diagnostics.Debug.WriteLine($"{element.Name} -- {testRes.Length} -- {testRes.Side}");
+                elementLength.Add(GetLengthFromUnder(fromElementRect, rectTo));
             }
         }
+
+        IOrderedEnumerable<LengthSide> sortedElementLengths = elementLength.OrderBy(x => x.Length);
+
+        await Task.Delay(200);
     }
 
     private static LengthSide GetLengthFromAbove(Rect rectFrom, Rect rectTo)
@@ -176,10 +185,8 @@ public class SolarEclipseService
 
 internal static class LungoBackgroudAnimationsHalper
 {
-    public static void BurntLeafDrowingBrush(this FrameworkElement element, BackgroundInfo backgroundInfo, Color testNewColor)
+    public static void BurntLeafDrowingBrush(this BackgroundInfo backgroundInfo, Color testNewColor, double fullSeconds = 0.2)
     {
-        double fullSeconds = 0.2;
-
         PathFigure topRightToLeftPoint = (PathFigure)backgroundInfo.InsideElements["TopRightToLeftPoint"];
         LineSegment rightUpToDownPoint = (LineSegment)backgroundInfo.InsideElements["RightUpToDownPoint"];
         LineSegment downRightToLeftPoint = (LineSegment)backgroundInfo.InsideElements["DownRightToLeftPoint"];
