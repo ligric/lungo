@@ -33,11 +33,13 @@ internal enum Side
 
 internal class LengthSide
 {
+    public FrameworkElement Element { get; }
     public double Length { get; }
     public Side Side { get; }
 
-    public LengthSide(double length, Side side)
+    public LengthSide(FrameworkElement element, double length, Side side)
     {
+        Element = element;
         Length = length;
         Side = side;
     }
@@ -117,67 +119,71 @@ public class SolarEclipseService
 
             if (fromElementRect.Top >= rectTo.Bottom)
             {
-                elementLength.Add(GetLengthFromAbove(fromElementRect, rectTo));
+                elementLength.Add(GetLengthFromAbove(element, fromElementRect, rectTo));
             }
             else
             {
-                elementLength.Add(GetLengthFromUnder(fromElementRect, rectTo));
+                elementLength.Add(GetLengthFromUnder(element, fromElementRect, rectTo));
             }
         }
 
         IOrderedEnumerable<LengthSide> sortedElementLengths = elementLength.OrderBy(x => x.Length);
-
-        await Task.Delay(200);
+        foreach (var item in sortedElementLengths)
+        {
+            FrameworkElement element = item.Element;
+            backgroundInfos[element].BurntLeafDrowingBrush(testNewColor);
+            await Task.Delay((int)item.Length); // Test
+        }
     }
 
-    private static LengthSide GetLengthFromAbove(Rect rectFrom, Rect rectTo)
+    private static LengthSide GetLengthFromAbove(FrameworkElement testElement, Rect rectFrom, Rect rectTo)
     {
         if (rectTo.Left <= rectFrom.Left)
         {
             if (rectTo.Right >= rectFrom.Left)
             {
-                return new LengthSide(rectFrom.Top - rectTo.Bottom, Side.BottomRight); 
+                return new LengthSide(testElement, rectFrom.Top - rectTo.Bottom, Side.BottomRight); 
             }
             else
             {
-                return new LengthSide(Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), Side.BottomRight);
+                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), Side.BottomRight);
             }
         }
         else
         {
             if (rectTo.Left <= rectFrom.Right)
             {
-                return new LengthSide(rectFrom.Top - rectTo.Bottom, Side.BottomLeft);
+                return new LengthSide(testElement, rectFrom.Top - rectTo.Bottom, Side.BottomLeft);
             }
             else
             {
-                return new LengthSide(Math.Sqrt(Math.Pow(rectFrom.TopRight.X - rectTo.BottomLeft.X, 2) + Math.Pow(rectFrom.TopRight.Y - rectTo.BottomLeft.Y, 2)), Side.BottomLeft);
+                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectFrom.TopRight.X - rectTo.BottomLeft.X, 2) + Math.Pow(rectFrom.TopRight.Y - rectTo.BottomLeft.Y, 2)), Side.BottomLeft);
             }
         }
     }
 
-    private static LengthSide GetLengthFromUnder(Rect rectFrom, Rect rectTo)
+    private static LengthSide GetLengthFromUnder(FrameworkElement testElement, Rect rectFrom, Rect rectTo)
     {
         if (rectTo.Left <= rectFrom.Left)
         {
             if (rectTo.Right >= rectFrom.Left)
             {
-                return new LengthSide(rectTo.Top - rectFrom.Bottom, Side.TopRight);
+                return new LengthSide(testElement, rectTo.Top - rectFrom.Bottom, Side.TopRight);
             }
             else
             {
-                return new LengthSide(Math.Sqrt(Math.Pow(rectTo.TopRight.X - rectFrom.BottomLeft.X, 2) + Math.Pow(rectTo.TopRight.Y - rectFrom.BottomLeft.Y, 2)), Side.TopRight);
+                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectTo.TopRight.X - rectFrom.BottomLeft.X, 2) + Math.Pow(rectTo.TopRight.Y - rectFrom.BottomLeft.Y, 2)), Side.TopRight);
             }
         }
         else
         {
             if (rectTo.Left <= rectFrom.Right)
             {
-                return new LengthSide(rectTo.Top - rectFrom.Bottom, Side.TopLeft);
+                return new LengthSide(testElement, rectTo.Top - rectFrom.Bottom, Side.TopLeft);
             }
             else
             {
-                return new LengthSide(Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), Side.TopLeft);
+                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), Side.TopLeft);
             }
         }
     }
@@ -185,8 +191,9 @@ public class SolarEclipseService
 
 internal static class LungoBackgroudAnimationsHalper
 {
-    public static void BurntLeafDrowingBrush(this BackgroundInfo backgroundInfo, Color testNewColor, double fullSeconds = 0.2)
+    public static void BurntLeafDrowingBrush(this BackgroundInfo backgroundInfo, Color testNewColor, Side side = Side.TopRight, double fullSeconds = 0.2)
     {
+        Point[] selectedPoints = new Point[] { new Point(100,0), new Point(100,100), new Point(0,0), new Point(0,100) };
         PathFigure topRightToLeftPoint = (PathFigure)backgroundInfo.InsideElements["TopRightToLeftPoint"];
         LineSegment rightUpToDownPoint = (LineSegment)backgroundInfo.InsideElements["RightUpToDownPoint"];
         LineSegment downRightToLeftPoint = (LineSegment)backgroundInfo.InsideElements["DownRightToLeftPoint"];
@@ -196,9 +203,9 @@ internal static class LungoBackgroudAnimationsHalper
 
         //// ------------------------------------------------------------------------------------------
         backgroundBrushFront.Color = testNewColor;
-        sezierSegment.Point1 = new Point(100, 0);
-        sezierSegment.Point2 = new Point(100, 0);
-        downRightToLeftPoint.Point = new Point(100,100);
+        sezierSegment.Point1 = selectedPoints[0];
+        sezierSegment.Point2 = selectedPoints[0];
+        downRightToLeftPoint.Point = selectedPoints[1];
 
         //// ------------------------------------------------------------------------------------------
 
@@ -207,8 +214,8 @@ internal static class LungoBackgroudAnimationsHalper
         var topRightToLeftPointAnimation = new PointAnimation()
         {
             Duration = TimeSpan.FromSeconds(fullSeconds),
-            From = new Point { X = 100, Y = 0 },
-            To = new Point { X = 0, Y = 0 }
+            From = selectedPoints[0],
+            To = selectedPoints[2]
         };
 
         topRightToLeftPoint.BeginAnimation(PathFigure.StartPointProperty, topRightToLeftPointAnimation);
@@ -219,9 +226,9 @@ internal static class LungoBackgroudAnimationsHalper
 
         var rightUpToDownPointAnimation = new PointAnimation()
         {
-            Duration = TimeSpan.FromSeconds(fullSeconds/2),
-            From = new Point { X = 100, Y = 0 },
-            To = new Point { X = 100, Y = 100 }
+            Duration = TimeSpan.FromSeconds(fullSeconds / 2),
+            From = selectedPoints[0],
+            To = selectedPoints[1]
         };
 
         rightUpToDownPoint.BeginAnimation(LineSegment.PointProperty, rightUpToDownPointAnimation);
@@ -234,8 +241,8 @@ internal static class LungoBackgroudAnimationsHalper
         {
             BeginTime = TimeSpan.FromSeconds(fullSeconds/2),
             Duration = TimeSpan.FromSeconds(fullSeconds),
-            From = new Point { X = 100, Y = 100 },
-            To = new Point { X = 0, Y = 100 }
+            From = selectedPoints[1],
+            To = selectedPoints[3]
         };
 
         downRightToLeftPoint.BeginAnimation(LineSegment.PointProperty, downRightToLeftPointAnimation);
@@ -250,8 +257,8 @@ internal static class LungoBackgroudAnimationsHalper
         {
             BeginTime = TimeSpan.FromSeconds(fullSeconds / 2),
             Duration = TimeSpan.FromSeconds(fullSeconds),
-            From = new Point { X = 100, Y = 0 },
-            To = new Point { X = 0, Y = 100 }
+            From = selectedPoints[0],
+            To = selectedPoints[3]
         };
 
         #endregion
@@ -262,8 +269,8 @@ internal static class LungoBackgroudAnimationsHalper
         {
             BeginTime = TimeSpan.FromSeconds(fullSeconds / 4),
             Duration = TimeSpan.FromSeconds(fullSeconds / 2),
-            From = new Point { X = 100, Y = 0 },
-            To = new Point { X = 0, Y = 0 }
+            From = selectedPoints[0],
+            To = selectedPoints[2]
         };
 
         sezierSegment.BeginAnimation(BezierSegment.Point2Property, sezierSegment2Animation);
@@ -275,8 +282,8 @@ internal static class LungoBackgroudAnimationsHalper
         var sezierSegment3Animation = new PointAnimation()
         {
             Duration = TimeSpan.FromSeconds(fullSeconds / 4),
-            From = new Point { X = 100, Y = 0 },
-            To = new Point { X = 0, Y = 0 }
+            From = selectedPoints[0],
+            To = selectedPoints[2]
         };
 
         sezierSegment.BeginAnimation(BezierSegment.Point3Property, sezierSegment3Animation);
