@@ -51,7 +51,9 @@ public class SolarEclipseService
 
     public void AddElement(FrameworkElement element)
     {
+        var rotateTransform = new RotateTransform();
         var group = new DrawingGroup();
+        group.Transform = rotateTransform;
         DrawingBrush burntLeafDrowingBrush = new DrawingBrush(group);
 
         GeometryDrawing backgroundGeometryDrawing = new GeometryDrawing();
@@ -73,7 +75,7 @@ public class SolarEclipseService
         topRightToLeftPoint.Segments.Add(rightUpToDownPoint);
         var downRightToLeftPoint = new LineSegment(new Point(100, 100), true);
         topRightToLeftPoint.Segments.Add(downRightToLeftPoint);
-        var sezierSegment = new BezierSegment(new Point(100, 0), new Point(100, 0), new Point(100, 0), true);
+        BezierSegment sezierSegment = new BezierSegment(new Point(100, 0), new Point(100, 0), new Point(100, 0), true);
         topRightToLeftPoint.Segments.Add(sezierSegment);
         group.Children.Add(geometryDrawing);
 
@@ -87,6 +89,7 @@ public class SolarEclipseService
         insideElements.Add("RightUpToDownPoint", rightUpToDownPoint);
         insideElements.Add("DownRightToLeftPoint", downRightToLeftPoint);
         insideElements.Add("SezierSegment", sezierSegment);
+        insideElements.Add("RotateTransform", rotateTransform);
 
         backgroundInfos.Add(element, new BackgroundInfo(burntLeafDrowingBrush, insideElements));
 
@@ -131,8 +134,9 @@ public class SolarEclipseService
         foreach (var item in sortedElementLengths)
         {
             FrameworkElement element = item.Element;
-            backgroundInfos[element].BurntLeafDrowingBrush(testNewColor);
-            await Task.Delay((int)item.Length); // Test
+            Side side = item.Side;
+            backgroundInfos[element].BurntLeafDrowingBrush(testNewColor, side);
+            //await Task.Delay(200); // Test
         }
     }
 
@@ -191,18 +195,34 @@ public class SolarEclipseService
 
 internal static class LungoBackgroudAnimationsHalper
 {
-    public static void BurntLeafDrowingBrush(this BackgroundInfo backgroundInfo, Color testNewColor, Side side = Side.TopRight, double fullSeconds = 0.2)
+    public static void BurntLeafDrowingBrush(this BackgroundInfo backgroundInfo, Color testNewColor, Side side = Side.TopRight, double fullSeconds = 20)
     {
         Point[] selectedPoints = new Point[] { new Point(100,0), new Point(100,100), new Point(0,0), new Point(0,100) };
+
+        RotateTransform rotateTransform = (RotateTransform)backgroundInfo.InsideElements["RotateTransform"];
         PathFigure topRightToLeftPoint = (PathFigure)backgroundInfo.InsideElements["TopRightToLeftPoint"];
         LineSegment rightUpToDownPoint = (LineSegment)backgroundInfo.InsideElements["RightUpToDownPoint"];
         LineSegment downRightToLeftPoint = (LineSegment)backgroundInfo.InsideElements["DownRightToLeftPoint"];
         BezierSegment sezierSegment = (BezierSegment)backgroundInfo.InsideElements["SezierSegment"];
+
         SolidColorBrush backgroundBrushBack = (SolidColorBrush)backgroundInfo.InsideElements["BackgroundBrushBack"];
         SolidColorBrush backgroundBrushFront = (SolidColorBrush)backgroundInfo.InsideElements["BackgroundBrushFront"];
 
         //// ------------------------------------------------------------------------------------------
+        if (side == Side.TopRight)
+            rotateTransform.Angle = 0;
+
+        if (side == Side.BottomRight)
+            rotateTransform.Angle = 90;
+
+        if (side == Side.BottomLeft)
+            rotateTransform.Angle = 180;
+
+        if (side == Side.TopLeft)
+            rotateTransform.Angle = 270;
+
         backgroundBrushFront.Color = testNewColor;
+        //topRightToLeftPoint.StartPoint = selectedPoints[0];
         sezierSegment.Point1 = selectedPoints[0];
         sezierSegment.Point2 = selectedPoints[0];
         downRightToLeftPoint.Point = selectedPoints[1];
@@ -214,8 +234,8 @@ internal static class LungoBackgroudAnimationsHalper
         var topRightToLeftPointAnimation = new PointAnimation()
         {
             Duration = TimeSpan.FromSeconds(fullSeconds),
-            From = selectedPoints[0],
-            To = selectedPoints[2]
+            From = selectedPoints[0], // [100,0]  [100,100]
+            To = selectedPoints[2] // [0,0]  [100,0]
         };
 
         topRightToLeftPoint.BeginAnimation(PathFigure.StartPointProperty, topRightToLeftPointAnimation);
@@ -227,8 +247,8 @@ internal static class LungoBackgroudAnimationsHalper
         var rightUpToDownPointAnimation = new PointAnimation()
         {
             Duration = TimeSpan.FromSeconds(fullSeconds / 2),
-            From = selectedPoints[0],
-            To = selectedPoints[1]
+            From = selectedPoints[0], // [100,0]  [100,100]
+            To = selectedPoints[1] // [100,100]  [0,100]
         };
 
         rightUpToDownPoint.BeginAnimation(LineSegment.PointProperty, rightUpToDownPointAnimation);
@@ -241,8 +261,8 @@ internal static class LungoBackgroudAnimationsHalper
         {
             BeginTime = TimeSpan.FromSeconds(fullSeconds/2),
             Duration = TimeSpan.FromSeconds(fullSeconds),
-            From = selectedPoints[1],
-            To = selectedPoints[3]
+            From = selectedPoints[1], // [100,100]  [0,100]
+            To = selectedPoints[3] // [0,100]  [0,0]
         };
 
         downRightToLeftPoint.BeginAnimation(LineSegment.PointProperty, downRightToLeftPointAnimation);
