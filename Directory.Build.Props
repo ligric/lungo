@@ -1,13 +1,17 @@
 <Project>
     <PropertyGroup>
         <UseWPF>true</UseWPF>
-        <Version>0.0.2</Version>
-        <FileVersion>0.0.2</FileVersion>
-        <AssemblyVersion>0.0.2</AssemblyVersion>
+        <Version>0.0.3</Version>
+        <FileVersion>0.0.3</FileVersion>
+        <AssemblyVersion>0.0.3</AssemblyVersion>
         <LangVersion>latest</LangVersion>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Copyright>Copyright © limeniye 2022</Copyright>
         <Authors>limeniye</Authors>
+		
         <RepositoryUrl>https://github.com/ligric/lungo</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/ligric/lungo</PackageProjectUrl>
     </PropertyGroup>
 </Project>
