@@ -1,25 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
 	<PropertyGroup>
-		<LangVersion>latest</LangVersion>
 		<AssemblyName>Lungo</AssemblyName>
 		<RootNamespace>Lungo</RootNamespace>
 		<TargetFrameworks>netcoreapp3.0;netcoreapp3.1;net451;net452;net46;net461;net462;net47;net471;net472;net48;net5.0-windows;net6.0-windows</TargetFrameworks>
-		<Description>Made in Ukraine</Description>
-		<PackageId>Lungo</PackageId>
-		<Nullable>enable</Nullable>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<NoWarn>SYSLIB0014;SYSLIB0020;SYSLIB0021;SYSLIB0022;SYSLIB0023;SYSLIB0032;0067;0649;1591;MSB3061;SYSLIB0003;SYSLIB0004;CS8632;MSB3245;MSB3243;CS8632;CS8073;CS0108;CS0436;MSB3245;3243;3245;0436</NoWarn>
 		<MSBuildWarningsAsMessages>NETSDK1138</MSBuildWarningsAsMessages>
-
-		<!--<AssemblyOriginatorKeyFile>..\..\Shared\HandyControl_Shared\key.snk</AssemblyOriginatorKeyFile>
-	    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>-->
-
-		<PackageTags>WPF C# Controls Control Attached Themes</PackageTags>
-		<PackageReleaseNotes>Changes are detailed at https://github.com/ligric/lungo/releases</PackageReleaseNotes>
-		<RepositoryType>git</RepositoryType>
-
-		<!--<SharedPath>..\Lungo.Wpf.Shared\Themes</SharedPath>-->
 		<TargetFile>Themes\Theme.xaml</TargetFile>
 	</PropertyGroup>
 
@@ -27,13 +14,6 @@
 		<SignAssembly>true</SignAssembly>
 		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Lungo.xml</DocumentationFile>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<PackageReference Include="XAMLTools.MSBuild" Version="1.0.0-alpha0121">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
 
 	<Import Project="..\Lungo.Wpf.Shared\Lungo.Wpf.Shared.projitems" Label="Shared" />
 

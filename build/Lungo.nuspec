@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Lungo</id>
+	<version>0.0.3</version>
+    <title>Lungo</title>
+    <authors>limeniye</authors>
+    <owners>limeniye</owners>
+    <projectUrl>https://github.com/ligric/lungo</projectUrl>
+    <licenseUrl>https://github.com/ligric/lungo/blob/main/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Lungo is a theme management library for Xaml platforms. Made in 🇺🇦.</description>
+    <tags>wpf uno themes wpf-controls attached-properties dark-light-mode management</tags>
+    <language>en-US</language>
+  </metadata>
+  
+    <files>
+    <file src="..\LICENSE" target="LICENSE" />
+  </files>
+</package>

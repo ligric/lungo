@@ -1,17 +1,32 @@
 <Project>
-    <PropertyGroup>
-        <UseWPF>true</UseWPF>
-        <Version>0.0.3</Version>
-        <FileVersion>0.0.3</FileVersion>
-        <AssemblyVersion>0.0.3</AssemblyVersion>
-        <LangVersion>latest</LangVersion>
-        <Copyright>Copyright © limeniye 2022</Copyright>
-        <Authors>limeniye</Authors>
-		
-        <RepositoryUrl>https://github.com/ligric/lungo</RepositoryUrl>
+	<PropertyGroup>
+		<UseWPF>true</UseWPF>
+		<PackageId>Lungo</PackageId>
+		<Version>0.0.3</Version>
+		<FileVersion>0.0.3</FileVersion>
+		<AssemblyVersion>0.0.3</AssemblyVersion>
+		<LangVersion>latest</LangVersion>
+		<Copyright>Copyright © limeniye 2022</Copyright>
+		<Authors>limeniye</Authors>
+
+		<RepositoryUrl>https://github.com/ligric/lungo</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		
+
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/ligric/lungo</PackageProjectUrl>
-    </PropertyGroup>
+	</PropertyGroup>
+
+	<!-- Common Project Properties -->
+	<PropertyGroup>
+		<CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
+		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+		<LangVersion>10.0</LangVersion>
+		<Nullable>enable</Nullable>
+		<NoWarn>$(NoWarn);NU1008;NU1701</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+		<CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+	</PropertyGroup>
 </Project>
