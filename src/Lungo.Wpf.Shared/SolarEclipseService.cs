@@ -103,6 +103,10 @@ public class SolarEclipseService
         {
             border.Background = burntLeafDrowingBrush;
         }
+        else if (element is Control control)
+        {
+            control.Background = burntLeafDrowingBrush;
+        }
         else
         {
             ((Border)element).Background = burntLeafDrowingBrush;
@@ -174,6 +178,7 @@ public class SolarEclipseService
             for (int i = 0; i < sortedPart.Length; i++)
             {
                 var item = sortedPart[i];
+                var nextItem = sortedPart[i + 1];
                 if (item is null)
                     continue;
 
@@ -184,12 +189,34 @@ public class SolarEclipseService
                     continue;
                 }
 
+                if (item.Side == Side.TopRight)
+                {
+                    if (item.Point.X >= lastLength.Point.X 
+                        && item.Point.Y >= lastLength.Point.Y
+                        && item.Point.X <= nextItem.Point.X
+                        && item.Point.Y >= nextItem.Point.Y)
+                        continue;
+
+                    if (item.Side == startSide)
+                    {
+                        rings.Add(ring.ToArray());
+                        lastLength = LengthSide.Empty;
+                    }
+
+                    ring.Add(item);
+                    sortedPart[i] = null;
+                    lastLength = item;
+                }
+
                 if (item.Side == Side.BottomRight || item.Side == Side.BottomLeft)
                 {
                     if (item.Point.X <= lastLength.Point.X)
                     {
-                        rings.Add(ring.ToArray());
-                        lastLength = LengthSide.Empty;
+                        if (item.Side == startSide)
+                        {
+                            rings.Add(ring.ToArray());
+                            lastLength = LengthSide.Empty;
+                        }
                         continue;
                     }
 
