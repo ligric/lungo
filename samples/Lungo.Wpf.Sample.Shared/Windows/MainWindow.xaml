@@ -36,7 +36,7 @@
         <Frame Margin="397,280,303,154" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
 
 
-        <Button x:Name="button" Width="25" Height="25" Margin="468,198,0,0" 
+        <Button x:Name="button" Width="25" Height="25" Margin="468,198,0,0" Background="Red"
                 HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnTestButtonClicked" />
     </Grid>
 </Window>
