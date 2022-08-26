@@ -33,14 +33,20 @@ internal enum Side
 
 internal class LengthSide
 {
-    public FrameworkElement Element { get; }
+    public FrameworkElement? Element { get; }
     public double Length { get; }
+    public Point Point { get; }
     public Side Side { get; }
 
-    public LengthSide(FrameworkElement element, double length, Side side)
+    public static readonly LengthSide Empty = new LengthSide();
+
+    private LengthSide() { }
+
+    public LengthSide(FrameworkElement element, double length, Point point, Side side)
     {
         Element = element;
         Length = length;
+        Point = point;
         Side = side;
     }
 }
@@ -110,7 +116,7 @@ public class SolarEclipseService
 
     public static async void ChangeTheme(Rect fromElementRect, Color testNewColor)
     {
-        List<LengthSide> elementLength = new List<LengthSide>();
+        List<LengthSide> elementLengths = new List<LengthSide>();
 
         foreach (var elementKeyValuePair in backgroundInfos)
         {
@@ -122,22 +128,90 @@ public class SolarEclipseService
 
             if (fromElementRect.Top >= rectTo.Bottom)
             {
-                elementLength.Add(GetLengthFromAbove(element, fromElementRect, rectTo));
+                elementLengths.Add(GetLengthFromAbove(element, fromElementRect, rectTo));
             }
             else
             {
-                elementLength.Add(GetLengthFromUnder(element, fromElementRect, rectTo));
+                elementLengths.Add(GetLengthFromUnder(element, fromElementRect, rectTo));
             }
         }
 
-        IOrderedEnumerable<LengthSide> sortedElementLengths = elementLength.OrderBy(x => x.Length);
-        foreach (var item in sortedElementLengths)
+        LengthSide[]? sortedTopRight = elementLengths.Where(x => x.Side == Side.TopRight).OrderByDescending(x => x.Length).ToArray();
+        LengthSide[]? sortedBottomRight = elementLengths.Where(x => x.Side == Side.BottomRight).OrderByDescending(x => x.Length).ToArray();
+        LengthSide[]? sortedBottomLeft = elementLengths.Where(x => x.Side == Side.BottomLeft).OrderByDescending(x => x.Length).ToArray();
+        LengthSide[]? sortedTopLeft = elementLengths.Where(x => x.Side == Side.TopLeft).OrderByDescending(x => x.Length).ToArray();
+
+        List<LengthSide[]> sortedParts = new List<LengthSide[]>();
+
+        if (sortedTopRight.Length > 0)
+            sortedParts.Add(sortedTopRight);
+
+        if (sortedBottomRight.Length > 0)
+            sortedParts.Add(sortedBottomRight);
+
+        if (sortedBottomLeft.Length > 0)
+            sortedParts.Add(sortedBottomLeft);
+
+        if (sortedTopLeft.Length > 0)
+            sortedParts.Add(sortedTopLeft);
+
+        List<LengthSide[]> rings = new List<LengthSide[]>();
+        List<LengthSide> ring = new List<LengthSide>();
+
+        //List<LengthSide> bufferRing;
+        //LengthSide startRingElement;
+        //LengthSide oldLength = maxLength;
+
+        if (sortedParts[0]?[0] is null)
+            return;
+
+        Side startSide = sortedParts[0][0].Side;
+        LengthSide lastLength = LengthSide.Empty;
+
+
+        foreach (LengthSide?[] sortedPart in sortedParts)
         {
-            FrameworkElement element = item.Element;
-            Side side = item.Side;
-            backgroundInfos[element].BurntLeafDrowingBrush(testNewColor, side);
-            //await Task.Delay(200); // Test
+            for (int i = 0; i < sortedPart.Length; i++)
+            {
+                var item = sortedPart[i];
+                if (item is null)
+                    continue;
+
+                if (lastLength == LengthSide.Empty)
+                {
+                    lastLength = item;
+                    ring.Add(item);
+                    continue;
+                }
+
+                if (item.Side == Side.BottomRight || item.Side == Side.BottomLeft)
+                {
+                    if (item.Point.X <= lastLength.Point.X)
+                    {
+                        rings.Add(ring.ToArray());
+                        lastLength = LengthSide.Empty;
+                        continue;
+                    }
+
+                    ring.Add(item);
+                    sortedPart[i] = null;
+                    lastLength = item;
+                }
+            }
         }
+
+        // 500px - 1 sec
+
+
+
+        //foreach (var item in sortedElementLengths)
+        //{
+        //    FrameworkElement element = item.Element;
+        //    double length = item.Length;
+        //    Side side = item.Side;
+        //    backgroundInfos[element].BurntLeafDrowingBrush(testNewColor, side, (500 / 1) * length);
+        //    //await Task.Delay(200); // Test
+        //}
     }
 
     private static LengthSide GetLengthFromAbove(FrameworkElement testElement, Rect rectFrom, Rect rectTo)
@@ -146,22 +220,22 @@ public class SolarEclipseService
         {
             if (rectTo.Right >= rectFrom.Left)
             {
-                return new LengthSide(testElement, rectFrom.Top - rectTo.Bottom, Side.BottomRight); 
+                return new LengthSide(testElement, rectFrom.Top - rectTo.Bottom, rectTo.BottomRight, Side.BottomRight); 
             }
             else
             {
-                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), Side.BottomRight);
+                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), rectTo.BottomRight, Side.BottomRight);
             }
         }
         else
         {
             if (rectTo.Left <= rectFrom.Right)
             {
-                return new LengthSide(testElement, rectFrom.Top - rectTo.Bottom, Side.BottomLeft);
+                return new LengthSide(testElement, rectFrom.Top - rectTo.Bottom, rectTo.BottomLeft, Side.BottomLeft);
             }
             else
             {
-                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectFrom.TopRight.X - rectTo.BottomLeft.X, 2) + Math.Pow(rectFrom.TopRight.Y - rectTo.BottomLeft.Y, 2)), Side.BottomLeft);
+                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectFrom.TopRight.X - rectTo.BottomLeft.X, 2) + Math.Pow(rectFrom.TopRight.Y - rectTo.BottomLeft.Y, 2)), rectTo.BottomLeft, Side.BottomLeft);
             }
         }
     }
@@ -172,22 +246,22 @@ public class SolarEclipseService
         {
             if (rectTo.Right >= rectFrom.Left)
             {
-                return new LengthSide(testElement, rectTo.Top - rectFrom.Bottom, Side.TopRight);
+                return new LengthSide(testElement, rectTo.Top - rectFrom.Bottom, rectTo.TopRight, Side.TopRight);
             }
             else
             {
-                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectTo.TopRight.X - rectFrom.BottomLeft.X, 2) + Math.Pow(rectTo.TopRight.Y - rectFrom.BottomLeft.Y, 2)), Side.TopRight);
+                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectTo.TopRight.X - rectFrom.BottomLeft.X, 2) + Math.Pow(rectTo.TopRight.Y - rectFrom.BottomLeft.Y, 2)), rectTo.TopRight, Side.TopRight);
             }
         }
         else
         {
             if (rectTo.Left <= rectFrom.Right)
             {
-                return new LengthSide(testElement, rectTo.Top - rectFrom.Bottom, Side.TopLeft);
+                return new LengthSide(testElement, rectTo.Top - rectFrom.Bottom, rectTo.TopLeft, Side.TopLeft);
             }
             else
             {
-                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), Side.TopLeft);
+                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), rectTo.TopLeft, Side.TopLeft);
             }
         }
     }
@@ -195,7 +269,7 @@ public class SolarEclipseService
 
 internal static class LungoBackgroudAnimationsHalper
 {
-    public static void BurntLeafDrowingBrush(this BackgroundInfo backgroundInfo, Color testNewColor, Side side = Side.TopRight, double fullSeconds = 20)
+    public static void BurntLeafDrowingBrush(this BackgroundInfo backgroundInfo, Color testNewColor, Side side = Side.TopRight, double fullSeconds = 1)
     {
         Point[] selectedPoints = new Point[] { new Point(100,0), new Point(100,100), new Point(0,0), new Point(0,100) };
 
