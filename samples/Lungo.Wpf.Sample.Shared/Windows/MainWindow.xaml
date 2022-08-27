@@ -44,22 +44,34 @@
 
     <Grid ap:SolarEclipse.ThemeChangingSubscribe="False">
 
-        <Frame Margin="468,27,202,357" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame Margin="335,27,335,357" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame Margin="208,0,462,384" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame x:Name="Second" Margin="20,141,680,293" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame x:Name="First" Margin="30,27,640,357" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame x:Name="Third" Margin="122,105,548,279" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame Margin="621,77,49,307" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame Margin="636,292,64,142" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame Margin="596,200,104,234" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame Margin="468,347,202,37" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame Margin="571,347,129,87" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame Margin="295,347,375,37" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Frame x:Name="Fourteenth" Margin="468,27,202,357" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Frame x:Name="Fifteenth" Margin="335,27,335,357" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Frame x:Name="Sixteenth" Margin="208,0,462,384" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Frame x:Name="Second" Margin="20,141,680,293" ap:SolarEclipse.ThemeChangingSubscribe="True">
+            <Frame.Content>
+                <TextBlock Text="70, 191" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Frame.Content>
+        </Frame>
+        <Frame x:Name="First" Margin="30,27,640,357" ap:SolarEclipse.ThemeChangingSubscribe="True">
+            <Frame.Content>
+                <TextBlock Text="97, 90.5" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Frame.Content>
+        </Frame>
+        <Frame x:Name="Third" Margin="122,105,548,279" ap:SolarEclipse.ThemeChangingSubscribe="True">
+            <Frame.Content>
+                <TextBlock Text="179, 168.5" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Frame.Content>
+        </Frame>
+        <Frame x:Name="Thirteenth" Margin="621,77,49,307" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Frame x:Name="Eleventh" Margin="636,292,64,142" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Frame x:Name="Twelfth" Margin="596,200,104,234" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Frame x:Name="Ninth" Margin="468,347,202,37" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Frame x:Name="Tenth" Margin="571,347,129,87" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Frame Name="Seventh" Margin="295,347,375,37" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
         <Frame x:Name="Fifth" Margin="122,347,548,37" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame Margin="208,242,462,142" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Frame Name="Sixth" Margin="208,242,462,142" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
         <Frame x:Name="Fourth" Margin="44,230,626,154" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame Margin="397,280,303,154" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Frame x:Name="Eighth" Margin="397,280,303,154" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
 
 
         <Frame Width="750" Background="Red" Height="2" VerticalAlignment="Top" Margin="0,210,0,0"/>

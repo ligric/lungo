@@ -34,7 +34,8 @@ internal enum Side
 internal class LengthSide
 {
     public FrameworkElement? Element { get; }
-    public double Length { get; }
+    public double LengthToMainPoint { get; }
+    public double LengthToZeroPoint { get; }
     public Point Point { get; }
     public Side Side { get; }
 
@@ -42,10 +43,11 @@ internal class LengthSide
 
     private LengthSide() { }
 
-    public LengthSide(FrameworkElement element, double length, Point point, Side side)
+    public LengthSide(FrameworkElement element, double lengthToMainPoint, double lengthToZeroPoint, Point point, Side side)
     {
         Element = element;
-        Length = length;
+        LengthToMainPoint = lengthToMainPoint;
+        LengthToZeroPoint = lengthToZeroPoint;
         Point = point;
         Side = side;
     }
@@ -140,24 +142,25 @@ public class SolarEclipseService
             }
         }
 
-        LengthSide[]? sortedTopRight = elementLengths.Where(x => x.Side == Side.TopRight).OrderByDescending(x => x.Length).ToArray();
-        LengthSide[]? sortedBottomRight = elementLengths.Where(x => x.Side == Side.BottomRight).OrderByDescending(x => x.Length).ToArray();
-        LengthSide[]? sortedBottomLeft = elementLengths.Where(x => x.Side == Side.BottomLeft).OrderByDescending(x => x.Length).ToArray();
-        LengthSide[]? sortedTopLeft = elementLengths.Where(x => x.Side == Side.TopLeft).OrderByDescending(x => x.Length).ToArray();
+        /*.OrderBy(x => x.Point.X).ThenByDescending(x => x.Point.Y)*/
+        LengthSide[]? sortedBottomRight = elementLengths.Where(x => x.Side == Side.BottomRight).OrderBy(x=> x.LengthToZeroPoint).ToArray();
+        LengthSide[]? sortedTopRight = elementLengths.Where(x => x.Side == Side.TopRight).OrderBy(x => x.LengthToZeroPoint).ToArray();
+        LengthSide[]? sortedTopLeft = elementLengths.Where(x => x.Side == Side.TopLeft).OrderBy(x => x.LengthToZeroPoint).ToArray();
+        LengthSide[]? sortedBottomLeft = elementLengths.Where(x => x.Side == Side.BottomLeft).OrderBy(x => x.LengthToZeroPoint).ToArray();
 
-        List<LengthSide[]> sortedParts = new List<LengthSide[]>();
-
-        if (sortedTopRight.Length > 0)
-            sortedParts.Add(sortedTopRight);
+        List<LengthSide?[]> sortedParts = new List<LengthSide?[]>();
 
         if (sortedBottomRight.Length > 0)
             sortedParts.Add(sortedBottomRight);
 
-        if (sortedBottomLeft.Length > 0)
-            sortedParts.Add(sortedBottomLeft);
+        if (sortedTopRight.Length > 0)
+            sortedParts.Add(sortedTopRight);
 
         if (sortedTopLeft.Length > 0)
             sortedParts.Add(sortedTopLeft);
+
+        if (sortedBottomLeft.Length > 0)
+            sortedParts.Add(sortedBottomLeft);
 
         List<LengthSide[]> rings = new List<LengthSide[]>();
         List<LengthSide> ring = new List<LengthSide>();
@@ -172,58 +175,60 @@ public class SolarEclipseService
         Side startSide = sortedParts[0][0].Side;
         LengthSide lastLength = LengthSide.Empty;
 
+        int clicks = 0;
+        int ringIndex = 0;
+        Tuple<int, int>? lastIndex = null;
 
-        foreach (LengthSide?[] sortedPart in sortedParts)
+        for (int a = 0; a < sortedParts.Count; a++)
         {
+            LengthSide?[] sortedPart = sortedParts[a];
+
             for (int i = 0; i < sortedPart.Length; i++)
             {
                 var item = sortedPart[i];
-                var nextItem = sortedPart[i + 1];
                 if (item is null)
                     continue;
 
                 if (lastLength == LengthSide.Empty)
                 {
                     lastLength = item;
+                    lastIndex = Tuple.Create(a,i);
                     ring.Add(item);
+                    System.Diagnostics.Debug.WriteLine($"{item.Element.Name}");
                     continue;
                 }
 
-                if (item.Side == Side.TopRight)
+                LengthSide nextItem = i + 1 == sortedPart.Length ? sortedParts[a + 1][0] : sortedPart[i + 1];
+
+                if (item.Side == Side.BottomRight || item.Side == Side.TopRight)
                 {
-                    if (item.Point.X >= lastLength.Point.X 
-                        && item.Point.Y >= lastLength.Point.Y
-                        && item.Point.X <= nextItem.Point.X
-                        && item.Point.Y >= nextItem.Point.Y)
+                    if ((item.Point.X >= lastLength.Point.X)
+                        && (item.Point.X >= nextItem.Point.X))
                         continue;
-
-                    if (item.Side == startSide)
-                    {
-                        rings.Add(ring.ToArray());
-                        lastLength = LengthSide.Empty;
-                    }
-
-                    ring.Add(item);
-                    sortedPart[i] = null;
-                    lastLength = item;
                 }
 
-                if (item.Side == Side.BottomRight || item.Side == Side.BottomLeft)
+                if (item.Side == Side.TopLeft)
                 {
-                    if (item.Point.X <= lastLength.Point.X)
-                    {
-                        if (item.Side == startSide)
-                        {
-                            rings.Add(ring.ToArray());
-                            lastLength = LengthSide.Empty;
-                        }
+                    if ((item.Point.Y <= lastLength.Point.Y)
+                        && (item.Point.Y <= nextItem.Point.Y))
                         continue;
-                    }
-
-                    ring.Add(item);
-                    sortedPart[i] = null;
-                    lastLength = item;
+                }              
+                
+                if (item.Side == Side.BottomLeft)
+                {
+                    if ((item.Point.Y >= lastLength.Point.Y)
+                        && (item.Point.Y >= nextItem.Point.Y))
+                        continue;
                 }
+
+                ring.Add(item);
+                clicks++;
+                System.Diagnostics.Debug.WriteLine($"{item.Element.Name}      {clicks}");
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                sortedParts[lastIndex.Item1][lastIndex.Item2] = null;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                lastIndex = Tuple.Create(a, i);
+                lastLength = item;
             }
         }
 
@@ -234,7 +239,7 @@ public class SolarEclipseService
         //foreach (var item in sortedElementLengths)
         //{
         //    FrameworkElement element = item.Element;
-        //    double length = item.Length;
+        //    double length = item.LengthToMainPoint;
         //    Side side = item.Side;
         //    backgroundInfos[element].BurntLeafDrowingBrush(testNewColor, side, (500 / 1) * length);
         //    //await Task.Delay(200); // Test
@@ -245,50 +250,57 @@ public class SolarEclipseService
     {
         if (rectTo.Left <= rectFrom.Left)
         {
+            double lengthToZeroPoint = Math.Sqrt(Math.Pow(rectTo.TopLeft.X - 0, 2) + Math.Pow(rectTo.TopLeft.Y - 0, 2));
+
             if (rectTo.Right >= rectFrom.Left)
             {
-                return new LengthSide(testElement, rectFrom.Top - rectTo.Bottom, rectTo.BottomRight, Side.BottomRight); 
+                return new LengthSide(testElement, rectFrom.Top - rectTo.Bottom, lengthToZeroPoint, rectTo.BottomRight, Side.BottomRight); 
             }
             else
             {
-                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), rectTo.BottomRight, Side.BottomRight);
+                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), lengthToZeroPoint, rectTo.BottomRight, Side.BottomRight);
             }
         }
         else
         {
+            var parent = ((FrameworkElement)testElement.Parent);
+            double lengthToZeroPoint = Math.Sqrt(Math.Pow(rectTo.TopLeft.X - parent.ActualWidth, 2) + Math.Pow(rectTo.TopLeft.Y - parent.ActualHeight, 2));
+
             if (rectTo.Left <= rectFrom.Right)
             {
-                return new LengthSide(testElement, rectFrom.Top - rectTo.Bottom, rectTo.BottomLeft, Side.BottomLeft);
+                return new LengthSide(testElement, rectFrom.Top - rectTo.Bottom, lengthToZeroPoint, rectTo.BottomLeft, Side.BottomLeft);
             }
             else
             {
-                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectFrom.TopRight.X - rectTo.BottomLeft.X, 2) + Math.Pow(rectFrom.TopRight.Y - rectTo.BottomLeft.Y, 2)), rectTo.BottomLeft, Side.BottomLeft);
+                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectFrom.TopRight.X - rectTo.BottomLeft.X, 2) + Math.Pow(rectFrom.TopRight.Y - rectTo.BottomLeft.Y, 2)), lengthToZeroPoint, rectTo.BottomLeft, Side.BottomLeft);
             }
         }
     }
 
     private static LengthSide GetLengthFromUnder(FrameworkElement testElement, Rect rectFrom, Rect rectTo)
     {
+        double lengthToZeroPoint = Math.Sqrt(Math.Pow(rectTo.TopLeft.X - 0, 2) + Math.Pow(rectTo.TopLeft.Y - 0, 2));
+
         if (rectTo.Left <= rectFrom.Left)
         {
             if (rectTo.Right >= rectFrom.Left)
             {
-                return new LengthSide(testElement, rectTo.Top - rectFrom.Bottom, rectTo.TopRight, Side.TopRight);
+                return new LengthSide(testElement, rectTo.Top - rectFrom.Bottom, lengthToZeroPoint, rectTo.TopRight, Side.TopRight);
             }
             else
             {
-                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectTo.TopRight.X - rectFrom.BottomLeft.X, 2) + Math.Pow(rectTo.TopRight.Y - rectFrom.BottomLeft.Y, 2)), rectTo.TopRight, Side.TopRight);
+                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectTo.TopRight.X - rectFrom.BottomLeft.X, 2) + Math.Pow(rectTo.TopRight.Y - rectFrom.BottomLeft.Y, 2)), lengthToZeroPoint, rectTo.TopRight, Side.TopRight);
             }
         }
         else
         {
             if (rectTo.Left <= rectFrom.Right)
             {
-                return new LengthSide(testElement, rectTo.Top - rectFrom.Bottom, rectTo.TopLeft, Side.TopLeft);
+                return new LengthSide(testElement, rectTo.Top - rectFrom.Bottom, lengthToZeroPoint, rectTo.TopLeft, Side.TopLeft);
             }
             else
             {
-                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), rectTo.TopLeft, Side.TopLeft);
+                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), lengthToZeroPoint, rectTo.TopLeft, Side.TopLeft);
             }
         }
     }
