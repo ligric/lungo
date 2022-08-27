@@ -179,76 +179,91 @@ public class SolarEclipseService
         int ringIndex = 0;
         Tuple<int, int>? lastIndex = null;
 
-        for (int a = 0; a < sortedParts.Count; a++)
+        int GetRingsLength()
         {
-            LengthSide?[] sortedPart = sortedParts[a];
+            int length = 0;
+            foreach (var item in rings)
+                length += item.Length;
+            return length;
+        }
 
-            for (int i = 0; i < sortedPart.Length; i++)
+        while (GetRingsLength() != elementLengths.Count)
+        {
+            System.Diagnostics.Debug.WriteLine($"Elements inside rings = {GetRingsLength()} from {elementLengths.Count}");
+            for (int a = 0; a < sortedParts.Count; a++)
             {
-                var item = sortedPart[i];
-                if (item is null)
-                    continue;
+                LengthSide?[] sortedPart = sortedParts[a];
 
-                if (lastLength == LengthSide.Empty)
+                for (int i = 0; i < sortedPart.Length; i++)
                 {
-                    lastLength = item;
-                    lastIndex = Tuple.Create(a,i);
-                    ring.Add(item);
-                    System.Diagnostics.Debug.WriteLine($"{item.Element.Name}");
-                    continue;
-                }
+                    var item = sortedPart[i];
+                    if (item is null)
+                        continue;
 
-                if (a + 1 == sortedParts.Count 
-                    && i + 1 == sortedPart.Length)
-                {
-                    lastLength = LengthSide.Empty;
-                    ring.Add(item);
-                    rings.Add(ring.ToArray());
-                    sortedParts[lastIndex.Item1][lastIndex.Item2] = null;
-                    lastIndex = null;
-                    sortedParts[a][i] = null;
+                    if (lastLength == LengthSide.Empty)
+                    {
+                        lastLength = item;
+                        lastIndex = Tuple.Create(a, i);
+                        ring.Add(item);
+                        System.Diagnostics.Debug.WriteLine($"{item.Element.Name}");
+                        continue;
+                    }
+
+                    if (a + 1 == sortedParts.Count
+                        && i + 1 == sortedPart.Length)
+                    {
+                        lastLength = LengthSide.Empty;
+                        ring.Add(item);
+                        rings.Add(ring.ToArray());
+                        sortedParts[lastIndex.Item1][lastIndex.Item2] = null;
+                        lastIndex = null;
+                        sortedParts[a][i] = null;
 #if DEBUG
-                    foreach (var ringResultItem in ring)
-                        System.Diagnostics.Debug.WriteLine($"____{ringResultItem.Element.Name}");
+                        foreach (var ringResultItem in ring)
+                            System.Diagnostics.Debug.WriteLine($"____{ringResultItem.Element.Name}");
 #endif
-                    ring = new List<LengthSide>();
+                        ring = new List<LengthSide>();
 
-                    break;
-                }
+                        break;
+                    }
+                     
+                    LengthSide nextItem = i + 1 == sortedPart.Length ? sortedParts[a + 1][0] : sortedPart[i + 1];
 
-                LengthSide nextItem = i + 1 == sortedPart.Length ? sortedParts[a + 1][0] : sortedPart[i + 1];
 
-                if (item.Side == Side.BottomRight || item.Side == Side.TopRight)
-                {
-                    if ((item.Point.X >= lastLength.Point.X)
-                        && (item.Point.X >= nextItem.Point.X))
-                        continue;
-                }
+                    if (item.Side == Side.BottomRight || item.Side == Side.TopRight)
+                    {
+                        if ((item.Point.X >= lastLength.Point.X)
+                            && (item.Point.X >= nextItem.Point.X))
+                            continue;
+                    }
 
-                if (item.Side == Side.TopLeft)
-                {
-                    if ((item.Point.Y <= lastLength.Point.Y)
-                        && (item.Point.Y <= nextItem.Point.Y))
-                        continue;
-                }              
-                
-                if (item.Side == Side.BottomLeft)
-                {
-                    if ((item.Point.Y >= lastLength.Point.Y)
-                        && (item.Point.Y >= nextItem.Point.Y))
-                        continue;
-                }
+                    if (item.Side == Side.TopLeft)
+                    {
+                        if ((item.Point.Y <= lastLength.Point.Y)
+                            && (item.Point.Y <= nextItem.Point.Y))
+                            continue;
+                    }
 
-                ring.Add(item);
-                clicks++;
-                System.Diagnostics.Debug.WriteLine($"{item.Element.Name}      {clicks}");
+                    if (item.Side == Side.BottomLeft)
+                    {
+                        if ((item.Point.Y >= lastLength.Point.Y)
+                            && (item.Point.Y >= nextItem.Point.Y))
+                            continue;
+                    }
+
+                    ring.Add(item);
+                    clicks++;
+                    System.Diagnostics.Debug.WriteLine($"{item.Element.Name}      {clicks}");
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-                sortedParts[lastIndex.Item1][lastIndex.Item2] = null;
+                    sortedParts[lastIndex.Item1][lastIndex.Item2] = null;
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
-                lastIndex = Tuple.Create(a, i);
-                lastLength = item;
+                    lastIndex = Tuple.Create(a, i);
+                    lastLength = item;
+                }
             }
         }
+
+
 
         // 500px - 1 sec
 
