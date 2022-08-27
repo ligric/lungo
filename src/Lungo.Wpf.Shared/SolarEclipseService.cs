@@ -198,6 +198,24 @@ public class SolarEclipseService
                     continue;
                 }
 
+                if (a + 1 == sortedParts.Count 
+                    && i + 1 == sortedPart.Length)
+                {
+                    lastLength = LengthSide.Empty;
+                    ring.Add(item);
+                    rings.Add(ring.ToArray());
+                    sortedParts[lastIndex.Item1][lastIndex.Item2] = null;
+                    lastIndex = null;
+                    sortedParts[a][i] = null;
+#if DEBUG
+                    foreach (var ringResultItem in ring)
+                        System.Diagnostics.Debug.WriteLine($"____{ringResultItem.Element.Name}");
+#endif
+                    ring = new List<LengthSide>();
+
+                    break;
+                }
+
                 LengthSide nextItem = i + 1 == sortedPart.Length ? sortedParts[a + 1][0] : sortedPart[i + 1];
 
                 if (item.Side == Side.BottomRight || item.Side == Side.TopRight)
@@ -342,7 +360,7 @@ internal static class LungoBackgroudAnimationsHalper
 
         //// ------------------------------------------------------------------------------------------
 
-        #region topRightToLeftPointAnimation
+#region topRightToLeftPointAnimation
 
         var topRightToLeftPointAnimation = new PointAnimation()
         {
@@ -353,9 +371,9 @@ internal static class LungoBackgroudAnimationsHalper
 
         topRightToLeftPoint.BeginAnimation(PathFigure.StartPointProperty, topRightToLeftPointAnimation);
 
-        #endregion
+#endregion
 
-        #region rightUpToDownPointAnimation
+#region rightUpToDownPointAnimation
 
         var rightUpToDownPointAnimation = new PointAnimation()
         {
@@ -366,9 +384,9 @@ internal static class LungoBackgroudAnimationsHalper
 
         rightUpToDownPoint.BeginAnimation(LineSegment.PointProperty, rightUpToDownPointAnimation);
 
-        #endregion
+#endregion
 
-        #region downRightToLeftPointAnimation
+#region downRightToLeftPointAnimation
 
         var downRightToLeftPointAnimation = new PointAnimation()
         {
@@ -380,11 +398,11 @@ internal static class LungoBackgroudAnimationsHalper
 
         downRightToLeftPoint.BeginAnimation(LineSegment.PointProperty, downRightToLeftPointAnimation);
 
-        #endregion
+#endregion
 
         //// ------------------------------------------------------------------------------------------
 
-        #region sezierSegment1Animation
+#region sezierSegment1Animation
 
         var sezierSegment1Animation = new PointAnimation()
         {
@@ -394,9 +412,9 @@ internal static class LungoBackgroudAnimationsHalper
             To = selectedPoints[3]
         };
 
-        #endregion
+#endregion
 
-        #region sezierSegment2Animation
+#region sezierSegment2Animation
 
         var sezierSegment2Animation = new PointAnimation()
         {
@@ -408,9 +426,9 @@ internal static class LungoBackgroudAnimationsHalper
 
         sezierSegment.BeginAnimation(BezierSegment.Point2Property, sezierSegment2Animation);
 
-        #endregion
+#endregion
 
-        #region sezierSegment3Animation
+#region sezierSegment3Animation
 
         var sezierSegment3Animation = new PointAnimation()
         {
@@ -421,7 +439,7 @@ internal static class LungoBackgroudAnimationsHalper
 
         sezierSegment.BeginAnimation(BezierSegment.Point3Property, sezierSegment3Animation);
 
-        #endregion
+#endregion
 
         sezierSegment1Animation.Completed += (s, e) =>
         {
