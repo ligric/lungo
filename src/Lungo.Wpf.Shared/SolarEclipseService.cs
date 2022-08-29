@@ -110,6 +110,10 @@ public class SolarEclipseService
         {
             control.Background = burntLeafDrowingBrush;
         }
+        else if (element is System.Windows.Shapes.Shape shape)
+        {
+            shape.Fill = burntLeafDrowingBrush;
+        }
         else
         {
             ((Border)element).Background = burntLeafDrowingBrush;
