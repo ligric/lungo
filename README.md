@@ -1,18 +1,23 @@
 [![NuGet Status](https://img.shields.io/nuget/v/Lungo.svg?style=flat)](https://www.nuget.org/packages/Lungo/) [![NuGet](https://img.shields.io/nuget/dt/Lungo.svg)](https://www.nuget.org/packages/Lungo)
 
 ```C#
-GeneralTransform generalTransform = button.TransformToVisual((Visual)button.Parent);
-Rect rect = generalTransform.TransformBounds(new Rect(button.RenderSize));
+private void OnTestButtonClicked(object sender, RoutedEventArgs e)
+{
+    GeneralTransform generalTransform = themeChangerButton.TransformToVisual((Visual)themeChangerButton.Parent);
+    Rect rect = generalTransform.TransformBounds(new Rect(themeChangerButton.RenderSize));
 
-if (isDarkTheme)
-{
-    SolarEclipseService.ChangeTheme(rect, (Color)FindResource("Light"));
-}
-else
-{
-    SolarEclipseService.ChangeTheme(rect, (Color)FindResource("Dark"));
+    if (isDarkTheme)
+    {
+        SolarEclipseService.ChangeTheme(rect, (Color)FindResource("Light"));
+    }
+    else
+    {
+        SolarEclipseService.ChangeTheme(rect, (Color)FindResource("Dark"));
+    }
+
+    isDarkTheme = !isDarkTheme;
 }
 ```
 
-https://user-images.githubusercontent.com/69314237/182225523-9734cfa2-2719-469e-ae7c-5bd167c50324.mp4
+https://user-images.githubusercontent.com/69314237/187296510-b0cf2c2e-9027-4913-8c8d-aeca574de47b.mp4
 
