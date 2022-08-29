@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Xml.Linq;
 
 namespace Lungo.Wpf;
 
@@ -165,7 +166,6 @@ public class SolarEclipseService
             return;
 
         List<LengthSide[]> rings = new List<LengthSide[]>();
-        List<LengthSide> ring = new List<LengthSide>();
 
         Side startSide = sortedParts[0][0].Side;
         LengthSide lastLength = LengthSide.Empty;
@@ -181,10 +181,21 @@ public class SolarEclipseService
             return length;
         }
 
+        foreach (var item in elementLengths)
+        {
+            FrameworkElement element = item.Element;
+            Side side = item.Side;
+            backgroundInfos[element].BurntLeafDrowingBrush(testNewColor, side, 2000);
+        }
+
+        return;
+
         while (GetRingsLength() != elementLengths.Count)
         {
-            System.Diagnostics.Debug.WriteLine($"Elements inside rings = {GetRingsLength()} from {elementLengths.Count}");
+            //System.Diagnostics.Debug.WriteLine($"Elements inside rings = {GetRingsLength()} from {elementLengths.Count}");
+            List<LengthSide> ring = new List<LengthSide>();
             List<Tuple<int, int>> indexesForRemove = new List<Tuple<int, int>>();
+
 
             for (int a = 0; a < sortedParts.Count; a++)
             {
@@ -199,7 +210,7 @@ public class SolarEclipseService
                         lastLength = item;
                         lastIndex = Tuple.Create(a, i);
                         ring.Add(item);
-                        System.Diagnostics.Debug.WriteLine($"{item.Element.Name}");
+                        //System.Diagnostics.Debug.WriteLine($"{item.Element.Name}");
                         continue;
                     }
 
@@ -212,12 +223,10 @@ public class SolarEclipseService
                         indexesForRemove.Add(Tuple.Create(a, i));
                         indexesForRemove.Add(Tuple.Create(lastIndex.Item1, lastIndex.Item2));
                         lastIndex = null;
-#if DEBUG
-                        foreach (var ringResultItem in ring)
-                            System.Diagnostics.Debug.WriteLine($"____{ringResultItem.Element.Name}");
-#endif
-                        ring = new List<LengthSide>();
-
+//#if DEBUG
+//                        foreach (var ringResultItem in ring)
+//                            System.Diagnostics.Debug.WriteLine($"____{ringResultItem.Element.Name}");
+//#endif
                         break;
                     }
 
@@ -246,7 +255,7 @@ public class SolarEclipseService
 
                     ring.Add(item);
                     clicks++;
-                    System.Diagnostics.Debug.WriteLine($"{item.Element.Name}      {clicks}");
+                    //System.Diagnostics.Debug.WriteLine($"{item.Element.Name}      {clicks}");
                     indexesForRemove.Add(Tuple.Create(lastIndex.Item1, lastIndex.Item2));
                     lastIndex = Tuple.Create(a, i);
                     lastLength = item;
@@ -257,19 +266,20 @@ public class SolarEclipseService
                 sortedParts[remove2DIndex.Item1].RemoveAt(remove2DIndex.Item2);
         }
 
-
-
         // 500px - 1 sec
 
 
+        //rings.Reverse();
 
-        //foreach (var item in sortedElementLengths)
+        //foreach (LengthSide[] ring in rings)
         //{
-        //    FrameworkElement element = item.Element;
-        //    double length = item.LengthToMainPoint;
-        //    Side side = item.Side;
-        //    backgroundInfos[element].BurntLeafDrowingBrush(testNewColor, side, (500 / 1) * length);
-        //    //await Task.Delay(200); // Test
+        //    foreach (LengthSide lengthSide in ring)
+        //    {
+        //        FrameworkElement element = lengthSide.Element;
+        //        Side side = lengthSide.Side;
+        //        backgroundInfos[element].BurntLeafDrowingBrush(testNewColor, side, 2000);
+        //    }
+        //    //await Task.Delay(1000); // Test
         //}
     }
 
