@@ -177,6 +177,8 @@ public class SolarEclipseService
         int clicks = 0;
         Tuple<int, int>? lastIndex = null;
 
+        int debugCount = 0;
+
         int GetRingsLength()
         {
             int length = 0;
@@ -225,7 +227,17 @@ public class SolarEclipseService
                         break;
                     }
 
+                    if (debugCount == 17)
+                    {
+                        var testA = a;
+                        var testI = i;
+                        var testB = i + 1;
+                        
+
+                    }
+
                     LengthSide nextItem = i + 1 == sortedPart.Count() ? sortedParts[a + 1][0] : sortedPart[i + 1];
+                    debugCount++;
 
                     if (item.Side == Side.BottomRight || item.Side == Side.TopRight)
                     {
@@ -258,7 +270,18 @@ public class SolarEclipseService
             }
 
             foreach (var remove2DIndex in indexesForRemove.OrderBy(x => x.Item1).ThenByDescending(x => x.Item2))
+            {
+                if (sortedParts.Count == 1 && sortedParts[0].Count == 0)
+                    break;
+
                 sortedParts[remove2DIndex.Item1].RemoveAt(remove2DIndex.Item2);
+            }
+
+            for (int i = sortedParts.Count - 1; i >= 0; i--)
+            {
+                if (sortedParts[i].Count == 0)
+                    sortedParts.RemoveAt(i);
+            }
         }
 
         // 500px - 1 sec

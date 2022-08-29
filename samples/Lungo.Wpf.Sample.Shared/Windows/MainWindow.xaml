@@ -51,6 +51,6 @@
 
 
         <Button x:Name="themeChangerButton" Background="Red"
-                Width="25" Height="26" Canvas.Left="281" Canvas.Top="165"/>
+                Width="24" Height="26" Canvas.Left="232" Canvas.Top="178"/>
     </Canvas>
 </Window>
