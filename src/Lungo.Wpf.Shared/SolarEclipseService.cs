@@ -223,11 +223,6 @@ public class SolarEclipseService
 
                     LengthSide nextItem = i + 1 == sortedPart.Count() ? sortedParts[a + 1][0] : sortedPart[i + 1];
 
-                    if (nextItem is null)
-                    {
-
-                    }
-
                     if (item.Side == Side.BottomRight || item.Side == Side.TopRight)
                     {
                         if ((item.Point.X >= lastLength.Point.X)
@@ -258,8 +253,7 @@ public class SolarEclipseService
                 }
             }
 
-            var test = indexesForRemove.OrderBy(x => x.Item1).ThenByDescending(x => x.Item2);
-            foreach (var remove2DIndex in test)
+            foreach (var remove2DIndex in indexesForRemove.OrderBy(x => x.Item1).ThenByDescending(x => x.Item2))
                 sortedParts[remove2DIndex.Item1].RemoveAt(remove2DIndex.Item2);
         }
 
