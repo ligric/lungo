@@ -4,42 +4,53 @@
 
     <Window.Resources>
         <ResourceDictionary>
-            <Style TargetType="Grid">
-                <Setter Property="Background" Value="#2b2731"/>
-            </Style>
-
-            <Style TargetType="Frame">
-                <Setter Property="Background" Value="#8f54d5"/>
+            <Style TargetType="Rectangle">
+                <Setter Property="Fill" Value="#8f54d5"/>
+                <Setter Property="RadiusX" Value="10"/>
+                <Setter Property="RadiusY" Value="10"/>
                 <Setter Property="Width" Value="50"/>
                 <Setter Property="Height" Value="50"/>
             </Style>
         </ResourceDictionary>
     </Window.Resources>
 
+    <Canvas x:Name="canvas" Background="#2b2731">
 
-    <Grid ap:SolarEclipse.ThemeChangingSubscribe="False">
+        <Rectangle x:Name="Fourteenth" Canvas.Left="493" Canvas.Top="27"
+                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Rectangle x:Name="Fifteenth" Canvas.Left="33" Canvas.Top="52" 
+                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Rectangle x:Name="Sixteenth" Canvas.Left="194" Canvas.Top="252" 
+                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Rectangle x:Name="Second" Canvas.Left="375" Canvas.Top="395" 
+                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Rectangle x:Name="First" Canvas.Left="350" Canvas.Top="52" 
+                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Rectangle x:Name="Third" Canvas.Left="571" Canvas.Top="198" 
+                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Rectangle x:Name="Thirteenth" Canvas.Left="219" Canvas.Top="385" 
+                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Rectangle x:Name="Eleventh" Canvas.Left="125" Canvas.Top="103" 
+                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Rectangle x:Name="Twelfth" Canvas.Left="673" Canvas.Top="128" 
+                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Rectangle x:Name="Ninth" Canvas.Left="493" Canvas.Top="362" 
+                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Rectangle x:Name="Tenth" Canvas.Left="631" Canvas.Top="302" 
+                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Rectangle x:Name="Seventh" Canvas.Left="244" Canvas.Top="52" 
+                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Rectangle x:Name="Fifth" Canvas.Left="58" Canvas.Top="198" 
+                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Rectangle x:Name="Sixth" Canvas.Left="437" Canvas.Top="153" 
+                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Rectangle x:Name="Fourth" Canvas.Left="325" Canvas.Top="277" 
+                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Rectangle x:Name="Eighth" Canvas.Left="100" Canvas.Top="337" 
+                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
 
-        <Frame x:Name="Fourteenth" Margin="468,27,202,357" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame x:Name="Fifteenth" Margin="335,27,335,357" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame x:Name="Sixteenth" Margin="208,0,462,384" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame x:Name="Second" Margin="20,141,680,293" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame x:Name="First" Margin="30,27,640,357" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame x:Name="Third" Margin="122,105,548,279" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame x:Name="Thirteenth" Margin="621,77,49,307" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame x:Name="Eleventh" Margin="636,292,64,142" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame x:Name="Twelfth" Margin="596,200,104,234" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame x:Name="Ninth" Margin="468,347,202,37" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame x:Name="Tenth" Margin="571,347,129,87" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame Name="Seventh" Margin="295,347,375,37" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame x:Name="Fifth" Margin="122,347,548,37" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame Name="Sixth" Margin="208,242,462,142" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame x:Name="Fourth" Margin="44,230,626,154" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Frame x:Name="Eighth" Margin="397,280,303,154" ap:SolarEclipse.ThemeChangingSubscribe="True"/>
 
-
-        <Frame Width="750" Background="Red" Height="2" VerticalAlignment="Top" Margin="0,210,0,0"/>
-        <Frame Width="2" Background="Red" Height="500" HorizontalAlignment="Left" Margin="212,0,0,0"/>
-        <Button x:Name="button" Width="25" Height="26" Margin="202,198,0,0" Background="Red"
-                HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnTestButtonClicked"/>
-    </Grid>
+        <Button x:Name="themeChangerButton" Background="Red"
+                Width="25" Height="26" Canvas.Left="281" Canvas.Top="165"/>
+    </Canvas>
 </Window>
