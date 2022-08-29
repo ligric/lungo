@@ -142,41 +142,35 @@ public class SolarEclipseService
             }
         }
 
-        /*.OrderBy(x => x.Point.X).ThenByDescending(x => x.Point.Y)*/
-        LengthSide[]? sortedBottomRight = elementLengths.Where(x => x.Side == Side.BottomRight).OrderBy(x=> x.LengthToZeroPoint).ToArray();
-        LengthSide[]? sortedTopRight = elementLengths.Where(x => x.Side == Side.TopRight).OrderBy(x => x.LengthToZeroPoint).ToArray();
-        LengthSide[]? sortedTopLeft = elementLengths.Where(x => x.Side == Side.TopLeft).OrderBy(x => x.LengthToZeroPoint).ToArray();
-        LengthSide[]? sortedBottomLeft = elementLengths.Where(x => x.Side == Side.BottomLeft).OrderBy(x => x.LengthToZeroPoint).ToArray();
+        IOrderedEnumerable<LengthSide> sortedBottomRight = elementLengths.Where(x => x.Side == Side.BottomRight).OrderBy(x=> x.LengthToZeroPoint);
+        IOrderedEnumerable<LengthSide> sortedTopRight = elementLengths.Where(x => x.Side == Side.TopRight).OrderBy(x => x.LengthToZeroPoint);
+        IOrderedEnumerable<LengthSide> sortedTopLeft = elementLengths.Where(x => x.Side == Side.TopLeft).OrderBy(x => x.LengthToZeroPoint);
+        IOrderedEnumerable<LengthSide> sortedBottomLeft = elementLengths.Where(x => x.Side == Side.BottomLeft).OrderBy(x => x.LengthToZeroPoint);
 
-        List<LengthSide?[]> sortedParts = new List<LengthSide?[]>();
+        List<List<LengthSide>> sortedParts = new List<List<LengthSide>>();
 
-        if (sortedBottomRight.Length > 0)
-            sortedParts.Add(sortedBottomRight);
+        if (sortedBottomRight.Count() > 0)
+            sortedParts.Add(sortedBottomRight.ToList());
 
-        if (sortedTopRight.Length > 0)
-            sortedParts.Add(sortedTopRight);
+        if (sortedTopRight.Count() > 0)
+            sortedParts.Add(sortedTopRight.ToList());
 
-        if (sortedTopLeft.Length > 0)
-            sortedParts.Add(sortedTopLeft);
+        if (sortedTopLeft.Count() > 0)
+            sortedParts.Add(sortedTopLeft.ToList());
 
-        if (sortedBottomLeft.Length > 0)
-            sortedParts.Add(sortedBottomLeft);
+        if (sortedBottomLeft.Count() > 0)
+            sortedParts.Add(sortedBottomLeft.ToList());
+
+        if (sortedParts.Count == 0)
+            return;
 
         List<LengthSide[]> rings = new List<LengthSide[]>();
         List<LengthSide> ring = new List<LengthSide>();
-
-        //List<LengthSide> bufferRing;
-        //LengthSide startRingElement;
-        //LengthSide oldLength = maxLength;
-
-        if (sortedParts[0]?[0] is null)
-            return;
 
         Side startSide = sortedParts[0][0].Side;
         LengthSide lastLength = LengthSide.Empty;
 
         int clicks = 0;
-        int ringIndex = 0;
         Tuple<int, int>? lastIndex = null;
 
         int GetRingsLength()
@@ -190,15 +184,15 @@ public class SolarEclipseService
         while (GetRingsLength() != elementLengths.Count)
         {
             System.Diagnostics.Debug.WriteLine($"Elements inside rings = {GetRingsLength()} from {elementLengths.Count}");
+            List<Tuple<int, int>> indexesForRemove = new List<Tuple<int, int>>();
+
             for (int a = 0; a < sortedParts.Count; a++)
             {
-                LengthSide?[] sortedPart = sortedParts[a];
+                List<LengthSide> sortedPart = sortedParts[a];
 
-                for (int i = 0; i < sortedPart.Length; i++)
+                for (int i = 0; i < sortedPart.Count(); i++)
                 {
                     var item = sortedPart[i];
-                    if (item is null)
-                        continue;
 
                     if (lastLength == LengthSide.Empty)
                     {
@@ -210,14 +204,14 @@ public class SolarEclipseService
                     }
 
                     if (a + 1 == sortedParts.Count
-                        && i + 1 == sortedPart.Length)
+                        && i + 1 == sortedPart.Count())
                     {
                         lastLength = LengthSide.Empty;
                         ring.Add(item);
                         rings.Add(ring.ToArray());
-                        sortedParts[lastIndex.Item1][lastIndex.Item2] = null;
+                        indexesForRemove.Add(Tuple.Create(a, i));
+                        indexesForRemove.Add(Tuple.Create(lastIndex.Item1, lastIndex.Item2));
                         lastIndex = null;
-                        sortedParts[a][i] = null;
 #if DEBUG
                         foreach (var ringResultItem in ring)
                             System.Diagnostics.Debug.WriteLine($"____{ringResultItem.Element.Name}");
@@ -226,9 +220,13 @@ public class SolarEclipseService
 
                         break;
                     }
-                     
-                    LengthSide nextItem = i + 1 == sortedPart.Length ? sortedParts[a + 1][0] : sortedPart[i + 1];
 
+                    LengthSide nextItem = i + 1 == sortedPart.Count() ? sortedParts[a + 1][0] : sortedPart[i + 1];
+
+                    if (nextItem is null)
+                    {
+
+                    }
 
                     if (item.Side == Side.BottomRight || item.Side == Side.TopRight)
                     {
@@ -254,13 +252,15 @@ public class SolarEclipseService
                     ring.Add(item);
                     clicks++;
                     System.Diagnostics.Debug.WriteLine($"{item.Element.Name}      {clicks}");
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-                    sortedParts[lastIndex.Item1][lastIndex.Item2] = null;
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                    indexesForRemove.Add(Tuple.Create(lastIndex.Item1, lastIndex.Item2));
                     lastIndex = Tuple.Create(a, i);
                     lastLength = item;
                 }
             }
+
+            var test = indexesForRemove.OrderBy(x => x.Item1).ThenByDescending(x => x.Item2);
+            foreach (var remove2DIndex in test)
+                sortedParts[remove2DIndex.Item1].RemoveAt(remove2DIndex.Item2);
         }
 
 
