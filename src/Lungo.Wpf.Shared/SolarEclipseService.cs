@@ -181,15 +181,6 @@ public class SolarEclipseService
             return length;
         }
 
-        foreach (var item in elementLengths)
-        {
-            FrameworkElement element = item.Element;
-            Side side = item.Side;
-            backgroundInfos[element].BurntLeafDrowingBrush(testNewColor, side, 2000);
-        }
-
-        return;
-
         while (GetRingsLength() != elementLengths.Count)
         {
             //System.Diagnostics.Debug.WriteLine($"Elements inside rings = {GetRingsLength()} from {elementLengths.Count}");
@@ -269,18 +260,18 @@ public class SolarEclipseService
         // 500px - 1 sec
 
 
-        //rings.Reverse();
+        rings.Reverse();
 
-        //foreach (LengthSide[] ring in rings)
-        //{
-        //    foreach (LengthSide lengthSide in ring)
-        //    {
-        //        FrameworkElement element = lengthSide.Element;
-        //        Side side = lengthSide.Side;
-        //        backgroundInfos[element].BurntLeafDrowingBrush(testNewColor, side, 2000);
-        //    }
-        //    //await Task.Delay(1000); // Test
-        //}
+        foreach (LengthSide[] ring in rings)
+        {
+            foreach (LengthSide lengthSide in ring)
+            {
+                FrameworkElement element = lengthSide.Element;
+                Side side = lengthSide.Side;
+                backgroundInfos[element].BurntLeafDrowingBrush(testNewColor, side, 2);
+            }
+            await Task.Delay(1); // Test
+        }
     }
 
     private static LengthSide GetLengthFromAbove(FrameworkElement testElement, Rect rectFrom, Rect rectTo)
