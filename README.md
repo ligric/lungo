@@ -1,4 +1,4 @@
-
+## Nugets
 
 | package | version  | downloads |
 | ---------------|:-------------:|:-------------:|
@@ -8,7 +8,7 @@
 | Lungo.Uno   | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.Uno.svg?style=flat)](https://www.nuget.org/packages/Lungo.Uno/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.Uno.svg)](https://www.nuget.org/packages/Lungo.Uno) |
 | Lungo.Maui   | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.Maui.svg?style=flat)](https://www.nuget.org/packages/Lungo.Maui/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.Maui.svg)](https://www.nuget.org/packages/Lungo.Maui) |
 
-
+## Examples
 ```XML
 <Rectangle ap:SolarEclipse.ThemeChangingSubscribe="True"/>
 ```
@@ -31,6 +31,6 @@ private void OnTestButtonClicked(object sender, RoutedEventArgs e)
     isDarkTheme = !isDarkTheme;
 }
 ```
-
+## Preview
 https://user-images.githubusercontent.com/69314237/187296510-b0cf2c2e-9027-4913-8c8d-aeca574de47b.mp4
 
