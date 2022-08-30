@@ -1,4 +1,13 @@
-[![NuGet Status](https://img.shields.io/nuget/v/Lungo.svg?style=flat)](https://www.nuget.org/packages/Lungo/) [![NuGet](https://img.shields.io/nuget/dt/Lungo.svg)](https://www.nuget.org/packages/Lungo)
+
+
+| package | version  | downloads |
+| ---------------|:-------------:|:-------------:|
+| Lungo         | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.svg?style=flat)](https://www.nuget.org/packages/Lungo/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.svg)](https://www.nuget.org/packages/Lungo) |
+| Lungo.Wpf   | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.Wpf.svg?style=flat)](https://www.nuget.org/packages/Lungo.Wpf/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.Wpf.svg)](https://www.nuget.org/packages/Lungo.Wpf) |
+| Lungo.Uwp   | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.Uwp.svg?style=flat)](https://www.nuget.org/packages/Lungo.Uwp/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.Uwp.svg)](https://www.nuget.org/packages/Lungo.Uwp) |
+| Lungo.Uno   | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.Uno.svg?style=flat)](https://www.nuget.org/packages/Lungo.Uno/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.Uno.svg)](https://www.nuget.org/packages/Lungo.Uno) |
+| Lungo.Maui   | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.Maui.svg?style=flat)](https://www.nuget.org/packages/Lungo.Maui/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.Maui.svg)](https://www.nuget.org/packages/Lungo.Maui) |
+
 
 ```XML
 <Rectangle ap:SolarEclipse.ThemeChangingSubscribe="True"/>
