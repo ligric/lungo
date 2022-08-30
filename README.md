@@ -1,5 +1,9 @@
 [![NuGet Status](https://img.shields.io/nuget/v/Lungo.svg?style=flat)](https://www.nuget.org/packages/Lungo/) [![NuGet](https://img.shields.io/nuget/dt/Lungo.svg)](https://www.nuget.org/packages/Lungo)
 
+```XML
+<Rectangle ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+```
+
 ```C#
 private void OnTestButtonClicked(object sender, RoutedEventArgs e)
 {
