@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -126,28 +127,60 @@ public class SolarEclipseService
     public static void ChangeTheme(FrameworkElement changerElement, Color newColor)
     {
         Rect changerElementRect = changerElement.GetElementRectFromScreen();
-
-        Tuple<Rect, LengthSide>[] minorElementLengthsToChangerElement = new Tuple<Rect, LengthSide>[backgroundInfos.Count];
+        LengthSide[] minorElementLengthsToChangerElement = new LengthSide[backgroundInfos.Count];
 
         int i = 0;
-        foreach (var elementKeyValuePair in backgroundInfos)
+        foreach (FrameworkElement element in backgroundInfos.Keys)
         {
-            FrameworkElement element = elementKeyValuePair.Key;
             Rect minorElementRect = element.GetElementRectFromScreen();
-
-            LengthSide lengthSide = changerElementRect.Top >= minorElementRect.Bottom ? GetLengthFromAbove(element, changerElementRect, minorElementRect) 
+            minorElementLengthsToChangerElement[i] = changerElementRect.Top >= minorElementRect.Bottom ? GetLengthFromAbove(element, changerElementRect, minorElementRect) 
                 : GetLengthFromUnder(element, changerElementRect, minorElementRect);
-
-            minorElementLengthsToChangerElement[i] = Tuple.Create(minorElementRect, lengthSide);
             i++;
         }
 
-        int millisecond = 2000;
+        int milliseconds = 2000;
+       
+        double maxRightBottomElementsHeight = 0, maxTopRightElementsHeight = 0, maxTopLeftElementsHeight = 0, maxLeftBottomElementsHeight = 0,
+               maxRightBottomElementsWidth = 0, maxTopRightElementsWidth = 0, maxTopLeftElementsWidth = 0, maxLeftBottomElementsWidth = 0;
 
-        foreach (var item in minorElementLengthsToChangerElement)
+        foreach (LengthSide lengthSide in minorElementLengthsToChangerElement)
         {
-
+            FrameworkElement element = lengthSide.Element;
+            switch (lengthSide.Side)
+            {
+                case Side.TopLeft:
+                    maxTopLeftElementsHeight += element.ActualHeight;
+                    maxTopLeftElementsWidth += element.ActualWidth;
+                    break;
+                case Side.TopRight:
+                    maxTopRightElementsHeight += element.ActualHeight;
+                    maxTopRightElementsWidth += element.ActualWidth;
+                    break;
+                case Side.BottomLeft:
+                    maxLeftBottomElementsHeight += element.ActualHeight;
+                    maxLeftBottomElementsWidth += element.ActualWidth;
+                    break;
+                case Side.BottomRight:
+                    maxRightBottomElementsHeight += element.ActualHeight;
+                    maxRightBottomElementsWidth += element.ActualWidth;
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
         }
+
+        double GetDiagonal(double a, double b)
+        {
+            return Math.Sqrt((a * a) + (b * b));
+        }
+
+        double maxRightBottomDiagonal = GetDiagonal(maxRightBottomElementsHeight, maxRightBottomElementsWidth),
+               maxTopRightDiagonal = GetDiagonal(maxTopRightElementsHeight, maxTopRightElementsWidth),
+               maxTopLeftDiagonal = GetDiagonal(maxTopLeftElementsHeight, maxTopLeftElementsWidth),
+               maxLeftBottomDiagonal = GetDiagonal(maxLeftBottomElementsHeight, maxLeftBottomElementsWidth);
+
+
+
 
         foreach (var minor in minorElementLengthsToChangerElement)
         {
