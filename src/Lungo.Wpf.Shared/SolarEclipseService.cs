@@ -66,7 +66,7 @@ public class SolarEclipseService
         GeometryDrawing backgroundGeometryDrawing = new GeometryDrawing();
         var backgroundBrushBack = new SolidColorBrush((Color)Application.Current.MainWindow.FindResource("Light"));
         backgroundGeometryDrawing.Brush = backgroundBrushBack;
-        backgroundGeometryDrawing.Geometry = new RectangleGeometry(new Rect(0,0,100,100));
+        backgroundGeometryDrawing.Geometry = new RectangleGeometry(new Rect(0, 0, 100, 100));
         group.Children.Add(backgroundGeometryDrawing);
 
         GeometryDrawing geometryDrawing = new GeometryDrawing();
@@ -77,7 +77,7 @@ public class SolarEclipseService
         var topRightToLeftPoint = new PathFigure();
         topRightToLeftPoint.StartPoint = new Point(100, 0);
         pathGeometry.Figures.Add(topRightToLeftPoint);
-        topRightToLeftPoint.Segments.Add(new LineSegment(new Point(100,0), true));
+        topRightToLeftPoint.Segments.Add(new LineSegment(new Point(100, 0), true));
         var rightUpToDownPoint = new LineSegment(new Point(100, 0), true);
         topRightToLeftPoint.Segments.Add(rightUpToDownPoint);
         var downRightToLeftPoint = new LineSegment(new Point(100, 100), true);
@@ -127,34 +127,37 @@ public class SolarEclipseService
     {
         Rect changerElementRect = changerElement.GetElementRectFromScreen();
 
-        List<LengthSide> minorElementLengthsToChangerElement = new List<LengthSide>();
+        Tuple<Rect, LengthSide>[] minorElementLengthsToChangerElement = new Tuple<Rect, LengthSide>[backgroundInfos.Count];
 
+        int i = 0;
         foreach (var elementKeyValuePair in backgroundInfos)
         {
             FrameworkElement element = elementKeyValuePair.Key;
             Rect minorElementRect = element.GetElementRectFromScreen();
 
-            if (changerElementRect.Top >= minorElementRect.Bottom)
-            {
-                minorElementLengthsToChangerElement.Add(GetLengthFromAbove(element, changerElementRect, minorElementRect));
-            }
-            else
-            {
-                minorElementLengthsToChangerElement.Add(GetLengthFromUnder(element, changerElementRect, minorElementRect));
-            }
+            LengthSide lengthSide = changerElementRect.Top >= minorElementRect.Bottom ? GetLengthFromAbove(element, changerElementRect, minorElementRect) 
+                : GetLengthFromUnder(element, changerElementRect, minorElementRect);
+
+            minorElementLengthsToChangerElement[i] = Tuple.Create(minorElementRect, lengthSide);
+            i++;
         }
 
         int millisecond = 2000;
 
-        //foreach (var item in elementLengths)
-        //{
-        //    Task.Run(async() =>
-        //    {
-        //        double length = item.Length;
-        //        double parentWidth = 
-        //        await Task.Delay(millisecond);
-        //    });
-        //}
+        foreach (var item in minorElementLengthsToChangerElement)
+        {
+
+        }
+
+        foreach (var minor in minorElementLengthsToChangerElement)
+        {
+            //Task.Run(async () =>
+            //{
+            //    double length = minor.Length;
+            //    double parentWidth =
+            //    await Task.Delay(millisecond);
+            //});
+        }
     }
 
     private static LengthSide GetLengthFromAbove(FrameworkElement minorElement, Rect rectFrom, Rect rectTo)
@@ -163,7 +166,7 @@ public class SolarEclipseService
         {
             if (rectTo.Right >= rectFrom.Left)
             {
-                return new LengthSide(minorElement, rectFrom.Top - rectTo.Bottom, rectTo.BottomRight, Side.BottomRight); 
+                return new LengthSide(minorElement, rectFrom.Top - rectTo.Bottom, rectTo.BottomRight, Side.BottomRight);
             }
             else
             {
@@ -214,7 +217,7 @@ internal static class LungoBackgroudAnimationsHalper
 {
     public static void BurntLeafDrowingBrush(this BackgroundInfo backgroundInfo, Color testNewColor, Side side = Side.TopRight, double fullSeconds = 1)
     {
-        Point[] selectedPoints = new Point[] { new Point(100,0), new Point(100,100), new Point(0,0), new Point(0,100) };
+        Point[] selectedPoints = new Point[] { new Point(100, 0), new Point(100, 100), new Point(0, 0), new Point(0, 100) };
 
         RotateTransform rotateTransform = (RotateTransform)backgroundInfo.InsideElements["RotateTransform"];
         PathFigure topRightToLeftPoint = (PathFigure)backgroundInfo.InsideElements["TopRightToLeftPoint"];
@@ -246,7 +249,7 @@ internal static class LungoBackgroudAnimationsHalper
 
         //// ------------------------------------------------------------------------------------------
 
-#region topRightToLeftPointAnimation
+        #region topRightToLeftPointAnimation
 
         var topRightToLeftPointAnimation = new PointAnimation()
         {
@@ -257,9 +260,9 @@ internal static class LungoBackgroudAnimationsHalper
 
         topRightToLeftPoint.BeginAnimation(PathFigure.StartPointProperty, topRightToLeftPointAnimation);
 
-#endregion
+        #endregion
 
-#region rightUpToDownPointAnimation
+        #region rightUpToDownPointAnimation
 
         var rightUpToDownPointAnimation = new PointAnimation()
         {
@@ -270,13 +273,13 @@ internal static class LungoBackgroudAnimationsHalper
 
         rightUpToDownPoint.BeginAnimation(LineSegment.PointProperty, rightUpToDownPointAnimation);
 
-#endregion
+        #endregion
 
-#region downRightToLeftPointAnimation
+        #region downRightToLeftPointAnimation
 
         var downRightToLeftPointAnimation = new PointAnimation()
         {
-            BeginTime = TimeSpan.FromSeconds(fullSeconds/2),
+            BeginTime = TimeSpan.FromSeconds(fullSeconds / 2),
             Duration = TimeSpan.FromSeconds(fullSeconds),
             From = selectedPoints[1], // [100,100]  [0,100]
             To = selectedPoints[3] // [0,100]  [0,0]
@@ -284,11 +287,11 @@ internal static class LungoBackgroudAnimationsHalper
 
         downRightToLeftPoint.BeginAnimation(LineSegment.PointProperty, downRightToLeftPointAnimation);
 
-#endregion
+        #endregion
 
         //// ------------------------------------------------------------------------------------------
 
-#region sezierSegment1Animation
+        #region sezierSegment1Animation
 
         var sezierSegment1Animation = new PointAnimation()
         {
@@ -298,9 +301,9 @@ internal static class LungoBackgroudAnimationsHalper
             To = selectedPoints[3]
         };
 
-#endregion
+        #endregion
 
-#region sezierSegment2Animation
+        #region sezierSegment2Animation
 
         var sezierSegment2Animation = new PointAnimation()
         {
@@ -312,9 +315,9 @@ internal static class LungoBackgroudAnimationsHalper
 
         sezierSegment.BeginAnimation(BezierSegment.Point2Property, sezierSegment2Animation);
 
-#endregion
+        #endregion
 
-#region sezierSegment3Animation
+        #region sezierSegment3Animation
 
         var sezierSegment3Animation = new PointAnimation()
         {
@@ -325,7 +328,7 @@ internal static class LungoBackgroudAnimationsHalper
 
         sezierSegment.BeginAnimation(BezierSegment.Point3Property, sezierSegment3Animation);
 
-#endregion
+        #endregion
 
         sezierSegment1Animation.Completed += (s, e) =>
         {
