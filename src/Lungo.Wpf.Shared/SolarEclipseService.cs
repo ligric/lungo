@@ -138,6 +138,8 @@ public class SolarEclipseService
             k++;
         }
 
+        minorElementLengthsToChangerElement = minorElementLengthsToChangerElement.OrderBy(i => i.Length).ToArray();
+
 
         double maxRightBottomElementsHeight = 0, maxTopRightElementsHeight = 0, maxTopLeftElementsHeight = 0, maxLeftBottomElementsHeight = 0,
                maxRightBottomElementsWidth = 0, maxTopRightElementsWidth = 0, maxTopLeftElementsWidth = 0, maxLeftBottomElementsWidth = 0;
@@ -178,8 +180,12 @@ public class SolarEclipseService
                maxTopLeftDiagonal = GetDiagonal(maxTopLeftElementsHeight, maxTopLeftElementsWidth),
                maxLeftBottomDiagonal = GetDiagonal(maxLeftBottomElementsHeight, maxLeftBottomElementsWidth);
 
+        double lastRightBottomProcent = 0, lastTopRightProcent = 0, lastTopLeftProcent = 0, lastLeftBottomProcent = 0;
+
         // 500px 25px                  ----------------           25 * 100 / 500 = 5%
-        Tuple<TimeSpan, LengthSide>[] completeAnimationArray = new Tuple<TimeSpan, LengthSide>[backgroundInfos.Count];
+
+        // Tumple for test where Item1 - BeginTime, Item2 - Duration, Item3 - LengthSide
+        Tuple<TimeSpan, TimeSpan, LengthSide>[] completeAnimationArray = new Tuple<TimeSpan, TimeSpan, LengthSide>[backgroundInfos.Count];
         int milliseconds = 20_000;
 
         for (int i = 0; i < minorElementLengthsToChangerElement.Length; i++)
@@ -193,45 +199,44 @@ public class SolarEclipseService
                 case Side.TopLeft:
                     procentOfFullLength = elementDiagonal * 100 / maxTopLeftDiagonal;
                     beginTimeMolliseconds = milliseconds / 100 * procentOfFullLength;
+                    completeAnimationArray[i] = Tuple.Create(TimeSpan.FromMilliseconds(lastTopLeftProcent), TimeSpan.FromMilliseconds(beginTimeMolliseconds), lengthSide);
+                    lastTopLeftProcent = beginTimeMolliseconds;
                     break;
                 case Side.TopRight:
                     procentOfFullLength = elementDiagonal * 100 / maxTopRightDiagonal;
                     beginTimeMolliseconds = milliseconds / 100 * procentOfFullLength;
+                    completeAnimationArray[i] = Tuple.Create(TimeSpan.FromMilliseconds(lastTopRightProcent), TimeSpan.FromMilliseconds(beginTimeMolliseconds), lengthSide);
+                    lastTopRightProcent = beginTimeMolliseconds;
                     break;
                 case Side.BottomLeft:
                     procentOfFullLength = elementDiagonal * 100 / maxLeftBottomDiagonal;
                     beginTimeMolliseconds = milliseconds / 100 * procentOfFullLength;
+                    completeAnimationArray[i] = Tuple.Create(TimeSpan.FromMilliseconds(lastLeftBottomProcent), TimeSpan.FromMilliseconds(beginTimeMolliseconds), lengthSide);
+                    lastLeftBottomProcent = beginTimeMolliseconds;
                     break;
                 case Side.BottomRight:
                     procentOfFullLength = elementDiagonal * 100 / maxRightBottomDiagonal;
                     beginTimeMolliseconds = milliseconds / 100 * procentOfFullLength;
+                    completeAnimationArray[i] = Tuple.Create(TimeSpan.FromMilliseconds(lastRightBottomProcent), TimeSpan.FromMilliseconds(beginTimeMolliseconds), lengthSide);
+                    lastRightBottomProcent = beginTimeMolliseconds;
                     break;
                 default:
                     throw new NotImplementedException();
             }
-
-            completeAnimationArray[i] = Tuple.Create(TimeSpan.FromMilliseconds(beginTimeMolliseconds), lengthSide);
         }
 
-        foreach (Tuple<TimeSpan, LengthSide> elementAnimationTimeLine in completeAnimationArray)
+        foreach (Tuple<TimeSpan, TimeSpan, LengthSide> elementAnimationTimeLine in completeAnimationArray)
         {
             Task.Run(async () =>
             {
-                try
-                {
-                    TimeSpan beginTime = elementAnimationTimeLine.Item1;
-                    LengthSide lengthSide = elementAnimationTimeLine.Item2;
-                    BackgroundInfo backgroundInfo = backgroundInfos[lengthSide.Element];
-                    await Task.Delay(beginTime);
+                TimeSpan beginTime = elementAnimationTimeLine.Item1;
+                TimeSpan duration = elementAnimationTimeLine.Item2;
+                LengthSide lengthSide = elementAnimationTimeLine.Item3;
+                BackgroundInfo backgroundInfo = backgroundInfos[lengthSide.Element];
+                await Task.Delay(beginTime);
 
-                    await Application.Current.Dispatcher.BeginInvoke(() =>
-                        backgroundInfo.BurntLeafDrowingBrush(newColor, lengthSide.Side, milliseconds - beginTime.TotalMilliseconds));
-                }
-                catch (Exception ex)
-                {
-
-                }
-               
+                await Application.Current.Dispatcher.BeginInvoke(() =>
+                    backgroundInfo.BurntLeafDrowingBrush(newColor, lengthSide.Side, milliseconds - duration.TotalMilliseconds));
             });
         }
     }
