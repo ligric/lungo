@@ -13,21 +13,17 @@ namespace Lungo.Wpf.Sample.Windows
         public MainWindow()
         {
             this.InitializeComponent();
-            themeChangerButton.Click += OnTestButtonClicked;
         }
 
-        private void OnTestButtonClicked(object sender, RoutedEventArgs e)
+        private void OnThemeChangerButtonClicked(object sender, RoutedEventArgs e)
         {
-            GeneralTransform generalTransform = themeChangerButton.TransformToVisual((Visual)themeChangerButton.Parent);
-            Rect rect = generalTransform.TransformBounds(new Rect(themeChangerButton.RenderSize));
-
             if (isDarkTheme)
             {
-                SolarEclipseService.ChangeTheme(rect, (Color)FindResource("Light"));
+                SolarEclipseService.ChangeTheme(themeChangerButton, (Color)FindResource("Light"));
             }
             else
             {
-                SolarEclipseService.ChangeTheme(rect, (Color)FindResource("Dark"));
+                SolarEclipseService.ChangeTheme(themeChangerButton, (Color)FindResource("Dark"));
             }
 
             isDarkTheme = !isDarkTheme;

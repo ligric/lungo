@@ -35,8 +35,7 @@ internal enum Side
 internal class LengthSide
 {
     public FrameworkElement? Element { get; }
-    public double LengthToMainPoint { get; }
-    public double LengthToZeroPoint { get; }
+    public double Length { get; }
     public Point Point { get; }
     public Side Side { get; }
 
@@ -44,11 +43,10 @@ internal class LengthSide
 
     private LengthSide() { }
 
-    public LengthSide(FrameworkElement element, double lengthToMainPoint, double lengthToZeroPoint, Point point, Side side)
+    public LengthSide(FrameworkElement element, double lengthToMainPoint, Point point, Side side)
     {
         Element = element;
-        LengthToMainPoint = lengthToMainPoint;
-        LengthToZeroPoint = lengthToZeroPoint;
+        Length = lengthToMainPoint;
         Point = point;
         Side = side;
     }
@@ -125,237 +123,88 @@ public class SolarEclipseService
         throw new NotImplementedException();
     }
 
-    public static async void ChangeTheme(Rect fromElementRect, Color testNewColor)
+    public static void ChangeTheme(FrameworkElement changerElement, Color newColor)
     {
-        List<LengthSide> elementLengths = new List<LengthSide>();
+        Rect changerElementRect = changerElement.GetElementRectFromScreen();
+
+        List<LengthSide> minorElementLengthsToChangerElement = new List<LengthSide>();
 
         foreach (var elementKeyValuePair in backgroundInfos)
         {
             FrameworkElement element = elementKeyValuePair.Key;
-            BackgroundInfo backgroundInfo = elementKeyValuePair.Value;
+            Rect minorElementRect = element.GetElementRectFromScreen();
 
-            GeneralTransform generalTransform = element.TransformToVisual((Visual)element.Parent);
-            Rect rectTo = generalTransform.TransformBounds(new Rect(element.RenderSize));
-
-            if (fromElementRect.Top >= rectTo.Bottom)
+            if (changerElementRect.Top >= minorElementRect.Bottom)
             {
-                elementLengths.Add(GetLengthFromAbove(element, fromElementRect, rectTo));
+                minorElementLengthsToChangerElement.Add(GetLengthFromAbove(element, changerElementRect, minorElementRect));
             }
             else
             {
-                elementLengths.Add(GetLengthFromUnder(element, fromElementRect, rectTo));
+                minorElementLengthsToChangerElement.Add(GetLengthFromUnder(element, changerElementRect, minorElementRect));
             }
         }
 
-        IOrderedEnumerable<LengthSide> sortedBottomRight = elementLengths.Where(x => x.Side == Side.BottomRight).OrderBy(x=> x.LengthToZeroPoint);
-        IOrderedEnumerable<LengthSide> sortedTopRight = elementLengths.Where(x => x.Side == Side.TopRight).OrderBy(x => x.LengthToZeroPoint);
-        IOrderedEnumerable<LengthSide> sortedTopLeft = elementLengths.Where(x => x.Side == Side.TopLeft).OrderBy(x => x.LengthToZeroPoint);
-        IOrderedEnumerable<LengthSide> sortedBottomLeft = elementLengths.Where(x => x.Side == Side.BottomLeft).OrderBy(x => x.LengthToZeroPoint);
+        int millisecond = 2000;
 
-        List<List<LengthSide>> sortedParts = new List<List<LengthSide>>();
-
-        if (sortedBottomRight.Count() > 0)
-            sortedParts.Add(sortedBottomRight.ToList());
-
-        if (sortedTopRight.Count() > 0)
-            sortedParts.Add(sortedTopRight.ToList());
-
-        if (sortedTopLeft.Count() > 0)
-            sortedParts.Add(sortedTopLeft.ToList());
-
-        if (sortedBottomLeft.Count() > 0)
-            sortedParts.Add(sortedBottomLeft.ToList());
-
-        if (sortedParts.Count == 0)
-            return;
-
-        List<LengthSide[]> rings = new List<LengthSide[]>();
-
-        Side startSide = sortedParts[0][0].Side;
-        LengthSide lastLength = LengthSide.Empty;
-
-        int clicks = 0;
-        Tuple<int, int>? lastIndex = null;
-
-        int debugCount = 0;
-
-        int GetRingsLength()
-        {
-            int length = 0;
-            foreach (var item in rings)
-                length += item.Length;
-            return length;
-        }
-
-        while (GetRingsLength() != elementLengths.Count)
-        {
-            //System.Diagnostics.Debug.WriteLine($"Elements inside rings = {GetRingsLength()} from {elementLengths.Count}");
-            List<LengthSide> ring = new List<LengthSide>();
-            List<Tuple<int, int>> indexesForRemove = new List<Tuple<int, int>>();
-
-
-            for (int a = 0; a < sortedParts.Count; a++)
-            {
-                List<LengthSide> sortedPart = sortedParts[a];
-
-                for (int i = 0; i < sortedPart.Count(); i++)
-                {
-                    var item = sortedPart[i];
-
-                    if (lastLength == LengthSide.Empty)
-                    {
-                        lastLength = item;
-                        lastIndex = Tuple.Create(a, i);
-                        ring.Add(item);
-                        //System.Diagnostics.Debug.WriteLine($"{item.Element.Name}");
-                        continue;
-                    }
-
-                    if (a + 1 == sortedParts.Count
-                        && i + 1 == sortedPart.Count())
-                    {
-                        lastLength = LengthSide.Empty;
-                        ring.Add(item);
-                        rings.Add(ring.ToArray());
-                        indexesForRemove.Add(Tuple.Create(a, i));
-                        indexesForRemove.Add(Tuple.Create(lastIndex.Item1, lastIndex.Item2));
-                        lastIndex = null;
-//#if DEBUG
-//                        foreach (var ringResultItem in ring)
-//                            System.Diagnostics.Debug.WriteLine($"____{ringResultItem.Element.Name}");
-//#endif
-                        break;
-                    }
-
-                    if (debugCount == 17)
-                    {
-                        var testA = a;
-                        var testI = i;
-                        var testB = i + 1;
-                        
-
-                    }
-
-                    LengthSide nextItem = i + 1 == sortedPart.Count() ? sortedParts[a + 1][0] : sortedPart[i + 1];
-                    debugCount++;
-
-                    if (item.Side == Side.BottomRight || item.Side == Side.TopRight)
-                    {
-                        if ((item.Point.X >= lastLength.Point.X)
-                            && (item.Point.X >= nextItem.Point.X))
-                            continue;
-                    }
-
-                    if (item.Side == Side.TopLeft)
-                    {
-                        if ((item.Point.Y <= lastLength.Point.Y)
-                            && (item.Point.Y <= nextItem.Point.Y))
-                            continue;
-                    }
-
-                    if (item.Side == Side.BottomLeft)
-                    {
-                        if ((item.Point.Y >= lastLength.Point.Y)
-                            && (item.Point.Y >= nextItem.Point.Y))
-                            continue;
-                    }
-
-                    ring.Add(item);
-                    clicks++;
-                    //System.Diagnostics.Debug.WriteLine($"{item.Element.Name}      {clicks}");
-                    indexesForRemove.Add(Tuple.Create(lastIndex.Item1, lastIndex.Item2));
-                    lastIndex = Tuple.Create(a, i);
-                    lastLength = item;
-                }
-            }
-
-            foreach (var remove2DIndex in indexesForRemove.OrderBy(x => x.Item1).ThenByDescending(x => x.Item2))
-            {
-                if (sortedParts.Count == 1 && sortedParts[0].Count == 0)
-                    break;
-
-                sortedParts[remove2DIndex.Item1].RemoveAt(remove2DIndex.Item2);
-            }
-
-            for (int i = sortedParts.Count - 1; i >= 0; i--)
-            {
-                if (sortedParts[i].Count == 0)
-                    sortedParts.RemoveAt(i);
-            }
-        }
-
-        // 500px - 1 sec
-
-
-        rings.Reverse();
-
-        foreach (LengthSide[] ring in rings)
-        {
-            foreach (LengthSide lengthSide in ring)
-            {
-                FrameworkElement element = lengthSide.Element;
-                Side side = lengthSide.Side;
-                backgroundInfos[element].BurntLeafDrowingBrush(testNewColor, side, 2);
-            }
-            await Task.Delay(1); // Test
-        }
+        //foreach (var item in elementLengths)
+        //{
+        //    Task.Run(async() =>
+        //    {
+        //        double length = item.Length;
+        //        double parentWidth = 
+        //        await Task.Delay(millisecond);
+        //    });
+        //}
     }
 
-    private static LengthSide GetLengthFromAbove(FrameworkElement testElement, Rect rectFrom, Rect rectTo)
+    private static LengthSide GetLengthFromAbove(FrameworkElement minorElement, Rect rectFrom, Rect rectTo)
     {
-        if (rectTo.Left <= rectFrom.Left)
-        {
-            double lengthToZeroPoint = Math.Sqrt(Math.Pow(rectTo.TopLeft.X - 0, 2) + Math.Pow(rectTo.TopLeft.Y - 0, 2));
-
-            if (rectTo.Right >= rectFrom.Left)
-            {
-                return new LengthSide(testElement, rectFrom.Top - rectTo.Bottom, lengthToZeroPoint, rectTo.BottomRight, Side.BottomRight); 
-            }
-            else
-            {
-                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), lengthToZeroPoint, rectTo.BottomRight, Side.BottomRight);
-            }
-        }
-        else
-        {
-            var parent = ((FrameworkElement)testElement.Parent);
-            double lengthToZeroPoint = Math.Sqrt(Math.Pow(rectTo.TopLeft.X - parent.ActualWidth, 2) + Math.Pow(rectTo.TopLeft.Y - parent.ActualHeight, 2));
-
-            if (rectTo.Left <= rectFrom.Right)
-            {
-                return new LengthSide(testElement, rectFrom.Top - rectTo.Bottom, lengthToZeroPoint, rectTo.BottomLeft, Side.BottomLeft);
-            }
-            else
-            {
-                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectFrom.TopRight.X - rectTo.BottomLeft.X, 2) + Math.Pow(rectFrom.TopRight.Y - rectTo.BottomLeft.Y, 2)), lengthToZeroPoint, rectTo.BottomLeft, Side.BottomLeft);
-            }
-        }
-    }
-
-    private static LengthSide GetLengthFromUnder(FrameworkElement testElement, Rect rectFrom, Rect rectTo)
-    {
-        double lengthToZeroPoint = Math.Sqrt(Math.Pow(rectTo.TopLeft.X - 0, 2) + Math.Pow(rectTo.TopLeft.Y - 0, 2));
-
         if (rectTo.Left <= rectFrom.Left)
         {
             if (rectTo.Right >= rectFrom.Left)
             {
-                return new LengthSide(testElement, rectTo.Top - rectFrom.Bottom, lengthToZeroPoint, rectTo.TopRight, Side.TopRight);
+                return new LengthSide(minorElement, rectFrom.Top - rectTo.Bottom, rectTo.BottomRight, Side.BottomRight); 
             }
             else
             {
-                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectTo.TopRight.X - rectFrom.BottomLeft.X, 2) + Math.Pow(rectTo.TopRight.Y - rectFrom.BottomLeft.Y, 2)), lengthToZeroPoint, rectTo.TopRight, Side.TopRight);
+                return new LengthSide(minorElement, Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), rectTo.BottomRight, Side.BottomRight);
             }
         }
         else
         {
             if (rectTo.Left <= rectFrom.Right)
             {
-                return new LengthSide(testElement, rectTo.Top - rectFrom.Bottom, lengthToZeroPoint, rectTo.TopLeft, Side.TopLeft);
+                return new LengthSide(minorElement, rectFrom.Top - rectTo.Bottom, rectTo.BottomLeft, Side.BottomLeft);
             }
             else
             {
-                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), lengthToZeroPoint, rectTo.TopLeft, Side.TopLeft);
+                return new LengthSide(minorElement, Math.Sqrt(Math.Pow(rectFrom.TopRight.X - rectTo.BottomLeft.X, 2) + Math.Pow(rectFrom.TopRight.Y - rectTo.BottomLeft.Y, 2)), rectTo.BottomLeft, Side.BottomLeft);
+            }
+        }
+    }
+
+    private static LengthSide GetLengthFromUnder(FrameworkElement minorElement, Rect rectFrom, Rect rectTo)
+    {
+        if (rectTo.Left <= rectFrom.Left)
+        {
+            if (rectTo.Right >= rectFrom.Left)
+            {
+                return new LengthSide(minorElement, rectTo.Top - rectFrom.Bottom, rectTo.TopRight, Side.TopRight);
+            }
+            else
+            {
+                return new LengthSide(minorElement, Math.Sqrt(Math.Pow(rectTo.TopRight.X - rectFrom.BottomLeft.X, 2) + Math.Pow(rectTo.TopRight.Y - rectFrom.BottomLeft.Y, 2)), rectTo.TopRight, Side.TopRight);
+            }
+        }
+        else
+        {
+            if (rectTo.Left <= rectFrom.Right)
+            {
+                return new LengthSide(minorElement, rectTo.Top - rectFrom.Bottom, rectTo.TopLeft, Side.TopLeft);
+            }
+            else
+            {
+                return new LengthSide(minorElement, Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), rectTo.TopLeft, Side.TopLeft);
             }
         }
     }
@@ -499,5 +348,14 @@ internal class ElementDistance
     {
         Element = frameworkElement;
         DistanceLength = distanceLength;
+    }
+}
+
+internal static class FrameworkElementExtansions
+{
+    public static Rect GetElementRectFromScreen(this FrameworkElement element)
+    {
+        Point elementPoint = element.PointToScreen(new Point(0, 0));
+        return new Rect(elementPoint, new Point(elementPoint.X + element.ActualWidth, elementPoint.Y + element.ActualHeight));
     }
 }
