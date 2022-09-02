@@ -129,17 +129,16 @@ public class SolarEclipseService
         Rect changerElementRect = changerElement.GetElementRectFromScreen();
         LengthSide[] minorElementLengthsToChangerElement = new LengthSide[backgroundInfos.Count];
 
-        int i = 0;
+        int k = 0;
         foreach (FrameworkElement element in backgroundInfos.Keys)
         {
             Rect minorElementRect = element.GetElementRectFromScreen();
-            minorElementLengthsToChangerElement[i] = changerElementRect.Top >= minorElementRect.Bottom ? GetLengthFromAbove(element, changerElementRect, minorElementRect) 
+            minorElementLengthsToChangerElement[k] = changerElementRect.Top >= minorElementRect.Bottom ? GetLengthFromAbove(element, changerElementRect, minorElementRect)
                 : GetLengthFromUnder(element, changerElementRect, minorElementRect);
-            i++;
+            k++;
         }
 
-        int milliseconds = 2000;
-       
+
         double maxRightBottomElementsHeight = 0, maxTopRightElementsHeight = 0, maxTopLeftElementsHeight = 0, maxLeftBottomElementsHeight = 0,
                maxRightBottomElementsWidth = 0, maxTopRightElementsWidth = 0, maxTopLeftElementsWidth = 0, maxLeftBottomElementsWidth = 0;
 
@@ -179,17 +178,61 @@ public class SolarEclipseService
                maxTopLeftDiagonal = GetDiagonal(maxTopLeftElementsHeight, maxTopLeftElementsWidth),
                maxLeftBottomDiagonal = GetDiagonal(maxLeftBottomElementsHeight, maxLeftBottomElementsWidth);
 
+        // 500px 25px                  ----------------           25 * 100 / 500 = 5%
+        Tuple<TimeSpan, LengthSide>[] completeAnimationArray = new Tuple<TimeSpan, LengthSide>[backgroundInfos.Count];
+        int milliseconds = 20_000;
 
-
-
-        foreach (var minor in minorElementLengthsToChangerElement)
+        for (int i = 0; i < minorElementLengthsToChangerElement.Length; i++)
         {
-            //Task.Run(async () =>
-            //{
-            //    double length = minor.Length;
-            //    double parentWidth =
-            //    await Task.Delay(millisecond);
-            //});
+            LengthSide lengthSide = minorElementLengthsToChangerElement[i];
+            FrameworkElement element = lengthSide.Element;
+            double elementDiagonal = GetDiagonal(element.ActualHeight, element.ActualWidth);
+            double procentOfFullLength, beginTimeMolliseconds = 0;
+            switch (lengthSide.Side)
+            {
+                case Side.TopLeft:
+                    procentOfFullLength = elementDiagonal * 100 / maxTopLeftDiagonal;
+                    beginTimeMolliseconds = milliseconds / 100 * procentOfFullLength;
+                    break;
+                case Side.TopRight:
+                    procentOfFullLength = elementDiagonal * 100 / maxTopRightDiagonal;
+                    beginTimeMolliseconds = milliseconds / 100 * procentOfFullLength;
+                    break;
+                case Side.BottomLeft:
+                    procentOfFullLength = elementDiagonal * 100 / maxLeftBottomDiagonal;
+                    beginTimeMolliseconds = milliseconds / 100 * procentOfFullLength;
+                    break;
+                case Side.BottomRight:
+                    procentOfFullLength = elementDiagonal * 100 / maxRightBottomDiagonal;
+                    beginTimeMolliseconds = milliseconds / 100 * procentOfFullLength;
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+
+            completeAnimationArray[i] = Tuple.Create(TimeSpan.FromMilliseconds(beginTimeMolliseconds), lengthSide);
+        }
+
+        foreach (Tuple<TimeSpan, LengthSide> elementAnimationTimeLine in completeAnimationArray)
+        {
+            Task.Run(async () =>
+            {
+                try
+                {
+                    TimeSpan beginTime = elementAnimationTimeLine.Item1;
+                    LengthSide lengthSide = elementAnimationTimeLine.Item2;
+                    BackgroundInfo backgroundInfo = backgroundInfos[lengthSide.Element];
+                    await Task.Delay(beginTime);
+
+                    await Application.Current.Dispatcher.BeginInvoke(() =>
+                        backgroundInfo.BurntLeafDrowingBrush(newColor, lengthSide.Side, milliseconds - beginTime.TotalMilliseconds));
+                }
+                catch (Exception ex)
+                {
+
+                }
+               
+            });
         }
     }
 
@@ -248,7 +291,7 @@ public class SolarEclipseService
 
 internal static class LungoBackgroudAnimationsHalper
 {
-    public static void BurntLeafDrowingBrush(this BackgroundInfo backgroundInfo, Color testNewColor, Side side = Side.TopRight, double fullSeconds = 1)
+    public static void BurntLeafDrowingBrush(this BackgroundInfo backgroundInfo, Color newColor, Side side = Side.TopRight, double fullSeconds = 1)
     {
         Point[] selectedPoints = new Point[] { new Point(100, 0), new Point(100, 100), new Point(0, 0), new Point(0, 100) };
 
@@ -274,7 +317,7 @@ internal static class LungoBackgroudAnimationsHalper
         if (side == Side.TopLeft)
             rotateTransform.Angle = 270;
 
-        backgroundBrushFront.Color = testNewColor;
+        backgroundBrushFront.Color = newColor;
         //topRightToLeftPoint.StartPoint = selectedPoints[0];
         sezierSegment.Point1 = selectedPoints[0];
         sezierSegment.Point2 = selectedPoints[0];
@@ -365,7 +408,7 @@ internal static class LungoBackgroudAnimationsHalper
 
         sezierSegment1Animation.Completed += (s, e) =>
         {
-            backgroundBrushBack.Color = testNewColor;
+            backgroundBrushBack.Color = newColor;
             sezierSegment.BeginAnimation(BezierSegment.Point1Property, null);
             sezierSegment.BeginAnimation(BezierSegment.Point2Property, null);
             downRightToLeftPoint.BeginAnimation(LineSegment.PointProperty, null);
