@@ -291,7 +291,7 @@ public class SolarEclipseService
 
 internal static class LungoBackgroudAnimationsHalper
 {
-    public static void BurntLeafDrowingBrush(this BackgroundInfo backgroundInfo, Color newColor, Side side = Side.TopRight, double fullSeconds = 1)
+    public static void BurntLeafDrowingBrush(this BackgroundInfo backgroundInfo, Color newColor, Side side = Side.TopRight, double milliseconds = 1000)
     {
         Point[] selectedPoints = new Point[] { new Point(100, 0), new Point(100, 100), new Point(0, 0), new Point(0, 100) };
 
@@ -329,7 +329,7 @@ internal static class LungoBackgroudAnimationsHalper
 
         var topRightToLeftPointAnimation = new PointAnimation()
         {
-            Duration = TimeSpan.FromSeconds(fullSeconds),
+            Duration = TimeSpan.FromMilliseconds(milliseconds),
             From = selectedPoints[0], // [100,0]  [100,100]
             To = selectedPoints[2] // [0,0]  [100,0]
         };
@@ -342,7 +342,7 @@ internal static class LungoBackgroudAnimationsHalper
 
         var rightUpToDownPointAnimation = new PointAnimation()
         {
-            Duration = TimeSpan.FromSeconds(fullSeconds / 2),
+            Duration = TimeSpan.FromMilliseconds(milliseconds / 2),
             From = selectedPoints[0], // [100,0]  [100,100]
             To = selectedPoints[1] // [100,100]  [0,100]
         };
@@ -355,8 +355,8 @@ internal static class LungoBackgroudAnimationsHalper
 
         var downRightToLeftPointAnimation = new PointAnimation()
         {
-            BeginTime = TimeSpan.FromSeconds(fullSeconds / 2),
-            Duration = TimeSpan.FromSeconds(fullSeconds),
+            BeginTime = TimeSpan.FromMilliseconds(milliseconds / 2),
+            Duration = TimeSpan.FromMilliseconds(milliseconds),
             From = selectedPoints[1], // [100,100]  [0,100]
             To = selectedPoints[3] // [0,100]  [0,0]
         };
@@ -371,8 +371,8 @@ internal static class LungoBackgroudAnimationsHalper
 
         var sezierSegment1Animation = new PointAnimation()
         {
-            BeginTime = TimeSpan.FromSeconds(fullSeconds / 2),
-            Duration = TimeSpan.FromSeconds(fullSeconds),
+            BeginTime = TimeSpan.FromMilliseconds(milliseconds / 2),
+            Duration = TimeSpan.FromMilliseconds(milliseconds),
             From = selectedPoints[0],
             To = selectedPoints[3]
         };
@@ -383,8 +383,8 @@ internal static class LungoBackgroudAnimationsHalper
 
         var sezierSegment2Animation = new PointAnimation()
         {
-            BeginTime = TimeSpan.FromSeconds(fullSeconds / 4),
-            Duration = TimeSpan.FromSeconds(fullSeconds / 2),
+            BeginTime = TimeSpan.FromMilliseconds(milliseconds / 4),
+            Duration = TimeSpan.FromMilliseconds(milliseconds / 2),
             From = selectedPoints[0],
             To = selectedPoints[2]
         };
@@ -397,7 +397,7 @@ internal static class LungoBackgroudAnimationsHalper
 
         var sezierSegment3Animation = new PointAnimation()
         {
-            Duration = TimeSpan.FromSeconds(fullSeconds / 4),
+            Duration = TimeSpan.FromMilliseconds(milliseconds / 4),
             From = selectedPoints[0],
             To = selectedPoints[2]
         };
