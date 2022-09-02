@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -35,8 +36,7 @@ internal enum Side
 internal class LengthSide
 {
     public FrameworkElement? Element { get; }
-    public double LengthToMainPoint { get; }
-    public double LengthToZeroPoint { get; }
+    public double Length { get; }
     public Point Point { get; }
     public Side Side { get; }
 
@@ -44,11 +44,10 @@ internal class LengthSide
 
     private LengthSide() { }
 
-    public LengthSide(FrameworkElement element, double lengthToMainPoint, double lengthToZeroPoint, Point point, Side side)
+    public LengthSide(FrameworkElement element, double lengthToMainPoint, Point point, Side side)
     {
         Element = element;
-        LengthToMainPoint = lengthToMainPoint;
-        LengthToZeroPoint = lengthToZeroPoint;
+        Length = lengthToMainPoint;
         Point = point;
         Side = side;
     }
@@ -68,7 +67,7 @@ public class SolarEclipseService
         GeometryDrawing backgroundGeometryDrawing = new GeometryDrawing();
         var backgroundBrushBack = new SolidColorBrush((Color)Application.Current.MainWindow.FindResource("Light"));
         backgroundGeometryDrawing.Brush = backgroundBrushBack;
-        backgroundGeometryDrawing.Geometry = new RectangleGeometry(new Rect(0,0,100,100));
+        backgroundGeometryDrawing.Geometry = new RectangleGeometry(new Rect(0, 0, 100, 100));
         group.Children.Add(backgroundGeometryDrawing);
 
         GeometryDrawing geometryDrawing = new GeometryDrawing();
@@ -79,7 +78,7 @@ public class SolarEclipseService
         var topRightToLeftPoint = new PathFigure();
         topRightToLeftPoint.StartPoint = new Point(100, 0);
         pathGeometry.Figures.Add(topRightToLeftPoint);
-        topRightToLeftPoint.Segments.Add(new LineSegment(new Point(100,0), true));
+        topRightToLeftPoint.Segments.Add(new LineSegment(new Point(100, 0), true));
         var rightUpToDownPoint = new LineSegment(new Point(100, 0), true);
         topRightToLeftPoint.Segments.Add(rightUpToDownPoint);
         var downRightToLeftPoint = new LineSegment(new Point(100, 100), true);
@@ -125,237 +124,171 @@ public class SolarEclipseService
         throw new NotImplementedException();
     }
 
-    public static async void ChangeTheme(Rect fromElementRect, Color testNewColor)
+    public static void ChangeTheme(FrameworkElement changerElement, Color newColor)
     {
-        List<LengthSide> elementLengths = new List<LengthSide>();
+        Rect changerElementRect = changerElement.GetElementRectFromScreen();
+        LengthSide[] minorElementLengthsToChangerElement = new LengthSide[backgroundInfos.Count];
 
-        foreach (var elementKeyValuePair in backgroundInfos)
+        int k = 0;
+        foreach (FrameworkElement element in backgroundInfos.Keys)
         {
-            FrameworkElement element = elementKeyValuePair.Key;
-            BackgroundInfo backgroundInfo = elementKeyValuePair.Value;
-
-            GeneralTransform generalTransform = element.TransformToVisual((Visual)element.Parent);
-            Rect rectTo = generalTransform.TransformBounds(new Rect(element.RenderSize));
-
-            if (fromElementRect.Top >= rectTo.Bottom)
-            {
-                elementLengths.Add(GetLengthFromAbove(element, fromElementRect, rectTo));
-            }
-            else
-            {
-                elementLengths.Add(GetLengthFromUnder(element, fromElementRect, rectTo));
-            }
+            Rect minorElementRect = element.GetElementRectFromScreen();
+            minorElementLengthsToChangerElement[k] = changerElementRect.Top >= minorElementRect.Bottom ? GetLengthFromAbove(element, changerElementRect, minorElementRect)
+                : GetLengthFromUnder(element, changerElementRect, minorElementRect);
+            k++;
         }
 
-        IOrderedEnumerable<LengthSide> sortedBottomRight = elementLengths.Where(x => x.Side == Side.BottomRight).OrderBy(x=> x.LengthToZeroPoint);
-        IOrderedEnumerable<LengthSide> sortedTopRight = elementLengths.Where(x => x.Side == Side.TopRight).OrderBy(x => x.LengthToZeroPoint);
-        IOrderedEnumerable<LengthSide> sortedTopLeft = elementLengths.Where(x => x.Side == Side.TopLeft).OrderBy(x => x.LengthToZeroPoint);
-        IOrderedEnumerable<LengthSide> sortedBottomLeft = elementLengths.Where(x => x.Side == Side.BottomLeft).OrderBy(x => x.LengthToZeroPoint);
+        minorElementLengthsToChangerElement = minorElementLengthsToChangerElement.OrderBy(i => i.Length).ToArray();
 
-        List<List<LengthSide>> sortedParts = new List<List<LengthSide>>();
 
-        if (sortedBottomRight.Count() > 0)
-            sortedParts.Add(sortedBottomRight.ToList());
+        double maxRightBottomElementsHeight = 0, maxTopRightElementsHeight = 0, maxTopLeftElementsHeight = 0, maxLeftBottomElementsHeight = 0,
+               maxRightBottomElementsWidth = 0, maxTopRightElementsWidth = 0, maxTopLeftElementsWidth = 0, maxLeftBottomElementsWidth = 0;
 
-        if (sortedTopRight.Count() > 0)
-            sortedParts.Add(sortedTopRight.ToList());
-
-        if (sortedTopLeft.Count() > 0)
-            sortedParts.Add(sortedTopLeft.ToList());
-
-        if (sortedBottomLeft.Count() > 0)
-            sortedParts.Add(sortedBottomLeft.ToList());
-
-        if (sortedParts.Count == 0)
-            return;
-
-        List<LengthSide[]> rings = new List<LengthSide[]>();
-
-        Side startSide = sortedParts[0][0].Side;
-        LengthSide lastLength = LengthSide.Empty;
-
-        int clicks = 0;
-        Tuple<int, int>? lastIndex = null;
-
-        int debugCount = 0;
-
-        int GetRingsLength()
+        foreach (LengthSide lengthSide in minorElementLengthsToChangerElement)
         {
-            int length = 0;
-            foreach (var item in rings)
-                length += item.Length;
-            return length;
-        }
-
-        while (GetRingsLength() != elementLengths.Count)
-        {
-            //System.Diagnostics.Debug.WriteLine($"Elements inside rings = {GetRingsLength()} from {elementLengths.Count}");
-            List<LengthSide> ring = new List<LengthSide>();
-            List<Tuple<int, int>> indexesForRemove = new List<Tuple<int, int>>();
-
-
-            for (int a = 0; a < sortedParts.Count; a++)
+            FrameworkElement element = lengthSide.Element;
+            switch (lengthSide.Side)
             {
-                List<LengthSide> sortedPart = sortedParts[a];
-
-                for (int i = 0; i < sortedPart.Count(); i++)
-                {
-                    var item = sortedPart[i];
-
-                    if (lastLength == LengthSide.Empty)
-                    {
-                        lastLength = item;
-                        lastIndex = Tuple.Create(a, i);
-                        ring.Add(item);
-                        //System.Diagnostics.Debug.WriteLine($"{item.Element.Name}");
-                        continue;
-                    }
-
-                    if (a + 1 == sortedParts.Count
-                        && i + 1 == sortedPart.Count())
-                    {
-                        lastLength = LengthSide.Empty;
-                        ring.Add(item);
-                        rings.Add(ring.ToArray());
-                        indexesForRemove.Add(Tuple.Create(a, i));
-                        indexesForRemove.Add(Tuple.Create(lastIndex.Item1, lastIndex.Item2));
-                        lastIndex = null;
-//#if DEBUG
-//                        foreach (var ringResultItem in ring)
-//                            System.Diagnostics.Debug.WriteLine($"____{ringResultItem.Element.Name}");
-//#endif
-                        break;
-                    }
-
-                    if (debugCount == 17)
-                    {
-                        var testA = a;
-                        var testI = i;
-                        var testB = i + 1;
-                        
-
-                    }
-
-                    LengthSide nextItem = i + 1 == sortedPart.Count() ? sortedParts[a + 1][0] : sortedPart[i + 1];
-                    debugCount++;
-
-                    if (item.Side == Side.BottomRight || item.Side == Side.TopRight)
-                    {
-                        if ((item.Point.X >= lastLength.Point.X)
-                            && (item.Point.X >= nextItem.Point.X))
-                            continue;
-                    }
-
-                    if (item.Side == Side.TopLeft)
-                    {
-                        if ((item.Point.Y <= lastLength.Point.Y)
-                            && (item.Point.Y <= nextItem.Point.Y))
-                            continue;
-                    }
-
-                    if (item.Side == Side.BottomLeft)
-                    {
-                        if ((item.Point.Y >= lastLength.Point.Y)
-                            && (item.Point.Y >= nextItem.Point.Y))
-                            continue;
-                    }
-
-                    ring.Add(item);
-                    clicks++;
-                    //System.Diagnostics.Debug.WriteLine($"{item.Element.Name}      {clicks}");
-                    indexesForRemove.Add(Tuple.Create(lastIndex.Item1, lastIndex.Item2));
-                    lastIndex = Tuple.Create(a, i);
-                    lastLength = item;
-                }
-            }
-
-            foreach (var remove2DIndex in indexesForRemove.OrderBy(x => x.Item1).ThenByDescending(x => x.Item2))
-            {
-                if (sortedParts.Count == 1 && sortedParts[0].Count == 0)
+                case Side.TopLeft:
+                    maxTopLeftElementsHeight += element.ActualHeight;
+                    maxTopLeftElementsWidth += element.ActualWidth;
                     break;
-
-                sortedParts[remove2DIndex.Item1].RemoveAt(remove2DIndex.Item2);
-            }
-
-            for (int i = sortedParts.Count - 1; i >= 0; i--)
-            {
-                if (sortedParts[i].Count == 0)
-                    sortedParts.RemoveAt(i);
+                case Side.TopRight:
+                    maxTopRightElementsHeight += element.ActualHeight;
+                    maxTopRightElementsWidth += element.ActualWidth;
+                    break;
+                case Side.BottomLeft:
+                    maxLeftBottomElementsHeight += element.ActualHeight;
+                    maxLeftBottomElementsWidth += element.ActualWidth;
+                    break;
+                case Side.BottomRight:
+                    maxRightBottomElementsHeight += element.ActualHeight;
+                    maxRightBottomElementsWidth += element.ActualWidth;
+                    break;
+                default:
+                    throw new NotImplementedException();
             }
         }
 
-        // 500px - 1 sec
-
-
-        rings.Reverse();
-
-        foreach (LengthSide[] ring in rings)
+        double GetDiagonal(double a, double b)
         {
-            foreach (LengthSide lengthSide in ring)
+            return Math.Sqrt((a * a) + (b * b));
+        }
+
+        double maxRightBottomDiagonal = GetDiagonal(maxRightBottomElementsHeight, maxRightBottomElementsWidth),
+               maxTopRightDiagonal = GetDiagonal(maxTopRightElementsHeight, maxTopRightElementsWidth),
+               maxTopLeftDiagonal = GetDiagonal(maxTopLeftElementsHeight, maxTopLeftElementsWidth),
+               maxLeftBottomDiagonal = GetDiagonal(maxLeftBottomElementsHeight, maxLeftBottomElementsWidth);
+
+        double lastRightBottomProcent = 0, lastTopRightProcent = 0, lastTopLeftProcent = 0, lastLeftBottomProcent = 0;
+
+        // 500px 25px                  ----------------           25 * 100 / 500 = 5%
+
+        // Tumple for test where Item1 - BeginTime, Item2 - Duration, Item3 - LengthSide
+        Tuple<TimeSpan, TimeSpan, LengthSide>[] completeAnimationArray = new Tuple<TimeSpan, TimeSpan, LengthSide>[backgroundInfos.Count];
+        int milliseconds = 20_000;
+
+        for (int i = 0; i < minorElementLengthsToChangerElement.Length; i++)
+        {
+            LengthSide lengthSide = minorElementLengthsToChangerElement[i];
+            FrameworkElement element = lengthSide.Element;
+            double elementDiagonal = GetDiagonal(element.ActualHeight, element.ActualWidth);
+            double procentOfFullLength, beginTimeMolliseconds = 0;
+            switch (lengthSide.Side)
             {
-                FrameworkElement element = lengthSide.Element;
-                Side side = lengthSide.Side;
-                backgroundInfos[element].BurntLeafDrowingBrush(testNewColor, side, 2);
+                case Side.TopLeft:
+                    procentOfFullLength = elementDiagonal * 100 / maxTopLeftDiagonal;
+                    beginTimeMolliseconds = milliseconds / 100 * procentOfFullLength;
+                    completeAnimationArray[i] = Tuple.Create(TimeSpan.FromMilliseconds(lastTopLeftProcent), TimeSpan.FromMilliseconds(beginTimeMolliseconds), lengthSide);
+                    lastTopLeftProcent = beginTimeMolliseconds;
+                    break;
+                case Side.TopRight:
+                    procentOfFullLength = elementDiagonal * 100 / maxTopRightDiagonal;
+                    beginTimeMolliseconds = milliseconds / 100 * procentOfFullLength;
+                    completeAnimationArray[i] = Tuple.Create(TimeSpan.FromMilliseconds(lastTopRightProcent), TimeSpan.FromMilliseconds(beginTimeMolliseconds), lengthSide);
+                    lastTopRightProcent = beginTimeMolliseconds;
+                    break;
+                case Side.BottomLeft:
+                    procentOfFullLength = elementDiagonal * 100 / maxLeftBottomDiagonal;
+                    beginTimeMolliseconds = milliseconds / 100 * procentOfFullLength;
+                    completeAnimationArray[i] = Tuple.Create(TimeSpan.FromMilliseconds(lastLeftBottomProcent), TimeSpan.FromMilliseconds(beginTimeMolliseconds), lengthSide);
+                    lastLeftBottomProcent = beginTimeMolliseconds;
+                    break;
+                case Side.BottomRight:
+                    procentOfFullLength = elementDiagonal * 100 / maxRightBottomDiagonal;
+                    beginTimeMolliseconds = milliseconds / 100 * procentOfFullLength;
+                    completeAnimationArray[i] = Tuple.Create(TimeSpan.FromMilliseconds(lastRightBottomProcent), TimeSpan.FromMilliseconds(beginTimeMolliseconds), lengthSide);
+                    lastRightBottomProcent = beginTimeMolliseconds;
+                    break;
+                default:
+                    throw new NotImplementedException();
             }
-            await Task.Delay(1); // Test
+        }
+
+        foreach (Tuple<TimeSpan, TimeSpan, LengthSide> elementAnimationTimeLine in completeAnimationArray)
+        {
+            Task.Run(async () =>
+            {
+                TimeSpan beginTime = elementAnimationTimeLine.Item1;
+                TimeSpan duration = elementAnimationTimeLine.Item2;
+                LengthSide lengthSide = elementAnimationTimeLine.Item3;
+                BackgroundInfo backgroundInfo = backgroundInfos[lengthSide.Element];
+                await Task.Delay(beginTime);
+
+                await Application.Current.Dispatcher.BeginInvoke(() =>
+                    backgroundInfo.BurntLeafDrowingBrush(newColor, lengthSide.Side, milliseconds - duration.TotalMilliseconds));
+            });
         }
     }
 
-    private static LengthSide GetLengthFromAbove(FrameworkElement testElement, Rect rectFrom, Rect rectTo)
+    private static LengthSide GetLengthFromAbove(FrameworkElement minorElement, Rect rectFrom, Rect rectTo)
     {
         if (rectTo.Left <= rectFrom.Left)
         {
-            double lengthToZeroPoint = Math.Sqrt(Math.Pow(rectTo.TopLeft.X - 0, 2) + Math.Pow(rectTo.TopLeft.Y - 0, 2));
-
             if (rectTo.Right >= rectFrom.Left)
             {
-                return new LengthSide(testElement, rectFrom.Top - rectTo.Bottom, lengthToZeroPoint, rectTo.BottomRight, Side.BottomRight); 
+                return new LengthSide(minorElement, rectFrom.Top - rectTo.Bottom, rectTo.BottomRight, Side.BottomRight);
             }
             else
             {
-                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), lengthToZeroPoint, rectTo.BottomRight, Side.BottomRight);
+                return new LengthSide(minorElement, Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), rectTo.BottomRight, Side.BottomRight);
             }
         }
         else
         {
-            var parent = ((FrameworkElement)testElement.Parent);
-            double lengthToZeroPoint = Math.Sqrt(Math.Pow(rectTo.TopLeft.X - parent.ActualWidth, 2) + Math.Pow(rectTo.TopLeft.Y - parent.ActualHeight, 2));
-
             if (rectTo.Left <= rectFrom.Right)
             {
-                return new LengthSide(testElement, rectFrom.Top - rectTo.Bottom, lengthToZeroPoint, rectTo.BottomLeft, Side.BottomLeft);
+                return new LengthSide(minorElement, rectFrom.Top - rectTo.Bottom, rectTo.BottomLeft, Side.BottomLeft);
             }
             else
             {
-                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectFrom.TopRight.X - rectTo.BottomLeft.X, 2) + Math.Pow(rectFrom.TopRight.Y - rectTo.BottomLeft.Y, 2)), lengthToZeroPoint, rectTo.BottomLeft, Side.BottomLeft);
+                return new LengthSide(minorElement, Math.Sqrt(Math.Pow(rectFrom.TopRight.X - rectTo.BottomLeft.X, 2) + Math.Pow(rectFrom.TopRight.Y - rectTo.BottomLeft.Y, 2)), rectTo.BottomLeft, Side.BottomLeft);
             }
         }
     }
 
-    private static LengthSide GetLengthFromUnder(FrameworkElement testElement, Rect rectFrom, Rect rectTo)
+    private static LengthSide GetLengthFromUnder(FrameworkElement minorElement, Rect rectFrom, Rect rectTo)
     {
-        double lengthToZeroPoint = Math.Sqrt(Math.Pow(rectTo.TopLeft.X - 0, 2) + Math.Pow(rectTo.TopLeft.Y - 0, 2));
-
         if (rectTo.Left <= rectFrom.Left)
         {
             if (rectTo.Right >= rectFrom.Left)
             {
-                return new LengthSide(testElement, rectTo.Top - rectFrom.Bottom, lengthToZeroPoint, rectTo.TopRight, Side.TopRight);
+                return new LengthSide(minorElement, rectTo.Top - rectFrom.Bottom, rectTo.TopRight, Side.TopRight);
             }
             else
             {
-                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectTo.TopRight.X - rectFrom.BottomLeft.X, 2) + Math.Pow(rectTo.TopRight.Y - rectFrom.BottomLeft.Y, 2)), lengthToZeroPoint, rectTo.TopRight, Side.TopRight);
+                return new LengthSide(minorElement, Math.Sqrt(Math.Pow(rectTo.TopRight.X - rectFrom.BottomLeft.X, 2) + Math.Pow(rectTo.TopRight.Y - rectFrom.BottomLeft.Y, 2)), rectTo.TopRight, Side.TopRight);
             }
         }
         else
         {
             if (rectTo.Left <= rectFrom.Right)
             {
-                return new LengthSide(testElement, rectTo.Top - rectFrom.Bottom, lengthToZeroPoint, rectTo.TopLeft, Side.TopLeft);
+                return new LengthSide(minorElement, rectTo.Top - rectFrom.Bottom, rectTo.TopLeft, Side.TopLeft);
             }
             else
             {
-                return new LengthSide(testElement, Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), lengthToZeroPoint, rectTo.TopLeft, Side.TopLeft);
+                return new LengthSide(minorElement, Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), rectTo.TopLeft, Side.TopLeft);
             }
         }
     }
@@ -363,9 +296,9 @@ public class SolarEclipseService
 
 internal static class LungoBackgroudAnimationsHalper
 {
-    public static void BurntLeafDrowingBrush(this BackgroundInfo backgroundInfo, Color testNewColor, Side side = Side.TopRight, double fullSeconds = 1)
+    public static void BurntLeafDrowingBrush(this BackgroundInfo backgroundInfo, Color newColor, Side side = Side.TopRight, double milliseconds = 1000)
     {
-        Point[] selectedPoints = new Point[] { new Point(100,0), new Point(100,100), new Point(0,0), new Point(0,100) };
+        Point[] selectedPoints = new Point[] { new Point(100, 0), new Point(100, 100), new Point(0, 0), new Point(0, 100) };
 
         RotateTransform rotateTransform = (RotateTransform)backgroundInfo.InsideElements["RotateTransform"];
         PathFigure topRightToLeftPoint = (PathFigure)backgroundInfo.InsideElements["TopRightToLeftPoint"];
@@ -389,7 +322,7 @@ internal static class LungoBackgroudAnimationsHalper
         if (side == Side.TopLeft)
             rotateTransform.Angle = 270;
 
-        backgroundBrushFront.Color = testNewColor;
+        backgroundBrushFront.Color = newColor;
         //topRightToLeftPoint.StartPoint = selectedPoints[0];
         sezierSegment.Point1 = selectedPoints[0];
         sezierSegment.Point2 = selectedPoints[0];
@@ -397,90 +330,90 @@ internal static class LungoBackgroudAnimationsHalper
 
         //// ------------------------------------------------------------------------------------------
 
-#region topRightToLeftPointAnimation
+        #region topRightToLeftPointAnimation
 
         var topRightToLeftPointAnimation = new PointAnimation()
         {
-            Duration = TimeSpan.FromSeconds(fullSeconds),
+            Duration = TimeSpan.FromMilliseconds(milliseconds),
             From = selectedPoints[0], // [100,0]  [100,100]
             To = selectedPoints[2] // [0,0]  [100,0]
         };
 
         topRightToLeftPoint.BeginAnimation(PathFigure.StartPointProperty, topRightToLeftPointAnimation);
 
-#endregion
+        #endregion
 
-#region rightUpToDownPointAnimation
+        #region rightUpToDownPointAnimation
 
         var rightUpToDownPointAnimation = new PointAnimation()
         {
-            Duration = TimeSpan.FromSeconds(fullSeconds / 2),
+            Duration = TimeSpan.FromMilliseconds(milliseconds / 2),
             From = selectedPoints[0], // [100,0]  [100,100]
             To = selectedPoints[1] // [100,100]  [0,100]
         };
 
         rightUpToDownPoint.BeginAnimation(LineSegment.PointProperty, rightUpToDownPointAnimation);
 
-#endregion
+        #endregion
 
-#region downRightToLeftPointAnimation
+        #region downRightToLeftPointAnimation
 
         var downRightToLeftPointAnimation = new PointAnimation()
         {
-            BeginTime = TimeSpan.FromSeconds(fullSeconds/2),
-            Duration = TimeSpan.FromSeconds(fullSeconds),
+            BeginTime = TimeSpan.FromMilliseconds(milliseconds / 2),
+            Duration = TimeSpan.FromMilliseconds(milliseconds),
             From = selectedPoints[1], // [100,100]  [0,100]
             To = selectedPoints[3] // [0,100]  [0,0]
         };
 
         downRightToLeftPoint.BeginAnimation(LineSegment.PointProperty, downRightToLeftPointAnimation);
 
-#endregion
+        #endregion
 
         //// ------------------------------------------------------------------------------------------
 
-#region sezierSegment1Animation
+        #region sezierSegment1Animation
 
         var sezierSegment1Animation = new PointAnimation()
         {
-            BeginTime = TimeSpan.FromSeconds(fullSeconds / 2),
-            Duration = TimeSpan.FromSeconds(fullSeconds),
+            BeginTime = TimeSpan.FromMilliseconds(milliseconds / 2),
+            Duration = TimeSpan.FromMilliseconds(milliseconds),
             From = selectedPoints[0],
             To = selectedPoints[3]
         };
 
-#endregion
+        #endregion
 
-#region sezierSegment2Animation
+        #region sezierSegment2Animation
 
         var sezierSegment2Animation = new PointAnimation()
         {
-            BeginTime = TimeSpan.FromSeconds(fullSeconds / 4),
-            Duration = TimeSpan.FromSeconds(fullSeconds / 2),
+            BeginTime = TimeSpan.FromMilliseconds(milliseconds / 4),
+            Duration = TimeSpan.FromMilliseconds(milliseconds / 2),
             From = selectedPoints[0],
             To = selectedPoints[2]
         };
 
         sezierSegment.BeginAnimation(BezierSegment.Point2Property, sezierSegment2Animation);
 
-#endregion
+        #endregion
 
-#region sezierSegment3Animation
+        #region sezierSegment3Animation
 
         var sezierSegment3Animation = new PointAnimation()
         {
-            Duration = TimeSpan.FromSeconds(fullSeconds / 4),
+            Duration = TimeSpan.FromMilliseconds(milliseconds / 4),
             From = selectedPoints[0],
             To = selectedPoints[2]
         };
 
         sezierSegment.BeginAnimation(BezierSegment.Point3Property, sezierSegment3Animation);
 
-#endregion
+        #endregion
 
         sezierSegment1Animation.Completed += (s, e) =>
         {
-            backgroundBrushBack.Color = testNewColor;
+            backgroundBrushBack.Color = newColor;
             sezierSegment.BeginAnimation(BezierSegment.Point1Property, null);
             sezierSegment.BeginAnimation(BezierSegment.Point2Property, null);
             downRightToLeftPoint.BeginAnimation(LineSegment.PointProperty, null);
@@ -499,5 +432,14 @@ internal class ElementDistance
     {
         Element = frameworkElement;
         DistanceLength = distanceLength;
+    }
+}
+
+internal static class FrameworkElementExtansions
+{
+    public static Rect GetElementRectFromScreen(this FrameworkElement element)
+    {
+        Point elementPoint = element.PointToScreen(new Point(0, 0));
+        return new Rect(elementPoint, new Point(elementPoint.X + element.ActualWidth, elementPoint.Y + element.ActualHeight));
     }
 }
