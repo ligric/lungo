@@ -7,9 +7,11 @@
 
         <Rectangle x:Name="rectangle0" Fill="#8f54d5" Width="100" Height="200" Canvas.Left="94" Canvas.Top="142"/>
 
-        <Rectangle x:Name="rectangle1" Fill="#8f54d5" Width="100" Height="200" Canvas.Left="275" Canvas.Top="142"/>
+        <Rectangle x:Name="rectangle1" Fill="#8f54d5" Width="100" Height="200" Canvas.Left="294" Canvas.Top="142" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-        <Rectangle x:Name="rectangle2" Fill="#8f54d5" Width="100" Height="200" Canvas.Left="477" Canvas.Top="142"/>
-        
+        <Rectangle x:Name="rectangle2" Fill="#8f54d5" Width="100" Height="200" Canvas.Left="492" Canvas.Top="142" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+        <Button Width="40" Height="40" Click="OnTestButtonClicked" Canvas.Left="324" Canvas.Top="412"/>
+
     </Canvas>
 </Window>

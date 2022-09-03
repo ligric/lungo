@@ -5,6 +5,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace Lungo.Wpf.Sample.Windows
 {
@@ -15,6 +16,16 @@ namespace Lungo.Wpf.Sample.Windows
         public MainWindow()
         {
             this.InitializeComponent();
+        }
+
+
+        private void OnTestButtonClicked(object sender, RoutedEventArgs e)
+        {
+            Brush brush = FrameworkElementToImmutableBrush(ellipse);
+
+            rectangle0.Fill = brush;
+            rectangle1.Fill = brush;
+            rectangle2.Fill = brush;
         }
 
         private static Brush FrameworkElementToImmutableBrush(FrameworkElement source)
@@ -48,22 +59,5 @@ namespace Lungo.Wpf.Sample.Windows
 
             return brush;
         }
-
-
-        //private void OnThemeChangerButtonClicked(object sender, RoutedEventArgs e)
-        //{
-        //    if (isDarkTheme)
-        //    {
-        //        SolarEclipseService.ChangeTheme(themeChangerButton, (Color)FindResource("Light"));
-        //    }
-        //    else
-        //    {
-        //        SolarEclipseService.ChangeTheme(themeChangerButton, (Color)FindResource("Dark"));
-        //    }
-
-        //    isDarkTheme = !isDarkTheme;
-        //}
-
-
     }
 }
