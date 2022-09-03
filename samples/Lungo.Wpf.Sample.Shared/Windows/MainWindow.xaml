@@ -1,57 +1,15 @@
 ﻿<Window x:Class="Lungo.Wpf.Sample.Windows.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Width="750" Height="500" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-        xmlns:ap="clr-namespace:Lungo.Wpf;assembly=Lungo">
-
-    <Window.Resources>
-        <ResourceDictionary>
-            <Style TargetType="Rectangle">
-                <Setter Property="Fill" Value="#8f54d5"/>
-                <Setter Property="RadiusX" Value="10"/>
-                <Setter Property="RadiusY" Value="10"/>
-                <Setter Property="Width" Value="70"/>
-                <Setter Property="Height" Value="70"/>
-            </Style>
-        </ResourceDictionary>
-    </Window.Resources>
+        Width="750" Height="500" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
 
     <Canvas x:Name="canvas" Background="#2b2731">
 
-        <Rectangle Canvas.Left="493" Canvas.Top="27"
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle Canvas.Left="33" Canvas.Top="52" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle Canvas.Left="194" Canvas.Top="252" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle Canvas.Left="422" Canvas.Top="337" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle Canvas.Left="350" Canvas.Top="52" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle Canvas.Left="528" Canvas.Top="233" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle Canvas.Left="638" Canvas.Top="27" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle Canvas.Left="125" Canvas.Top="103" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle Canvas.Left="631" Canvas.Top="142" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle Canvas.Left="528" Canvas.Top="337" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle Canvas.Left="631" Canvas.Top="302" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle Canvas.Left="244" Canvas.Top="52" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle Canvas.Left="58" Canvas.Top="198" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle Canvas.Left="437" Canvas.Top="153" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle Canvas.Left="325" Canvas.Top="277" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle Canvas.Left="100" Canvas.Top="337" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+        <Ellipse x:Name="ellipse" Width="400" Height="400" Fill="White" Canvas.Left="144" Canvas.Top="-98"/>
 
+        <Rectangle x:Name="rectangle0" Fill="#8f54d5" Width="100" Height="200" Canvas.Left="94" Canvas.Top="142"/>
 
-        <Button x:Name="themeChangerButton" Background="Red"
-                Width="25" Height="25" Canvas.Left="232" Canvas.Top="178"
-                Click="OnThemeChangerButtonClicked"/>
+        <Rectangle x:Name="rectangle1" Fill="#8f54d5" Width="100" Height="200" Canvas.Left="275" Canvas.Top="142"/>
+
+        <Rectangle x:Name="rectangle2" Fill="#8f54d5" Width="100" Height="200" Canvas.Left="477" Canvas.Top="142"/>
+        
     </Canvas>
 </Window>
