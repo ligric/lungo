@@ -16,37 +16,37 @@
 
     <Canvas x:Name="canvas" Background="#2b2731">
 
-        <Rectangle x:Name="Fourteenth" Canvas.Left="493" Canvas.Top="27"
+        <Rectangle Canvas.Left="493" Canvas.Top="27"
                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Fifteenth" Canvas.Left="33" Canvas.Top="52" 
+        <Rectangle Canvas.Left="33" Canvas.Top="52" 
                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Sixteenth" Canvas.Left="194" Canvas.Top="252" 
+        <Rectangle Canvas.Left="194" Canvas.Top="252" 
                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Second" Canvas.Left="422" Canvas.Top="337" 
+        <Rectangle Canvas.Left="422" Canvas.Top="337" 
                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="First" Canvas.Left="350" Canvas.Top="52" 
+        <Rectangle Canvas.Left="350" Canvas.Top="52" 
                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Third" Canvas.Left="528" Canvas.Top="233" 
+        <Rectangle Canvas.Left="528" Canvas.Top="233" 
                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Thirteenth" Canvas.Left="638" Canvas.Top="27" 
+        <Rectangle Canvas.Left="638" Canvas.Top="27" 
                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Eleventh" Canvas.Left="125" Canvas.Top="103" 
+        <Rectangle Canvas.Left="125" Canvas.Top="103" 
                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Twelfth" Canvas.Left="631" Canvas.Top="142" 
+        <Rectangle Canvas.Left="631" Canvas.Top="142" 
                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Ninth" Canvas.Left="528" Canvas.Top="337" 
+        <Rectangle Canvas.Left="528" Canvas.Top="337" 
                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Tenth" Canvas.Left="631" Canvas.Top="302" 
+        <Rectangle Canvas.Left="631" Canvas.Top="302" 
                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Seventh" Canvas.Left="244" Canvas.Top="52" 
+        <Rectangle Canvas.Left="244" Canvas.Top="52" 
                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Fifth" Canvas.Left="58" Canvas.Top="198" 
+        <Rectangle Canvas.Left="58" Canvas.Top="198" 
                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Sixth" Canvas.Left="437" Canvas.Top="153" 
+        <Rectangle Canvas.Left="437" Canvas.Top="153" 
                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Fourth" Canvas.Left="325" Canvas.Top="277" 
+        <Rectangle Canvas.Left="325" Canvas.Top="277" 
                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Eighth" Canvas.Left="100" Canvas.Top="337" 
+        <Rectangle Canvas.Left="100" Canvas.Top="337" 
                    ap:SolarEclipse.ThemeChangingSubscribe="True"/>
 
 
