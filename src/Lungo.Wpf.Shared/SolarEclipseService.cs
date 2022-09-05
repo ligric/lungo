@@ -93,33 +93,46 @@ internal static class AFasfasfasa
         };
 
         path.Data = GetCirclePathGeometry(out Dictionary<string, DependencyObject> circlePathGeometryInsideElements);
-         
+
+
+        VisualBrush contentVisualBrush = new VisualBrush()
+        {
+            AlignmentX = AlignmentX.Left,
+            AlignmentY = AlignmentY.Top,
+            Stretch = Stretch.None
+        };
+        contentVisualBrush.Visual = path;
+
+        System.Windows.Shapes.Rectangle rectangle = new System.Windows.Shapes.Rectangle();
+        rectangle.Fill = contentVisualBrush;
+
+
         Border border = new Border()
         {
             Background = new SolidColorBrush(Colors.Red)
         };
         border.SetBinding(Window.HeightProperty, new Binding("Height") { Source = Application.Current.MainWindow });
         border.SetBinding(Window.WidthProperty, new Binding("Width") { Source = Application.Current.MainWindow });
+        border.Child = rectangle;
 
-        border.Child = path;
-
-        VisualBrush ellipseVisualBrush = new VisualBrush()
+        VisualBrush rootVisualBrush = new VisualBrush()
         {
             AlignmentX = AlignmentX.Left,
             AlignmentY = AlignmentY.Top,
             Stretch = Stretch.None,
         };
-        ellipseVisualBrush.Visual = border;
+        rootVisualBrush.Visual = border;
 
-
+         
         insideElements = new Dictionary<string, DependencyObject>();
+        insideElements.Add("ContentVisualBrush", contentVisualBrush);
         insideElements.Add("Border", border);
         insideElements.Add("Path", path);
-        insideElements.Add("VisualBrush", ellipseVisualBrush);
+        insideElements.Add("RootVisualBrush", rootVisualBrush);
         foreach (var item in circlePathGeometryInsideElements) insideElements.Add(item.Key, item.Value);
 
 
-        return ellipseVisualBrush;
+        return rootVisualBrush;
     }
 
     private static IReadOnlyList<Point> GetPolygonVertices(int n, double r, Vector center)
