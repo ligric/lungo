@@ -1,17 +1,86 @@
 ﻿<Window x:Class="Lungo.Wpf.Sample.Windows.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Width="750" Height="500" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
 
-    <Canvas x:Name="canvas" Background="#2b2731">
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Button.Click" SourceName="moveButt">
+            <BeginStoryboard>
+                <Storyboard>
+                    <RectAnimation Storyboard.TargetName="rectangle0"
+                                   Storyboard.TargetProperty="Fill.Viewbox"
+                                   To="1,1,1,1"
+                                   Duration="0:0:2"/>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="Button.Click" SourceName="retButt">
+            <BeginStoryboard>
+                <Storyboard>
+                    <RectAnimation Storyboard.TargetName="rectangle0"
+                                   Storyboard.TargetProperty="Fill.Viewbox"
+                                   To="0,0,1,1"
+                                   Duration="0:0:2"/>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+    
+    <Window.Resources>
+        <VisualBrush x:Key="EllipseVisualBrush" Stretch="None" Viewbox="0,0.25,1,1" >
+            <VisualBrush.Visual>
+                <Path x:Name="path" Width="400" Height="400" Fill="#32a69e">
+                    <Path.Data>
+                        <PathGeometry>
+                            <PathGeometry.Figures>
+                                <PathFigureCollection>
+                                    <PathFigure StartPoint="200,0" IsClosed="False">
+                                        <PathFigure.Segments>
+                                            <PathSegmentCollection>
+                                                <!-- 8 угольник по 45 граусов -->
+                                                <!--
+                                                [200,0]
+                                                [341.42,58.57]
+                                                [400,200]
+                                                [341.42,341.42]
+                                                [200,400]
+                                                [58.57,341.42]
+                                                [0,200]
+                                                [58.57,58.57]-->
 
-        <Ellipse x:Name="ellipse" Width="400" Height="400" Fill="#32a69e" Canvas.Left="144" Canvas.Top="-98"/>
+                                                <ArcSegment Point="341.42,58.57" Size="180,180" SweepDirection="Clockwise"/>
+                                                <ArcSegment Point="400,200" Size="180,180" SweepDirection="Clockwise"/>
+                                                <ArcSegment Point="341.42,341.42" Size="180,180" SweepDirection="Clockwise"/>
+                                                <ArcSegment Point="200,400" Size="180,180" SweepDirection="Clockwise"/>
+                                                <ArcSegment Point="58.57,341.42" Size="180,180" SweepDirection="Clockwise"/>
+                                                <ArcSegment Point="0,200" Size="180,180" SweepDirection="Clockwise"/>
+                                                <ArcSegment Point="58.57,58.57" Size="180,180" SweepDirection="Clockwise"/>
+                                                <ArcSegment Point="200,0" Size="180,180" SweepDirection="Clockwise"/>
+                                            </PathSegmentCollection>
+                                        </PathFigure.Segments>
+                                    </PathFigure>
+                                </PathFigureCollection>
+                            </PathGeometry.Figures>
+                        </PathGeometry>
+                    </Path.Data>
+                </Path>
+            </VisualBrush.Visual>
+        </VisualBrush>
+    </Window.Resources>
 
-        <Rectangle x:Name="rectangle0" Fill="#1e1e1e" Width="100" Height="200" Canvas.Left="94" Canvas.Top="142"/>
+    <Grid Background="#2b2731">
+        <Canvas x:Name="canvas" Background="{StaticResource EllipseVisualBrush}">
+            
+            <Rectangle x:Name="rectangle0" Fill="{StaticResource EllipseVisualBrush}" Width="100" Height="200" Canvas.Left="94" Canvas.Top="142"/>
 
-        <Rectangle x:Name="rectangle1" Fill="#1e1e1e" Width="100" Height="200" Canvas.Left="294" Canvas.Top="142" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Rectangle x:Name="rectangle1" Fill="#1e1e1e" Width="100" Height="200" Canvas.Left="294" Canvas.Top="142" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-        <Rectangle x:Name="rectangle2" Fill="#1e1e1e" Width="100" Height="200" Canvas.Left="492" Canvas.Top="142" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Rectangle x:Name="rectangle2" Fill="#1e1e1e" Width="100" Height="200" Canvas.Left="492" Canvas.Top="142" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
-        <Button Width="40" Height="40" Click="OnTestButtonClicked" Canvas.Left="324" Canvas.Top="412"/>
+        </Canvas>
 
-    </Canvas>
+        <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Button x:Name="moveButt" Content="Переместить" Width="100"/>
+            <Button x:Name="retButt" Content="Вернуть" Width="100"/>
+        </StackPanel>
+    </Grid>
+
 </Window>
