@@ -98,8 +98,9 @@ internal static class AFasfasfasa
         {
             Background = new SolidColorBrush(Colors.Red)
         };
-        border.SetBinding(Window.ActualHeightProperty, new Binding("Height") { Source = Application.Current.MainWindow });
-        border.SetBinding(Window.ActualWidthProperty, new Binding("Width") { Source = Application.Current.MainWindow });
+        border.SetBinding(Window.HeightProperty, new Binding("Height") { Source = Application.Current.MainWindow });
+        border.SetBinding(Window.WidthProperty, new Binding("Width") { Source = Application.Current.MainWindow });
+
         border.Child = path;
 
         VisualBrush ellipseVisualBrush = new VisualBrush()

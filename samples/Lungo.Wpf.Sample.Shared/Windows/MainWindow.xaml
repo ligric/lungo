@@ -7,53 +7,20 @@
         <Color x:Key="Dark">#161e28</Color>
 
         <Color x:Key="Light">#cac4b8</Color>
-
-        <!--<VisualBrush x:Key="EllipseVisualBrush" AlignmentX="Left" AlignmentY="Top" Stretch="None">
-            <VisualBrush.Visual>
-                <Border Width="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=ActualWidth}"
-                        Height="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=ActualHeight}" 
-                        Background="Red">
-                    <Path x:Name="path" Width="400" Height="400" Fill="#32a69e" Stretch="Uniform"
-                          HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <Path.Data>
-                            <PathGeometry>
-                                <PathGeometry.Figures>
-                                    <PathFigure StartPoint="200,0" IsClosed="False">
-                                        <PathFigure.Segments>
-                                            <PathSegmentCollection>
-                                                <ArcSegment Point="341.42,58.57" Size="180,180" SweepDirection="Clockwise"/>
-                                                <ArcSegment Point="400,200" Size="180,180" SweepDirection="Clockwise"/>
-                                                <ArcSegment Point="341.42,341.42" Size="180,180" SweepDirection="Clockwise"/>
-                                                <ArcSegment Point="200,400" Size="180,180" SweepDirection="Clockwise"/>
-                                                <ArcSegment Point="58.57,341.42" Size="180,180" SweepDirection="Clockwise"/>
-                                                <ArcSegment Point="0,200" Size="180,180" SweepDirection="Clockwise"/>
-                                                <ArcSegment Point="58.57,58.57" Size="180,180" SweepDirection="Clockwise"/>
-                                                <ArcSegment Point="200,0" Size="180,180" SweepDirection="Clockwise"/>
-                                            </PathSegmentCollection>
-                                        </PathFigure.Segments>
-                                    </PathFigure>
-                                </PathGeometry.Figures>
-                            </PathGeometry>
-                        </Path.Data>
-
-                        <Path.RenderTransform>
-                            <TranslateTransform x:Name="PathTranslateTransform" X="150" Y="0"/>
-                        </Path.RenderTransform>
-                    </Path>
-                </Border>
-            </VisualBrush.Visual>
-        </VisualBrush>-->
     </Window.Resources>
 
     <Grid Background="#2b2731">
-        <Canvas x:Name="canvas">
+        <Canvas x:Name="canvas"
+                ap:SolarEclipse.ThemeChangingSubscribe="True">
 
             <Rectangle x:Name="rectangle0" Fill="#1e1e1e" Width="100" Height="200" Canvas.Left="94" Canvas.Top="142"
                        ap:SolarEclipse.ThemeChangingSubscribe="True"/>
 
-            <Rectangle x:Name="rectangle1" Fill="#1e1e1e" Width="100" Height="200" Canvas.Left="294" Canvas.Top="142" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Rectangle x:Name="rectangle1" Fill="#1e1e1e" Width="100" Height="200" Canvas.Left="294" Canvas.Top="142" HorizontalAlignment="Center" VerticalAlignment="Center"
+                       ap:SolarEclipse.ThemeChangingSubscribe="True"/>
 
-            <Rectangle x:Name="rectangle2" Fill="#1e1e1e" Width="100" Height="200" Canvas.Left="492" Canvas.Top="142" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Rectangle x:Name="rectangle2" Fill="#1e1e1e" Width="100" Height="200" Canvas.Left="492" Canvas.Top="142" HorizontalAlignment="Left" VerticalAlignment="Center"
+                       ap:SolarEclipse.ThemeChangingSubscribe="True"/>
 
         </Canvas>
 
