@@ -37,7 +37,20 @@ public static class SolarEclipse
         }
         else
         {
-            solarEclipseService.AddElement(element);
+            if(!element.IsLoaded)
+            {
+                RoutedEventHandler loaded = null;
+                loaded += (s, e) =>
+                {
+                    element.Loaded -= loaded;
+                    solarEclipseService.AddElement(element);
+                };
+                element.Loaded += loaded;
+            }
+            else
+            {
+                solarEclipseService.AddElement(element);
+            }
         }
     }
 }
