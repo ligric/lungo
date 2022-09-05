@@ -105,6 +105,7 @@ internal static class AFasfasfasa
 
         System.Windows.Shapes.Rectangle rectangle = new System.Windows.Shapes.Rectangle();
         rectangle.Fill = contentVisualBrush;
+        rectangle.Visibility = Visibility.Collapsed;
 
 
         Border border = new Border()
@@ -126,6 +127,7 @@ internal static class AFasfasfasa
          
         insideElements = new Dictionary<string, DependencyObject>();
         insideElements.Add("ContentVisualBrush", contentVisualBrush);
+        insideElements.Add("Rectangle", rectangle);
         insideElements.Add("Border", border);
         insideElements.Add("Path", path);
         insideElements.Add("RootVisualBrush", rootVisualBrush);
