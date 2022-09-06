@@ -62,10 +62,23 @@ public class SolarEclipseService
 
     public static void ChangeTheme(FrameworkElement changerElement, Color newColor)
     {
-        //Rect changerElementRect = changerElement.GetElementRectFromScreen();
+        Rect changerElementRect = changerElement.GetElementRectFromParent();
+        var centerX = changerElementRect.Left + changerElement.ActualWidth / 2; // 367
+        var centerY = changerElementRect.Top + changerElement.ActualHeight / 2; // 451
 
 
+        double coefficientX = (centerX - 400 / 2) / 400;
+        double coefficientY = (centerY - 400 / 2) / 400;
 
+        foreach (BackgroundInfo backgroundInfo in backgroundInfos.Values)
+        {
+            VisualBrush visualBrush = (VisualBrush)backgroundInfo.InsideElements["ContentVisualBrush"];
+            System.Windows.Shapes.Rectangle rectangle = (System.Windows.Shapes.Rectangle)backgroundInfo.InsideElements["Rectangle"];
+            rectangle.Visibility = Visibility.Visible;
+
+
+            visualBrush.Viewbox = new Rect(-coefficientX, -coefficientY, 1, 1);
+        }
     }
 }
 
@@ -75,6 +88,18 @@ internal static class FrameworkElementExtansions
     {
         Point elementPoint = element.PointToScreen(new Point(0, 0));
         return new Rect(elementPoint, new Point(elementPoint.X + element.ActualWidth, elementPoint.Y + element.ActualHeight));
+    }
+
+    public static Rect GetElementRectFromWindow(this FrameworkElement element)
+    {
+        GeneralTransform generalTransform = element.TransformToVisual(Application.Current.MainWindow);
+        return generalTransform.TransformBounds(new Rect(element.RenderSize));
+    }
+
+    public static Rect GetElementRectFromParent(this FrameworkElement element)
+    {
+        GeneralTransform generalTransform = element.TransformToVisual((Visual)element.Parent);
+        return generalTransform.TransformBounds(new Rect(element.RenderSize));
     }
 }
 
@@ -87,7 +112,7 @@ internal static class AFasfasfasa
             Width = 400,
             Height = 400,
             Fill = new SolidColorBrush(Colors.Green),
-            Stretch = Stretch.Uniform,
+            Stretch = Stretch.None,
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
         };

@@ -13,19 +13,23 @@
         <Canvas x:Name="canvas"
                 ap:SolarEclipse.ThemeChangingSubscribe="True">
 
-            <Rectangle x:Name="rectangle0" Fill="#1e1e1e" Width="100" Height="200" Canvas.Left="94" Canvas.Top="142" RadiusX="20" RadiusY="20"
+            <Rectangle x:Name="rectangle0" Fill="#1e1e1e" Stroke="Orange" Width="100" Height="200" Canvas.Left="94" Canvas.Top="142" RadiusX="20" RadiusY="20"
                        ap:SolarEclipse.ThemeChangingSubscribe="True"/>
 
-            <Rectangle x:Name="rectangle1" Fill="#1e1e1e" Width="100" Height="200" Canvas.Left="294" Canvas.Top="142" HorizontalAlignment="Center" VerticalAlignment="Center"
+            <Rectangle x:Name="rectangle1" Fill="#1e1e1e" Stroke="Orange" Width="100" Height="200" Canvas.Left="294" Canvas.Top="142" HorizontalAlignment="Center" VerticalAlignment="Center"
                        ap:SolarEclipse.ThemeChangingSubscribe="True"/>
 
-            <Rectangle x:Name="rectangle2" Fill="#1e1e1e" Width="100" Height="200" Canvas.Left="492" Canvas.Top="142" HorizontalAlignment="Left" VerticalAlignment="Center"
+            <Rectangle x:Name="rectangle2" Fill="#1e1e1e" Stroke="Orange" Width="100" Height="200" Canvas.Left="492" Canvas.Top="142" HorizontalAlignment="Left" VerticalAlignment="Center"
                        ap:SolarEclipse.ThemeChangingSubscribe="True"/>
 
         </Canvas>
 
-        <Button x:Name="moveButt" Content="Переместить" Width="100"
-                VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+        <Button x:Name="themeChanger" Content="Изменить тему" Height="50" Width="100" Click="OnThemeChengerClicked"
+                VerticalAlignment="Top" HorizontalAlignment="Left">
+            <Button.RenderTransform>
+                <TranslateTransform X="360" Y="440"/>
+            </Button.RenderTransform>
+        </Button>
 
     </Grid>
 
