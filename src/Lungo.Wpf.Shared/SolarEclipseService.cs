@@ -63,20 +63,29 @@ public class SolarEclipseService
     public static void ChangeTheme(FrameworkElement changerElement, Color newColor)
     {
         Rect changerElementRect = changerElement.GetElementRectFromParent();
-        var centerX = changerElementRect.Left + changerElement.ActualWidth / 2; // 367
-        var centerY = changerElementRect.Top + changerElement.ActualHeight / 2; // 451
+        var centerX = changerElementRect.Left + changerElement.ActualWidth / 2;
+        var centerY = changerElementRect.Top + changerElement.ActualHeight / 2;
 
-
-        double coefficientX = (centerX - 400 / 2) / 400;
-        double coefficientY = (centerY - 400 / 2) / 400;
-
-        foreach (BackgroundInfo backgroundInfo in backgroundInfos.Values)
+        foreach (KeyValuePair<FrameworkElement, BackgroundInfo> item in backgroundInfos)
         {
+            FrameworkElement frameworkElement = item.Key;
+            BackgroundInfo backgroundInfo = item.Value;
+
+            VisualBrush rootVisualBrush = (VisualBrush)backgroundInfo.InsideElements["RootVisualBrush"];
             VisualBrush visualBrush = (VisualBrush)backgroundInfo.InsideElements["ContentVisualBrush"];
+            Border border = (Border)backgroundInfo.InsideElements["Border"];
+            System.Windows.Shapes.Path path = (System.Windows.Shapes.Path)backgroundInfo.InsideElements["Path"];
             System.Windows.Shapes.Rectangle rectangle = (System.Windows.Shapes.Rectangle)backgroundInfo.InsideElements["Rectangle"];
             rectangle.Visibility = Visibility.Visible;
 
+            Rect elementRect = frameworkElement.GetElementRectFromParent();
+            double elementCoefficientX = elementRect.Left / border.ActualWidth;
+            double elementCoefficientY = elementRect.Top / border.ActualHeight;
+            rootVisualBrush.Viewbox = new Rect(elementCoefficientX, elementCoefficientY, 1,1);
 
+
+            double coefficientX = (centerX - path.ActualWidth / 2) / path.ActualWidth;
+            double coefficientY = (centerY - path.ActualHeight / 2) / path.ActualHeight;
             visualBrush.Viewbox = new Rect(-coefficientX, -coefficientY, 1, 1);
         }
     }
@@ -101,7 +110,25 @@ internal static class FrameworkElementExtansions
         GeneralTransform generalTransform = element.TransformToVisual((Visual)element.Parent);
         return generalTransform.TransformBounds(new Rect(element.RenderSize));
     }
+
+    public static Rect GetElementRectFrom(this FrameworkElement element, Visual visual)
+    {
+        GeneralTransform generalTransform = element.TransformToVisual(visual);
+        return generalTransform.TransformBounds(new Rect(element.RenderSize));
+    }
 }
+
+//internal static class VisualBrushExtensions
+//{
+//    public static Rect GetElementCenterPoint(this FrameworkElement element)
+//    {
+//        Rect changerElementRect = element.GetElementRectFromParent();
+//        var centerX = changerElementRect.Left + element.ActualWidth / 2;
+//        var centerY = changerElementRect.Top + element.ActualHeight / 2;
+
+
+//    }
+//}
 
 internal static class AFasfasfasa
 {
