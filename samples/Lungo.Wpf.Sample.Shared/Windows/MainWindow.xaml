@@ -4,9 +4,11 @@
 
 
     <Window.Resources>
-        <Color x:Key="Dark">#161e28</Color>
+        <Color x:Key="BaseDark">#2b2731</Color>
+        <Color x:Key="RectangleDark">#161e28</Color>
 
-        <Color x:Key="Light">#cac4b8</Color>
+        <Color x:Key="BaseLight">#cac4b8</Color>
+        <Color x:Key="RectangleLight">#cac4b8</Color>
     </Window.Resources>
 
     <Grid Background="#2b2731">

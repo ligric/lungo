@@ -33,22 +33,27 @@ public class SolarEclipseService
 
     public void AddElement(FrameworkElement element)
     {
-        VisualBrush brush = AFasfasfasa.GetEllipseVisualBrush(out Dictionary<string, DependencyObject> insideElements);
+        Dictionary<string, DependencyObject> insideElements;
+        VisualBrush brush;
 
         if (element is Panel border)
         {
+            brush = AFasfasfasa.GetEllipseVisualBrush(((SolidColorBrush)border.Background)?.Color, out insideElements);
             border.Background = brush;
         }
         else if (element is Control control)
         {
+            brush = AFasfasfasa.GetEllipseVisualBrush(((SolidColorBrush)control.Background)?.Color, out insideElements);
             control.Background = brush;
         }
         else if (element is System.Windows.Shapes.Shape shape)
         {
+            brush = AFasfasfasa.GetEllipseVisualBrush(((SolidColorBrush)shape.Fill)?.Color, out insideElements);
             shape.Fill = brush;
         }
         else
         {
+            brush = AFasfasfasa.GetEllipseVisualBrush(((SolidColorBrush)((Border)element).Background)?.Color, out insideElements);
             ((Border)element).Background = brush;
         }
 
@@ -76,6 +81,7 @@ public class SolarEclipseService
             Border border = (Border)backgroundInfo.InsideElements["Border"];
             System.Windows.Shapes.Path path = (System.Windows.Shapes.Path)backgroundInfo.InsideElements["Path"];
             System.Windows.Shapes.Rectangle rectangle = (System.Windows.Shapes.Rectangle)backgroundInfo.InsideElements["Rectangle"];
+            path.Fill = new SolidColorBrush(newColor);
             rectangle.Visibility = Visibility.Visible;
 
             Rect elementRect = frameworkElement.GetElementRectFromParent();
@@ -84,8 +90,8 @@ public class SolarEclipseService
             rootVisualBrush.Viewbox = new Rect(elementCoefficientX, elementCoefficientY, 1, 1);
 
 
-            double coefficientX = (centerX - path.ActualWidth / 2) / path.ActualWidth;
-            double coefficientY = (centerY - path.ActualHeight / 2) / path.ActualHeight;
+            double coefficientX = (centerX - rectangle.Width / 2) / rectangle.Width;
+            double coefficientY = (centerY - rectangle.Height / 2) / rectangle.Height;
             visualBrush.Viewbox = new Rect(-coefficientX, -coefficientY, 1, 1);
 
 
@@ -108,8 +114,17 @@ public class SolarEclipseService
                 To = sizedHeight
             };
 
-            path.BeginAnimation(FrameworkElement.WidthProperty, pathWidthformDoubleAnimation);
-            path.BeginAnimation(FrameworkElement.HeightProperty, pathHeightformDoubleAnimation);
+            pathHeightformDoubleAnimation.Completed += (s, e) =>
+            {
+                border.Background = new SolidColorBrush(newColor);
+                rectangle.Width = 200;
+                rectangle.Height = 200;
+                rectangle.Visibility = Visibility.Collapsed;
+            };
+
+
+            rectangle.BeginAnimation(FrameworkElement.WidthProperty, pathWidthformDoubleAnimation);
+            rectangle.BeginAnimation(FrameworkElement.HeightProperty, pathHeightformDoubleAnimation);
 
 
 
@@ -122,7 +137,7 @@ public class SolarEclipseService
 
             var contentVisualBrushRectAnimation = new RectAnimation()
             {
-                Duration = TimeSpan.FromMilliseconds(10_000),
+                Duration = TimeSpan.FromMilliseconds(5_000),
                 To = new Rect(-testX, -textY, 1, 1)
             };
 
@@ -173,12 +188,10 @@ internal static class FrameworkElementExtansions
 
 internal static class AFasfasfasa
 {
-    public static VisualBrush GetEllipseVisualBrush(out Dictionary<string, DependencyObject> insideElements)
+    public static VisualBrush GetEllipseVisualBrush(Color? baseColor, out Dictionary<string, DependencyObject> insideElements)
     {
         System.Windows.Shapes.Path path = new System.Windows.Shapes.Path()
         {
-            Width = 400,
-            Height = 400,
             Fill = new SolidColorBrush(Colors.Green),
             Stretch = Stretch.Uniform,
             HorizontalAlignment = HorizontalAlignment.Left,
@@ -198,11 +211,13 @@ internal static class AFasfasfasa
         System.Windows.Shapes.Rectangle rectangle = new System.Windows.Shapes.Rectangle();
         rectangle.Fill = contentVisualBrush;
         rectangle.Visibility = Visibility.Collapsed;
+        rectangle.Height = 200;
+        rectangle.Width = 200;
 
 
         Border border = new Border()
         {
-            Background = new SolidColorBrush(Colors.Red)
+            Background = baseColor == null ? null : new SolidColorBrush((Color)baseColor)
         };
         border.SetBinding(Window.HeightProperty, new Binding("Height") { Source = Application.Current.MainWindow });
         border.SetBinding(Window.WidthProperty, new Binding("Width") { Source = Application.Current.MainWindow });

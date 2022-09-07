@@ -5,7 +5,7 @@ namespace Lungo.Wpf.Sample.Windows
 {
     public sealed partial class MainWindow : Window
     {
-        private bool isDarkTheme = false;
+        private bool isDarkTheme = true;
 
         public MainWindow()
         {
@@ -16,11 +16,11 @@ namespace Lungo.Wpf.Sample.Windows
         {
             if (isDarkTheme)
             {
-                SolarEclipseService.ChangeTheme(themeChanger, (Color)FindResource("Light"));
+                SolarEclipseService.ChangeTheme(themeChanger, (Color)FindResource("BaseLight"));
             }
             else
             {
-                SolarEclipseService.ChangeTheme(themeChanger, (Color)FindResource("Dark"));
+                SolarEclipseService.ChangeTheme(themeChanger, (Color)FindResource("BaseDark"));
             }
 
             isDarkTheme = !isDarkTheme;
