@@ -81,12 +81,53 @@ public class SolarEclipseService
             Rect elementRect = frameworkElement.GetElementRectFromParent();
             double elementCoefficientX = elementRect.Left / border.ActualWidth;
             double elementCoefficientY = elementRect.Top / border.ActualHeight;
-            rootVisualBrush.Viewbox = new Rect(elementCoefficientX, elementCoefficientY, 1,1);
+            rootVisualBrush.Viewbox = new Rect(elementCoefficientX, elementCoefficientY, 1, 1);
 
 
             double coefficientX = (centerX - path.ActualWidth / 2) / path.ActualWidth;
             double coefficientY = (centerY - path.ActualHeight / 2) / path.ActualHeight;
             visualBrush.Viewbox = new Rect(-coefficientX, -coefficientY, 1, 1);
+
+
+            //----------------------------------------------------------------------------------------
+            //                                    Animation
+            //----------------------------------------------------------------------------------------
+
+            double sizedWidth = Application.Current.MainWindow.ActualWidth * 3;
+            double sizedHeight = Application.Current.MainWindow.ActualHeight * 3;
+
+            var pathWidthformDoubleAnimation = new DoubleAnimation()
+            {
+                Duration = TimeSpan.FromMilliseconds(10_000),
+                To = sizedWidth
+            };
+
+            var pathHeightformDoubleAnimation = new DoubleAnimation()
+            {
+                Duration = TimeSpan.FromMilliseconds(10_000),
+                To = sizedHeight
+            };
+
+            path.BeginAnimation(FrameworkElement.WidthProperty, pathWidthformDoubleAnimation);
+            path.BeginAnimation(FrameworkElement.HeightProperty, pathHeightformDoubleAnimation);
+
+
+
+            double windowCenterX = Application.Current.MainWindow.ActualWidth / 2;
+            double windowCenterY = Application.Current.MainWindow.ActualHeight / 2;
+
+            double testX = (windowCenterX - sizedWidth / 2) / sizedWidth;
+            double textY = (windowCenterY - sizedHeight / 2) / sizedHeight;
+
+
+            var contentVisualBrushRectAnimation = new RectAnimation()
+            {
+                Duration = TimeSpan.FromMilliseconds(10_000),
+                To = new Rect(-testX, -textY, 1, 1)
+            };
+
+            visualBrush.BeginAnimation(TileBrush.ViewboxProperty, contentVisualBrushRectAnimation);
+
         }
     }
 }
@@ -139,13 +180,12 @@ internal static class AFasfasfasa
             Width = 400,
             Height = 400,
             Fill = new SolidColorBrush(Colors.Green),
-            Stretch = Stretch.None,
+            Stretch = Stretch.Uniform,
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
         };
 
         path.Data = GetCirclePathGeometry(out Dictionary<string, DependencyObject> circlePathGeometryInsideElements);
-
 
         VisualBrush contentVisualBrush = new VisualBrush()
         {
@@ -231,11 +271,3 @@ internal static class AFasfasfasa
         return new PathGeometry(pathFigures);
     }
 }
-//var topRightToLeftPointAnimation = new PointAnimation()
-//{
-//    Duration = TimeSpan.FromMilliseconds(milliseconds),
-//    From = selectedPoints[0], // [100,0]  [100,100]
-//    To = selectedPoints[2] // [0,0]  [100,0]
-//};
-
-//topRightToLeftPoint.BeginAnimation(PathFigure.StartPointProperty, topRightToLeftPointAnimation);
