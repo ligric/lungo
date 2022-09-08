@@ -90,8 +90,8 @@ public class SolarEclipseService
             rootVisualBrush.Viewbox = new Rect(elementCoefficientX, elementCoefficientY, 1, 1);
 
 
-            double coefficientX = (centerX - rectangle.Width / 2) / rectangle.Width;
-            double coefficientY = (centerY - rectangle.Height / 2) / rectangle.Height;
+            double coefficientX = (centerX - path.ActualWidth / 2) / path.ActualWidth;
+            double coefficientY = (centerY - path.ActualHeight / 2) / path.ActualHeight;
             visualBrush.Viewbox = new Rect(-coefficientX, -coefficientY, 1, 1);
 
 
@@ -102,6 +102,7 @@ public class SolarEclipseService
             double sizedWidth = Application.Current.MainWindow.ActualWidth * 3;
             double sizedHeight = Application.Current.MainWindow.ActualHeight * 3;
 
+
             var pathWidthformDoubleAnimation = new DoubleAnimation()
             {
                 Duration = TimeSpan.FromMilliseconds(10_000),
@@ -110,21 +111,22 @@ public class SolarEclipseService
 
             var pathHeightformDoubleAnimation = new DoubleAnimation()
             {
+                
                 Duration = TimeSpan.FromMilliseconds(10_000),
                 To = sizedHeight
             };
 
-            pathHeightformDoubleAnimation.Completed += (s, e) =>
+            pathWidthformDoubleAnimation.Completed += (s, e) =>
             {
                 border.Background = new SolidColorBrush(newColor);
-                rectangle.Width = 200;
-                rectangle.Height = 200;
+                path.BeginAnimation(FrameworkElement.WidthProperty, null);
+                path.BeginAnimation(FrameworkElement.HeightProperty, null);
+                visualBrush.BeginAnimation(TileBrush.ViewboxProperty, null);
                 rectangle.Visibility = Visibility.Collapsed;
             };
 
-
-            rectangle.BeginAnimation(FrameworkElement.WidthProperty, pathWidthformDoubleAnimation);
-            rectangle.BeginAnimation(FrameworkElement.HeightProperty, pathHeightformDoubleAnimation);
+            path.BeginAnimation(FrameworkElement.WidthProperty, pathWidthformDoubleAnimation);
+            path.BeginAnimation(FrameworkElement.HeightProperty, pathHeightformDoubleAnimation);
 
 
 
@@ -142,7 +144,6 @@ public class SolarEclipseService
             };
 
             visualBrush.BeginAnimation(TileBrush.ViewboxProperty, contentVisualBrushRectAnimation);
-
         }
     }
 }
@@ -193,6 +194,8 @@ internal static class AFasfasfasa
         System.Windows.Shapes.Path path = new System.Windows.Shapes.Path()
         {
             Fill = new SolidColorBrush(Colors.Green),
+            Width = 100,
+            Height = 100,
             Stretch = Stretch.Uniform,
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
@@ -211,8 +214,6 @@ internal static class AFasfasfasa
         System.Windows.Shapes.Rectangle rectangle = new System.Windows.Shapes.Rectangle();
         rectangle.Fill = contentVisualBrush;
         rectangle.Visibility = Visibility.Collapsed;
-        rectangle.Height = 200;
-        rectangle.Width = 200;
 
 
         Border border = new Border()
