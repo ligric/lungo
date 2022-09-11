@@ -1,55 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Xml.Linq;
+using System.Windows.Media.Media3D;
 
 namespace Lungo.Wpf;
 
 internal class BackgroundInfo
 {
-    public DrawingBrush CurrentDrawingBrush { get; }
+    public VisualBrush CurrentDrawingBrush { get; }
 
     public IReadOnlyDictionary<string, DependencyObject> InsideElements { get; }
 
-    public BackgroundInfo(DrawingBrush currentDrawingBrush, Dictionary<string, DependencyObject> insideElements)
+    public BackgroundInfo(VisualBrush currentDrawingBrush, Dictionary<string, DependencyObject> insideElements)
     {
         CurrentDrawingBrush = currentDrawingBrush;
         InsideElements = insideElements;
-    }
-}
-
-internal enum Side
-{
-    TopLeft,
-    TopRight,
-
-    BottomLeft,
-    BottomRight
-}
-
-internal class LengthSide
-{
-    public FrameworkElement? Element { get; }
-    public double Length { get; }
-    public Point Point { get; }
-    public Side Side { get; }
-
-    public static readonly LengthSide Empty = new LengthSide();
-
-    private LengthSide() { }
-
-    public LengthSide(FrameworkElement element, double lengthToMainPoint, Point point, Side side)
-    {
-        Element = element;
-        Length = lengthToMainPoint;
-        Point = point;
-        Side = side;
     }
 }
 
@@ -59,64 +33,31 @@ public class SolarEclipseService
 
     public void AddElement(FrameworkElement element)
     {
-        var rotateTransform = new RotateTransform();
-        var group = new DrawingGroup();
-        group.Transform = rotateTransform;
-        DrawingBrush burntLeafDrowingBrush = new DrawingBrush(group);
-
-        GeometryDrawing backgroundGeometryDrawing = new GeometryDrawing();
-        var backgroundBrushBack = new SolidColorBrush((Color)Application.Current.MainWindow.FindResource("Light"));
-        backgroundGeometryDrawing.Brush = backgroundBrushBack;
-        backgroundGeometryDrawing.Geometry = new RectangleGeometry(new Rect(0, 0, 100, 100));
-        group.Children.Add(backgroundGeometryDrawing);
-
-        GeometryDrawing geometryDrawing = new GeometryDrawing();
-        var backgroundBrushFront = new SolidColorBrush((Color)Application.Current.MainWindow.FindResource("Light"));
-        geometryDrawing.Brush = backgroundBrushFront;
-        var pathGeometry = new PathGeometry();
-        geometryDrawing.Geometry = pathGeometry;
-        var topRightToLeftPoint = new PathFigure();
-        topRightToLeftPoint.StartPoint = new Point(100, 0);
-        pathGeometry.Figures.Add(topRightToLeftPoint);
-        topRightToLeftPoint.Segments.Add(new LineSegment(new Point(100, 0), true));
-        var rightUpToDownPoint = new LineSegment(new Point(100, 0), true);
-        topRightToLeftPoint.Segments.Add(rightUpToDownPoint);
-        var downRightToLeftPoint = new LineSegment(new Point(100, 100), true);
-        topRightToLeftPoint.Segments.Add(downRightToLeftPoint);
-        BezierSegment sezierSegment = new BezierSegment(new Point(100, 0), new Point(100, 0), new Point(100, 0), true);
-        topRightToLeftPoint.Segments.Add(sezierSegment);
-        group.Children.Add(geometryDrawing);
-
-
-
-        Dictionary<string, DependencyObject> insideElements = new Dictionary<string, DependencyObject>();
-        insideElements.Add("BackgroundGeometryDrawing", backgroundGeometryDrawing);
-        insideElements.Add("BackgroundBrushBack", backgroundBrushBack);
-        insideElements.Add("BackgroundBrushFront", backgroundBrushFront);
-        insideElements.Add("TopRightToLeftPoint", topRightToLeftPoint);
-        insideElements.Add("RightUpToDownPoint", rightUpToDownPoint);
-        insideElements.Add("DownRightToLeftPoint", downRightToLeftPoint);
-        insideElements.Add("SezierSegment", sezierSegment);
-        insideElements.Add("RotateTransform", rotateTransform);
-
-        backgroundInfos.Add(element, new BackgroundInfo(burntLeafDrowingBrush, insideElements));
+        Dictionary<string, DependencyObject> insideElements;
+        VisualBrush brush;
 
         if (element is Panel border)
         {
-            border.Background = burntLeafDrowingBrush;
+            brush = AFasfasfasa.GetEllipseVisualBrush(((SolidColorBrush)border.Background)?.Color, out insideElements);
+            border.Background = brush;
         }
         else if (element is Control control)
         {
-            control.Background = burntLeafDrowingBrush;
+            brush = AFasfasfasa.GetEllipseVisualBrush(((SolidColorBrush)control.Background)?.Color, out insideElements);
+            control.Background = brush;
         }
         else if (element is System.Windows.Shapes.Shape shape)
         {
-            shape.Fill = burntLeafDrowingBrush;
+            brush = AFasfasfasa.GetEllipseVisualBrush(((SolidColorBrush)shape.Fill)?.Color, out insideElements);
+            shape.Fill = brush;
         }
         else
         {
-            ((Border)element).Background = burntLeafDrowingBrush;
+            brush = AFasfasfasa.GetEllipseVisualBrush(((SolidColorBrush)((Border)element).Background)?.Color, out insideElements);
+            ((Border)element).Background = brush;
         }
+
+        backgroundInfos.Add(element, new BackgroundInfo(brush, insideElements));
     }
 
     public void RemoveElement(FrameworkElement element)
@@ -124,314 +65,84 @@ public class SolarEclipseService
         throw new NotImplementedException();
     }
 
-    public static void ChangeTheme(FrameworkElement changerElement, Color newColor)
+    public static void ChangeTheme(FrameworkElement changerElement, Color newColor, double milliseconds = 1_000)
     {
-        Rect changerElementRect = changerElement.GetElementRectFromScreen();
-        LengthSide[] minorElementLengthsToChangerElement = new LengthSide[backgroundInfos.Count];
+        double GetR(Size size) =>
+            Math.Sqrt(2 * (size.Width * size.Width) + 2 * (size.Height * size.Height));
 
-        int k = 0;
-        foreach (FrameworkElement element in backgroundInfos.Keys)
+        Rect changerElementRect = changerElement.GetElementRectFromParent();
+        Point changerElementCenter = new Point(changerElementRect.Left + changerElement.ActualWidth / 2, changerElementRect.Top + changerElement.ActualHeight / 2);
+
+        foreach (KeyValuePair<FrameworkElement, BackgroundInfo> item in backgroundInfos)
         {
-            Rect minorElementRect = element.GetElementRectFromScreen();
-            minorElementLengthsToChangerElement[k] = changerElementRect.Top >= minorElementRect.Bottom ? GetLengthFromAbove(element, changerElementRect, minorElementRect)
-                : GetLengthFromUnder(element, changerElementRect, minorElementRect);
-            k++;
+            FrameworkElement frameworkElement = item.Key;
+            BackgroundInfo backgroundInfo = item.Value;
+
+            VisualBrush rootVisualBrush = (VisualBrush)backgroundInfo.InsideElements["RootVisualBrush"];
+            Border border = (Border)backgroundInfo.InsideElements["Border"];
+            ScaleTransform contentVisualBrushScaleTransform = (ScaleTransform)backgroundInfo.InsideElements["ContentVisualBrushScaleTransform"];
+            TranslateTransform contentVisualBrushTranslateTransform = (TranslateTransform)backgroundInfo.InsideElements["ContentVisualBrushTranslateTransform"];
+            System.Windows.Shapes.Path path = (System.Windows.Shapes.Path)backgroundInfo.InsideElements["Path"];
+            System.Windows.Shapes.Rectangle rectangle = (System.Windows.Shapes.Rectangle)backgroundInfo.InsideElements["Rectangle"];
+
+            path.Fill = new SolidColorBrush(newColor);
+            rectangle.Visibility = Visibility.Visible;
+
+            Rect elementRect = frameworkElement.GetElementRectFromParent();
+            double elementCoefficientX = elementRect.Left / border.ActualWidth;
+            double elementCoefficientY = elementRect.Top / border.ActualHeight;
+            rootVisualBrush.Viewbox = new Rect(elementCoefficientX, elementCoefficientY, 1, 1);
+
+            //----------------------------------------------------------------------------------------
+            //                                    Animation
+            //----------------------------------------------------------------------------------------
+            Size windowSize = Application.Current.MainWindow.RenderSize;
+            double newContentVisualBrushScale = GetR(windowSize);
+
+            var contentVisualBrushScaleTransformX = new DoubleAnimation()
+            {
+                Duration = TimeSpan.FromMilliseconds(milliseconds),
+                From = GetR(new Size(1, 1)),
+                To = newContentVisualBrushScale,
+            };
+
+            var contentVisualBrushScaleTransformY = new DoubleAnimation()
+            {
+                Duration = TimeSpan.FromMilliseconds(milliseconds),
+                From = GetR(new Size(1, 1)),
+                To = newContentVisualBrushScale,
+            };
+
+
+            var contentVisualBrushTranslateTransformX = new DoubleAnimation()
+            {
+                Duration = TimeSpan.FromMilliseconds(milliseconds),
+                From = changerElementCenter.X - GetR(new Size(1, 1)) / 2,
+                To = changerElementCenter.X - newContentVisualBrushScale / 2,
+            };
+
+            var contentVisualBrushTranslateTransformY = new DoubleAnimation()
+            {
+                Duration = TimeSpan.FromMilliseconds(milliseconds),
+                From = changerElementCenter.Y - GetR(new Size(1, 1)) / 2,
+                To = changerElementCenter.Y - newContentVisualBrushScale / 2,
+            };
+
+            contentVisualBrushScaleTransformX.Completed += (s, e) =>
+            {
+                border.Background = new SolidColorBrush(newColor);
+                contentVisualBrushScaleTransformX.BeginAnimation(ScaleTransform.ScaleXProperty, null);
+                contentVisualBrushScaleTransformY.BeginAnimation(ScaleTransform.ScaleYProperty, null);
+                contentVisualBrushTranslateTransformX.BeginAnimation(ScaleTransform.ScaleXProperty, null);
+                contentVisualBrushTranslateTransformY.BeginAnimation(ScaleTransform.ScaleYProperty, null);
+                rectangle.Visibility = Visibility.Collapsed;
+            };
+            contentVisualBrushScaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, contentVisualBrushScaleTransformX);
+            contentVisualBrushScaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, contentVisualBrushScaleTransformY);
+
+            contentVisualBrushTranslateTransform.BeginAnimation(TranslateTransform.XProperty, contentVisualBrushTranslateTransformX);
+            contentVisualBrushTranslateTransform.BeginAnimation(TranslateTransform.YProperty, contentVisualBrushTranslateTransformY);
         }
-
-        minorElementLengthsToChangerElement = minorElementLengthsToChangerElement.OrderBy(i => i.Length).ToArray();
-
-
-        double maxRightBottomElementsHeight = 0, maxTopRightElementsHeight = 0, maxTopLeftElementsHeight = 0, maxLeftBottomElementsHeight = 0,
-               maxRightBottomElementsWidth = 0, maxTopRightElementsWidth = 0, maxTopLeftElementsWidth = 0, maxLeftBottomElementsWidth = 0;
-
-        foreach (LengthSide lengthSide in minorElementLengthsToChangerElement)
-        {
-            FrameworkElement element = lengthSide.Element;
-            switch (lengthSide.Side)
-            {
-                case Side.TopLeft:
-                    maxTopLeftElementsHeight += element.ActualHeight;
-                    maxTopLeftElementsWidth += element.ActualWidth;
-                    break;
-                case Side.TopRight:
-                    maxTopRightElementsHeight += element.ActualHeight;
-                    maxTopRightElementsWidth += element.ActualWidth;
-                    break;
-                case Side.BottomLeft:
-                    maxLeftBottomElementsHeight += element.ActualHeight;
-                    maxLeftBottomElementsWidth += element.ActualWidth;
-                    break;
-                case Side.BottomRight:
-                    maxRightBottomElementsHeight += element.ActualHeight;
-                    maxRightBottomElementsWidth += element.ActualWidth;
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-        double GetDiagonal(double a, double b)
-        {
-            return Math.Sqrt((a * a) + (b * b));
-        }
-
-        double maxRightBottomDiagonal = GetDiagonal(maxRightBottomElementsHeight, maxRightBottomElementsWidth),
-               maxTopRightDiagonal = GetDiagonal(maxTopRightElementsHeight, maxTopRightElementsWidth),
-               maxTopLeftDiagonal = GetDiagonal(maxTopLeftElementsHeight, maxTopLeftElementsWidth),
-               maxLeftBottomDiagonal = GetDiagonal(maxLeftBottomElementsHeight, maxLeftBottomElementsWidth);
-
-        double lastRightBottomProcent = 0, lastTopRightProcent = 0, lastTopLeftProcent = 0, lastLeftBottomProcent = 0;
-
-        // 500px 25px                  ----------------           25 * 100 / 500 = 5%
-
-        // Tumple for test where Item1 - BeginTime, Item2 - Duration, Item3 - LengthSide
-        Tuple<TimeSpan, TimeSpan, LengthSide>[] completeAnimationArray = new Tuple<TimeSpan, TimeSpan, LengthSide>[backgroundInfos.Count];
-        int milliseconds = 20_000;
-
-        for (int i = 0; i < minorElementLengthsToChangerElement.Length; i++)
-        {
-            LengthSide lengthSide = minorElementLengthsToChangerElement[i];
-            FrameworkElement element = lengthSide.Element;
-            double elementDiagonal = GetDiagonal(element.ActualHeight, element.ActualWidth);
-            double procentOfFullLength, beginTimeMolliseconds = 0;
-            switch (lengthSide.Side)
-            {
-                case Side.TopLeft:
-                    procentOfFullLength = elementDiagonal * 100 / maxTopLeftDiagonal;
-                    beginTimeMolliseconds = milliseconds / 100 * procentOfFullLength;
-                    completeAnimationArray[i] = Tuple.Create(TimeSpan.FromMilliseconds(lastTopLeftProcent), TimeSpan.FromMilliseconds(beginTimeMolliseconds), lengthSide);
-                    lastTopLeftProcent = beginTimeMolliseconds;
-                    break;
-                case Side.TopRight:
-                    procentOfFullLength = elementDiagonal * 100 / maxTopRightDiagonal;
-                    beginTimeMolliseconds = milliseconds / 100 * procentOfFullLength;
-                    completeAnimationArray[i] = Tuple.Create(TimeSpan.FromMilliseconds(lastTopRightProcent), TimeSpan.FromMilliseconds(beginTimeMolliseconds), lengthSide);
-                    lastTopRightProcent = beginTimeMolliseconds;
-                    break;
-                case Side.BottomLeft:
-                    procentOfFullLength = elementDiagonal * 100 / maxLeftBottomDiagonal;
-                    beginTimeMolliseconds = milliseconds / 100 * procentOfFullLength;
-                    completeAnimationArray[i] = Tuple.Create(TimeSpan.FromMilliseconds(lastLeftBottomProcent), TimeSpan.FromMilliseconds(beginTimeMolliseconds), lengthSide);
-                    lastLeftBottomProcent = beginTimeMolliseconds;
-                    break;
-                case Side.BottomRight:
-                    procentOfFullLength = elementDiagonal * 100 / maxRightBottomDiagonal;
-                    beginTimeMolliseconds = milliseconds / 100 * procentOfFullLength;
-                    completeAnimationArray[i] = Tuple.Create(TimeSpan.FromMilliseconds(lastRightBottomProcent), TimeSpan.FromMilliseconds(beginTimeMolliseconds), lengthSide);
-                    lastRightBottomProcent = beginTimeMolliseconds;
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-        foreach (Tuple<TimeSpan, TimeSpan, LengthSide> elementAnimationTimeLine in completeAnimationArray)
-        {
-            Task.Run(async () =>
-            {
-                TimeSpan beginTime = elementAnimationTimeLine.Item1;
-                TimeSpan duration = elementAnimationTimeLine.Item2;
-                LengthSide lengthSide = elementAnimationTimeLine.Item3;
-                BackgroundInfo backgroundInfo = backgroundInfos[lengthSide.Element];
-                await Task.Delay(beginTime);
-
-                await Application.Current.Dispatcher.BeginInvoke(() =>
-                    backgroundInfo.BurntLeafDrowingBrush(newColor, lengthSide.Side, milliseconds - duration.TotalMilliseconds));
-            });
-        }
-    }
-
-    private static LengthSide GetLengthFromAbove(FrameworkElement minorElement, Rect rectFrom, Rect rectTo)
-    {
-        if (rectTo.Left <= rectFrom.Left)
-        {
-            if (rectTo.Right >= rectFrom.Left)
-            {
-                return new LengthSide(minorElement, rectFrom.Top - rectTo.Bottom, rectTo.BottomRight, Side.BottomRight);
-            }
-            else
-            {
-                return new LengthSide(minorElement, Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), rectTo.BottomRight, Side.BottomRight);
-            }
-        }
-        else
-        {
-            if (rectTo.Left <= rectFrom.Right)
-            {
-                return new LengthSide(minorElement, rectFrom.Top - rectTo.Bottom, rectTo.BottomLeft, Side.BottomLeft);
-            }
-            else
-            {
-                return new LengthSide(minorElement, Math.Sqrt(Math.Pow(rectFrom.TopRight.X - rectTo.BottomLeft.X, 2) + Math.Pow(rectFrom.TopRight.Y - rectTo.BottomLeft.Y, 2)), rectTo.BottomLeft, Side.BottomLeft);
-            }
-        }
-    }
-
-    private static LengthSide GetLengthFromUnder(FrameworkElement minorElement, Rect rectFrom, Rect rectTo)
-    {
-        if (rectTo.Left <= rectFrom.Left)
-        {
-            if (rectTo.Right >= rectFrom.Left)
-            {
-                return new LengthSide(minorElement, rectTo.Top - rectFrom.Bottom, rectTo.TopRight, Side.TopRight);
-            }
-            else
-            {
-                return new LengthSide(minorElement, Math.Sqrt(Math.Pow(rectTo.TopRight.X - rectFrom.BottomLeft.X, 2) + Math.Pow(rectTo.TopRight.Y - rectFrom.BottomLeft.Y, 2)), rectTo.TopRight, Side.TopRight);
-            }
-        }
-        else
-        {
-            if (rectTo.Left <= rectFrom.Right)
-            {
-                return new LengthSide(minorElement, rectTo.Top - rectFrom.Bottom, rectTo.TopLeft, Side.TopLeft);
-            }
-            else
-            {
-                return new LengthSide(minorElement, Math.Sqrt(Math.Pow(rectFrom.TopLeft.X - rectTo.BottomRight.X, 2) + Math.Pow(rectFrom.TopLeft.Y - rectTo.BottomRight.Y, 2)), rectTo.TopLeft, Side.TopLeft);
-            }
-        }
-    }
-}
-
-internal static class LungoBackgroudAnimationsHalper
-{
-    public static void BurntLeafDrowingBrush(this BackgroundInfo backgroundInfo, Color newColor, Side side = Side.TopRight, double milliseconds = 1000)
-    {
-        Point[] selectedPoints = new Point[] { new Point(100, 0), new Point(100, 100), new Point(0, 0), new Point(0, 100) };
-
-        RotateTransform rotateTransform = (RotateTransform)backgroundInfo.InsideElements["RotateTransform"];
-        PathFigure topRightToLeftPoint = (PathFigure)backgroundInfo.InsideElements["TopRightToLeftPoint"];
-        LineSegment rightUpToDownPoint = (LineSegment)backgroundInfo.InsideElements["RightUpToDownPoint"];
-        LineSegment downRightToLeftPoint = (LineSegment)backgroundInfo.InsideElements["DownRightToLeftPoint"];
-        BezierSegment sezierSegment = (BezierSegment)backgroundInfo.InsideElements["SezierSegment"];
-
-        SolidColorBrush backgroundBrushBack = (SolidColorBrush)backgroundInfo.InsideElements["BackgroundBrushBack"];
-        SolidColorBrush backgroundBrushFront = (SolidColorBrush)backgroundInfo.InsideElements["BackgroundBrushFront"];
-
-        //// ------------------------------------------------------------------------------------------
-        if (side == Side.TopRight)
-            rotateTransform.Angle = 0;
-
-        if (side == Side.BottomRight)
-            rotateTransform.Angle = 90;
-
-        if (side == Side.BottomLeft)
-            rotateTransform.Angle = 180;
-
-        if (side == Side.TopLeft)
-            rotateTransform.Angle = 270;
-
-        backgroundBrushFront.Color = newColor;
-        //topRightToLeftPoint.StartPoint = selectedPoints[0];
-        sezierSegment.Point1 = selectedPoints[0];
-        sezierSegment.Point2 = selectedPoints[0];
-        downRightToLeftPoint.Point = selectedPoints[1];
-
-        //// ------------------------------------------------------------------------------------------
-
-        #region topRightToLeftPointAnimation
-
-        var topRightToLeftPointAnimation = new PointAnimation()
-        {
-            Duration = TimeSpan.FromMilliseconds(milliseconds),
-            From = selectedPoints[0], // [100,0]  [100,100]
-            To = selectedPoints[2] // [0,0]  [100,0]
-        };
-
-        topRightToLeftPoint.BeginAnimation(PathFigure.StartPointProperty, topRightToLeftPointAnimation);
-
-        #endregion
-
-        #region rightUpToDownPointAnimation
-
-        var rightUpToDownPointAnimation = new PointAnimation()
-        {
-            Duration = TimeSpan.FromMilliseconds(milliseconds / 2),
-            From = selectedPoints[0], // [100,0]  [100,100]
-            To = selectedPoints[1] // [100,100]  [0,100]
-        };
-
-        rightUpToDownPoint.BeginAnimation(LineSegment.PointProperty, rightUpToDownPointAnimation);
-
-        #endregion
-
-        #region downRightToLeftPointAnimation
-
-        var downRightToLeftPointAnimation = new PointAnimation()
-        {
-            BeginTime = TimeSpan.FromMilliseconds(milliseconds / 2),
-            Duration = TimeSpan.FromMilliseconds(milliseconds),
-            From = selectedPoints[1], // [100,100]  [0,100]
-            To = selectedPoints[3] // [0,100]  [0,0]
-        };
-
-        downRightToLeftPoint.BeginAnimation(LineSegment.PointProperty, downRightToLeftPointAnimation);
-
-        #endregion
-
-        //// ------------------------------------------------------------------------------------------
-
-        #region sezierSegment1Animation
-
-        var sezierSegment1Animation = new PointAnimation()
-        {
-            BeginTime = TimeSpan.FromMilliseconds(milliseconds / 2),
-            Duration = TimeSpan.FromMilliseconds(milliseconds),
-            From = selectedPoints[0],
-            To = selectedPoints[3]
-        };
-
-        #endregion
-
-        #region sezierSegment2Animation
-
-        var sezierSegment2Animation = new PointAnimation()
-        {
-            BeginTime = TimeSpan.FromMilliseconds(milliseconds / 4),
-            Duration = TimeSpan.FromMilliseconds(milliseconds / 2),
-            From = selectedPoints[0],
-            To = selectedPoints[2]
-        };
-
-        sezierSegment.BeginAnimation(BezierSegment.Point2Property, sezierSegment2Animation);
-
-        #endregion
-
-        #region sezierSegment3Animation
-
-        var sezierSegment3Animation = new PointAnimation()
-        {
-            Duration = TimeSpan.FromMilliseconds(milliseconds / 4),
-            From = selectedPoints[0],
-            To = selectedPoints[2]
-        };
-
-        sezierSegment.BeginAnimation(BezierSegment.Point3Property, sezierSegment3Animation);
-
-        #endregion
-
-        sezierSegment1Animation.Completed += (s, e) =>
-        {
-            backgroundBrushBack.Color = newColor;
-            sezierSegment.BeginAnimation(BezierSegment.Point1Property, null);
-            sezierSegment.BeginAnimation(BezierSegment.Point2Property, null);
-            downRightToLeftPoint.BeginAnimation(LineSegment.PointProperty, null);
-        };
-
-        sezierSegment.BeginAnimation(BezierSegment.Point1Property, sezierSegment1Animation);
-    }
-}
-
-internal class ElementDistance
-{
-    public FrameworkElement Element { get; }
-    public double DistanceLength { get; }
-
-    public ElementDistance(FrameworkElement frameworkElement, double distanceLength)
-    {
-        Element = frameworkElement;
-        DistanceLength = distanceLength;
     }
 }
 
@@ -441,5 +152,130 @@ internal static class FrameworkElementExtansions
     {
         Point elementPoint = element.PointToScreen(new Point(0, 0));
         return new Rect(elementPoint, new Point(elementPoint.X + element.ActualWidth, elementPoint.Y + element.ActualHeight));
+    }
+
+    public static Rect GetElementRectFromWindow(this FrameworkElement element)
+    {
+        GeneralTransform generalTransform = element.TransformToVisual(Application.Current.MainWindow);
+        return generalTransform.TransformBounds(new Rect(element.RenderSize));
+    }
+
+    public static Rect GetElementRectFromParent(this FrameworkElement element)
+    {
+        GeneralTransform generalTransform = element.TransformToVisual((Visual)element.Parent);
+        return generalTransform.TransformBounds(new Rect(element.RenderSize));
+    }
+
+    public static Rect GetElementRectFrom(this FrameworkElement element, Visual visual)
+    {
+        GeneralTransform generalTransform = element.TransformToVisual(visual);
+        return generalTransform.TransformBounds(new Rect(element.RenderSize));
+    }
+}
+
+internal static class AFasfasfasa
+{
+    public static VisualBrush GetEllipseVisualBrush(Color? baseColor, out Dictionary<string, DependencyObject> insideElements)
+    {
+        System.Windows.Shapes.Path path = new System.Windows.Shapes.Path()
+        {
+            Fill = new SolidColorBrush(Colors.Green),
+            Width = 1,
+            Height = 1,
+            Stretch = Stretch.Uniform,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            Data = GetCirclePathGeometry(out Dictionary<string, DependencyObject> circlePathGeometryInsideElements)
+        };
+
+        ScaleTransform contentVisualBrushScaleTransform = new ScaleTransform(1, 1);
+        TranslateTransform contentVisualBrushTranslateTransform = new TranslateTransform();
+        TransformGroup contentVisualBrushTransformGroup = new TransformGroup();
+        contentVisualBrushTransformGroup.Children.Add(contentVisualBrushScaleTransform);
+        contentVisualBrushTransformGroup.Children.Add(contentVisualBrushTranslateTransform);
+        VisualBrush contentVisualBrush = new VisualBrush()
+        {
+            AlignmentX = AlignmentX.Left,
+            AlignmentY = AlignmentY.Top,
+            Stretch = Stretch.None,
+            Visual = path,
+            Transform = contentVisualBrushTransformGroup,
+        };
+
+        System.Windows.Shapes.Rectangle rectangle = new System.Windows.Shapes.Rectangle()
+        {
+            Fill = contentVisualBrush,
+            Visibility = Visibility.Collapsed
+        };
+        
+        Border border = new Border()
+        {
+            Background = baseColor == null ? null : new SolidColorBrush((Color)baseColor)
+        };
+        border.SetBinding(Window.HeightProperty, new Binding("Height") { Source = Application.Current.MainWindow });
+        border.SetBinding(Window.WidthProperty, new Binding("Width") { Source = Application.Current.MainWindow });
+        border.Child = rectangle;
+
+        VisualBrush rootVisualBrush = new VisualBrush()
+        {
+            AlignmentX = AlignmentX.Left,
+            AlignmentY = AlignmentY.Top,
+            Stretch = Stretch.None,
+            Visual = border
+        };
+         
+        insideElements = new Dictionary<string, DependencyObject>();
+        insideElements.Add("ContentVisualBrushScaleTransform", contentVisualBrushScaleTransform);
+        insideElements.Add("ContentVisualBrushTranslateTransform", contentVisualBrushTranslateTransform);
+        insideElements.Add("ContentVisualBrush", contentVisualBrush);
+        insideElements.Add("Rectangle", rectangle);
+        insideElements.Add("Border", border);
+        insideElements.Add("Path", path);
+        insideElements.Add("RootVisualBrush", rootVisualBrush);
+        foreach (var item in circlePathGeometryInsideElements) insideElements.Add(item.Key, item.Value);
+
+        return rootVisualBrush;
+    }
+
+    private static IReadOnlyList<Point> GetPolygonVertices(int n, double r, Vector center)
+    {
+        Point[] points = new Point[n];
+        double segmentAngle = 2 * Math.PI / n; // Угол сегмента в радианах.
+        for (int i = 0; i < n; i++)
+        {
+            double angle = segmentAngle * i; // Угол очередной вершины.
+            Point vertic = new Point(r * Math.Cos(angle), r * Math.Sin(angle)); // Точка вершины без смещения центра.
+            vertic += center; // Добавляем смещение центра.
+            points[i] = vertic; // Запоминание точки вершины.
+        }
+        return Array.AsReadOnly(points); // Возврат вершин в массиве только для чтения.
+    }
+
+    private static PathGeometry GetCirclePathGeometry(out Dictionary<string, DependencyObject> insideElements)
+    {
+        insideElements = new Dictionary<string, DependencyObject>();
+        PathSegmentCollection pathSegments = new PathSegmentCollection();
+        var points = GetPolygonVertices(8, 200, new Vector(200, 200));
+
+        for (int i = 0; i < points.Count; i++)
+        {
+            var arcSegmentItem = new ArcSegment(points[i], new Size(180, 180), 0, false, SweepDirection.Clockwise, true);
+            pathSegments.Add(arcSegmentItem);
+            insideElements.Add($"ArcSegment{i}", arcSegmentItem);
+        }
+
+        var arcSegment = new ArcSegment(points[0], new Size(180, 180), 0, false, SweepDirection.Clockwise, true);
+        pathSegments.Add(arcSegment);
+        insideElements.Add($"ArcSegment{points.Count}", arcSegment);
+
+
+        PathFigure pathFigure = new PathFigure(points[0], pathSegments, true);
+        insideElements.Add("PathFigure", pathFigure);
+
+
+        PathFigureCollection pathFigures = new PathFigureCollection();
+        pathFigures.Add(pathFigure);
+
+        return new PathGeometry(pathFigures);
     }
 }

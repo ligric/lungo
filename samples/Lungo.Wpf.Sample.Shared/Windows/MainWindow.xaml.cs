@@ -1,29 +1,26 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+﻿using System.Windows;
 using System.Windows.Media;
 
 namespace Lungo.Wpf.Sample.Windows
 {
     public sealed partial class MainWindow : Window
     {
-        private bool isDarkTheme = false;
+        private bool isDarkTheme = true;
 
         public MainWindow()
         {
             this.InitializeComponent();
         }
 
-        private void OnThemeChangerButtonClicked(object sender, RoutedEventArgs e)
+        private void OnThemeChengerClicked(object sender, RoutedEventArgs e)
         {
             if (isDarkTheme)
             {
-                SolarEclipseService.ChangeTheme(themeChangerButton, (Color)FindResource("Light"));
+                SolarEclipseService.ChangeTheme(themeChanger, (Color)FindResource("BaseLight"));
             }
             else
             {
-                SolarEclipseService.ChangeTheme(themeChangerButton, (Color)FindResource("Dark"));
+                SolarEclipseService.ChangeTheme(themeChanger, (Color)FindResource("BaseDark"));
             }
 
             isDarkTheme = !isDarkTheme;

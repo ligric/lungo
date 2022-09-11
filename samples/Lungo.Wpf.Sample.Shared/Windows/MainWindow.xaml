@@ -1,57 +1,41 @@
 ﻿<Window x:Class="Lungo.Wpf.Sample.Windows.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Width="750" Height="500" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-        xmlns:ap="clr-namespace:Lungo.Wpf;assembly=Lungo">
+        xmlns:ap="clr-namespace:Lungo.Wpf;assembly=Lungo"
+        Width="750" Height="500" WindowStartupLocation="CenterScreen">
+
 
     <Window.Resources>
-        <ResourceDictionary>
-            <Style TargetType="Rectangle">
-                <Setter Property="Fill" Value="#8f54d5"/>
-                <Setter Property="RadiusX" Value="10"/>
-                <Setter Property="RadiusY" Value="10"/>
-                <Setter Property="Width" Value="70"/>
-                <Setter Property="Height" Value="70"/>
-            </Style>
-        </ResourceDictionary>
+        <Color x:Key="BaseDark">#2b2731</Color>
+        <Color x:Key="RectangleDark">#161e28</Color>
+
+        <Color x:Key="BaseLight">#cac4b8</Color>
+        <Color x:Key="RectangleLight">#cac4b8</Color>
     </Window.Resources>
 
-    <Canvas x:Name="canvas" Background="#2b2731">
+    <Grid Background="#2b2731">
+        <Canvas x:Name="canvas"
+                ap:SolarEclipse.ThemeChangingSubscribe="True">
 
-        <Rectangle x:Name="Fourteenth" Canvas.Left="493" Canvas.Top="27"
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Fifteenth" Canvas.Left="33" Canvas.Top="52" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Sixteenth" Canvas.Left="194" Canvas.Top="252" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Second" Canvas.Left="422" Canvas.Top="337" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="First" Canvas.Left="350" Canvas.Top="52" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Third" Canvas.Left="528" Canvas.Top="233" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Thirteenth" Canvas.Left="638" Canvas.Top="27" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Eleventh" Canvas.Left="125" Canvas.Top="103" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Twelfth" Canvas.Left="631" Canvas.Top="142" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Ninth" Canvas.Left="528" Canvas.Top="337" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Tenth" Canvas.Left="631" Canvas.Top="302" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Seventh" Canvas.Left="244" Canvas.Top="52" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Fifth" Canvas.Left="58" Canvas.Top="198" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Sixth" Canvas.Left="437" Canvas.Top="153" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Fourth" Canvas.Left="325" Canvas.Top="277" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
-        <Rectangle x:Name="Eighth" Canvas.Left="100" Canvas.Top="337" 
-                   ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+            <Rectangle x:Name="rectangle0" Fill="#1e1e1e" Stroke="Orange" Width="100" Height="200" Canvas.Left="94" Canvas.Top="142" RadiusX="20" RadiusY="20"
+                       HorizontalAlignment="Left" VerticalAlignment="Top"
+                       ap:SolarEclipse.ThemeChangingSubscribe="True"/>
 
+            <Rectangle x:Name="rectangle1" Fill="#1e1e1e" Stroke="Orange" Width="100" Height="200" Canvas.Left="294" Canvas.Top="142"
+                       HorizontalAlignment="Left" VerticalAlignment="Top"
+                       ap:SolarEclipse.ThemeChangingSubscribe="True"/>
 
-        <Button x:Name="themeChangerButton" Background="Red"
-                Width="25" Height="25" Canvas.Left="232" Canvas.Top="178"
-                Click="OnThemeChangerButtonClicked"/>
-    </Canvas>
+            <Rectangle x:Name="rectangle2" Fill="#1e1e1e" Stroke="Orange" Width="100" Height="200" Canvas.Left="492" Canvas.Top="142"
+                       HorizontalAlignment="Left" VerticalAlignment="Top"
+                       ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+
+        </Canvas>
+
+        <Button x:Name="themeChanger" Content="Изменить тему" Height="50" Width="100" Click="OnThemeChengerClicked"
+                VerticalAlignment="Top" HorizontalAlignment="Left">
+            <Button.RenderTransform>
+                <TranslateTransform X="360" Y="440"/>
+            </Button.RenderTransform>
+        </Button>
+
+    </Grid>
+
 </Window>
