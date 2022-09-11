@@ -1,9 +1,14 @@
 ﻿<Window x:Class="Lungo.Wpf.Sample.Windows.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:ap="clr-namespace:Lungo.Wpf;assembly=Lungo"
+        xmlns:lungo="clr-namespace:Lungo.Wpf;assembly=Lungo"
         Width="750" Height="500" WindowStartupLocation="CenterScreen">
 
 
     <Window.Resources>
+        <lungo:ThemeColorsDictionary x:Key="ButtonColor">
+            <Color x:Key="Dark">#512BD4</Color>
+            <Color x:Key="Light">Red</Color>
+        </lungo:ThemeColorsDictionary>
+        
         <Color x:Key="BaseDark">#2b2731</Color>
         <Color x:Key="RectangleDark">#161e28</Color>
 
@@ -13,24 +18,24 @@
 
     <Grid Background="#2b2731">
         <Canvas x:Name="canvas"
-                ap:SolarEclipse.ThemeChangingSubscribe="True">
+                lungo:SolarEclipse.ThemeChangingSubscribe="True">
 
             <Rectangle x:Name="rectangle0" Fill="#1e1e1e" Stroke="Orange" Width="100" Height="200" Canvas.Left="94" Canvas.Top="142" RadiusX="20" RadiusY="20"
                        HorizontalAlignment="Left" VerticalAlignment="Top"
-                       ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+                       lungo:SolarEclipse.ThemeChangingSubscribe="True"/>
 
             <Rectangle x:Name="rectangle1" Fill="#1e1e1e" Stroke="Orange" Width="100" Height="200" Canvas.Left="294" Canvas.Top="142"
                        HorizontalAlignment="Left" VerticalAlignment="Top"
-                       ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+                       lungo:SolarEclipse.ThemeChangingSubscribe="True"/>
 
             <Rectangle x:Name="rectangle2" Fill="#1e1e1e" Stroke="Orange" Width="100" Height="200" Canvas.Left="492" Canvas.Top="142"
                        HorizontalAlignment="Left" VerticalAlignment="Top"
-                       ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+                       lungo:SolarEclipse.ThemeChangingSubscribe="True"/>
 
         </Canvas>
 
         <Button x:Name="themeChanger" Content="Изменить тему" Height="50" Width="100" Click="OnThemeChengerClicked"
-                VerticalAlignment="Top" HorizontalAlignment="Left">
+                VerticalAlignment="Top" HorizontalAlignment="Left" Background="{lungo:ThemeColorResource ButtonColor}">
             <Button.RenderTransform>
                 <TranslateTransform X="360" Y="440"/>
             </Button.RenderTransform>
