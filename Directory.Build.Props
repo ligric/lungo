@@ -2,9 +2,9 @@
 	<PropertyGroup>
 		<UseWPF>true</UseWPF>
 		<PackageId>Lungo</PackageId>
-		<Version>0.0.4</Version>
-		<FileVersion>0.0.4</FileVersion>
-		<AssemblyVersion>0.0.4</AssemblyVersion>
+		<Version>0.0.6</Version>
+		<FileVersion>0.0.6</FileVersion>
+		<AssemblyVersion>0.0.6</AssemblyVersion>
 		<LangVersion>latest</LangVersion>
 		<Copyright>Copyright © limeniye 2022</Copyright>
 		<Authors>limeniye</Authors>
