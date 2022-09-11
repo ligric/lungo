@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AttachedProperties\SolarEclipse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\ThemeResourcesService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ThemeColorResource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ThemeColorsDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SolarEclipseService.cs" />
