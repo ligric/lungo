@@ -65,11 +65,13 @@ public class SolarEclipseService
         throw new NotImplementedException();
     }
 
-    public static void ChangeTheme(FrameworkElement changerElement, Color newColor)
+    public static void ChangeTheme(FrameworkElement changerElement, Color newColor, double milliseconds = 1_000)
     {
+        double GetR(Size size) =>
+            Math.Sqrt(2 * (size.Width * size.Width) + 2 * (size.Height * size.Height));
+
         Rect changerElementRect = changerElement.GetElementRectFromParent();
-        var centerX = changerElementRect.Left + changerElement.ActualWidth / 2;
-        var centerY = changerElementRect.Top + changerElement.ActualHeight / 2;
+        Point changerElementCenter = new Point(changerElementRect.Left + changerElement.ActualWidth / 2, changerElementRect.Top + changerElement.ActualHeight / 2);
 
         foreach (KeyValuePair<FrameworkElement, BackgroundInfo> item in backgroundInfos)
         {
@@ -77,11 +79,12 @@ public class SolarEclipseService
             BackgroundInfo backgroundInfo = item.Value;
 
             VisualBrush rootVisualBrush = (VisualBrush)backgroundInfo.InsideElements["RootVisualBrush"];
-            VisualBrush visualBrush = (VisualBrush)backgroundInfo.InsideElements["ContentVisualBrush"];
             Border border = (Border)backgroundInfo.InsideElements["Border"];
-            ScaleTransform pathScaleTransform = (ScaleTransform)backgroundInfo.InsideElements["PathScaleTransform"];
+            ScaleTransform contentVisualBrushScaleTransform = (ScaleTransform)backgroundInfo.InsideElements["ContentVisualBrushScaleTransform"];
+            TranslateTransform contentVisualBrushTranslateTransform = (TranslateTransform)backgroundInfo.InsideElements["ContentVisualBrushTranslateTransform"];
             System.Windows.Shapes.Path path = (System.Windows.Shapes.Path)backgroundInfo.InsideElements["Path"];
             System.Windows.Shapes.Rectangle rectangle = (System.Windows.Shapes.Rectangle)backgroundInfo.InsideElements["Rectangle"];
+
             path.Fill = new SolidColorBrush(newColor);
             rectangle.Visibility = Visibility.Visible;
 
@@ -90,60 +93,55 @@ public class SolarEclipseService
             double elementCoefficientY = elementRect.Top / border.ActualHeight;
             rootVisualBrush.Viewbox = new Rect(elementCoefficientX, elementCoefficientY, 1, 1);
 
-
-            double coefficientX = (centerX - pathScaleTransform.ScaleX / 2) / pathScaleTransform.ScaleX;
-            double coefficientY = (centerY - pathScaleTransform.ScaleY / 2) / pathScaleTransform.ScaleY;
-            visualBrush.Viewbox = new Rect(-coefficientX, -coefficientY, 1, 1);
-
-
             //----------------------------------------------------------------------------------------
             //                                    Animation
             //----------------------------------------------------------------------------------------
+            Size windowSize = Application.Current.MainWindow.RenderSize;
+            double newContentVisualBrushScale = GetR(windowSize);
 
-            double sizedWidth = Application.Current.MainWindow.ActualWidth * 3;
-            double sizedHeight = Application.Current.MainWindow.ActualHeight * 3;
-
-
-            var pathScaleTransformX = new DoubleAnimation()
+            var contentVisualBrushScaleTransformX = new DoubleAnimation()
             {
-                Duration = TimeSpan.FromMilliseconds(20_000),
-                To = sizedWidth
+                Duration = TimeSpan.FromMilliseconds(milliseconds),
+                From = GetR(new Size(1, 1)),
+                To = newContentVisualBrushScale,
             };
 
-            var pathScaleTransformY = new DoubleAnimation()
+            var contentVisualBrushScaleTransformY = new DoubleAnimation()
             {
-                Duration = TimeSpan.FromMilliseconds(20_000),
-                To = sizedHeight
+                Duration = TimeSpan.FromMilliseconds(milliseconds),
+                From = GetR(new Size(1, 1)),
+                To = newContentVisualBrushScale,
             };
 
-            pathScaleTransformX.Completed += (s, e) =>
+
+            var contentVisualBrushTranslateTransformX = new DoubleAnimation()
             {
-                //border.Background = new SolidColorBrush(newColor);
-                pathScaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, null);
-                pathScaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, null);
-                visualBrush.BeginAnimation(TileBrush.ViewboxProperty, null);
+                Duration = TimeSpan.FromMilliseconds(milliseconds),
+                From = changerElementCenter.X - GetR(new Size(1, 1)) / 2,
+                To = changerElementCenter.X - newContentVisualBrushScale / 2,
+            };
+
+            var contentVisualBrushTranslateTransformY = new DoubleAnimation()
+            {
+                Duration = TimeSpan.FromMilliseconds(milliseconds),
+                From = changerElementCenter.Y - GetR(new Size(1, 1)) / 2,
+                To = changerElementCenter.Y - newContentVisualBrushScale / 2,
+            };
+
+            contentVisualBrushScaleTransformX.Completed += (s, e) =>
+            {
+                border.Background = new SolidColorBrush(newColor);
+                contentVisualBrushScaleTransformX.BeginAnimation(ScaleTransform.ScaleXProperty, null);
+                contentVisualBrushScaleTransformY.BeginAnimation(ScaleTransform.ScaleYProperty, null);
+                contentVisualBrushTranslateTransformX.BeginAnimation(ScaleTransform.ScaleXProperty, null);
+                contentVisualBrushTranslateTransformY.BeginAnimation(ScaleTransform.ScaleYProperty, null);
                 rectangle.Visibility = Visibility.Collapsed;
             };
+            contentVisualBrushScaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, contentVisualBrushScaleTransformX);
+            contentVisualBrushScaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, contentVisualBrushScaleTransformY);
 
-            pathScaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, pathScaleTransformX);
-            pathScaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, pathScaleTransformY);
-
-
-
-            double windowCenterX = Application.Current.MainWindow.ActualWidth / 2;
-            double windowCenterY = Application.Current.MainWindow.ActualHeight / 2;
-
-            double testX = (windowCenterX - sizedWidth / 2) / sizedWidth;
-            double textY = (windowCenterY - sizedHeight / 2) / sizedHeight;
-
-
-            var contentVisualBrushRectAnimation = new RectAnimation()
-            {
-                Duration = TimeSpan.FromMilliseconds(5_000),
-                To = new Rect(-testX, -textY, 1, 1)
-            };
-
-            visualBrush.BeginAnimation(TileBrush.ViewboxProperty, contentVisualBrushRectAnimation);
+            contentVisualBrushTranslateTransform.BeginAnimation(TranslateTransform.XProperty, contentVisualBrushTranslateTransformX);
+            contentVisualBrushTranslateTransform.BeginAnimation(TranslateTransform.YProperty, contentVisualBrushTranslateTransformY);
         }
     }
 }
@@ -175,26 +173,10 @@ internal static class FrameworkElementExtansions
     }
 }
 
-//internal static class VisualBrushExtensions
-//{
-//    public static Rect GetElementCenterPoint(this FrameworkElement element)
-//    {
-//        Rect changerElementRect = element.GetElementRectFromParent();
-//        var centerX = changerElementRect.Left + element.ActualWidth / 2;
-//        var centerY = changerElementRect.Top + element.ActualHeight / 2;
-
-
-//    }
-//}
-
 internal static class AFasfasfasa
 {
     public static VisualBrush GetEllipseVisualBrush(Color? baseColor, out Dictionary<string, DependencyObject> insideElements)
     {
-        ScaleTransform pathScaleTransform = new ScaleTransform();
-        pathScaleTransform.ScaleX = 400;
-        pathScaleTransform.ScaleY = 400;
-
         System.Windows.Shapes.Path path = new System.Windows.Shapes.Path()
         {
             Fill = new SolidColorBrush(Colors.Green),
@@ -203,24 +185,29 @@ internal static class AFasfasfasa
             Stretch = Stretch.Uniform,
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
+            Data = GetCirclePathGeometry(out Dictionary<string, DependencyObject> circlePathGeometryInsideElements)
         };
 
-        path.Data = GetCirclePathGeometry(out Dictionary<string, DependencyObject> circlePathGeometryInsideElements);
-        path.LayoutTransform = pathScaleTransform;
-
+        ScaleTransform contentVisualBrushScaleTransform = new ScaleTransform(1, 1);
+        TranslateTransform contentVisualBrushTranslateTransform = new TranslateTransform();
+        TransformGroup contentVisualBrushTransformGroup = new TransformGroup();
+        contentVisualBrushTransformGroup.Children.Add(contentVisualBrushScaleTransform);
+        contentVisualBrushTransformGroup.Children.Add(contentVisualBrushTranslateTransform);
         VisualBrush contentVisualBrush = new VisualBrush()
         {
             AlignmentX = AlignmentX.Left,
             AlignmentY = AlignmentY.Top,
-            Stretch = Stretch.None
+            Stretch = Stretch.None,
+            Visual = path,
+            Transform = contentVisualBrushTransformGroup,
         };
-        contentVisualBrush.Visual = path;
 
-        System.Windows.Shapes.Rectangle rectangle = new System.Windows.Shapes.Rectangle();
-        rectangle.Fill = contentVisualBrush;
-        //rectangle.Visibility = Visibility.Collapsed;
-
-
+        System.Windows.Shapes.Rectangle rectangle = new System.Windows.Shapes.Rectangle()
+        {
+            Fill = contentVisualBrush,
+            Visibility = Visibility.Collapsed
+        };
+        
         Border border = new Border()
         {
             Background = baseColor == null ? null : new SolidColorBrush((Color)baseColor)
@@ -234,19 +221,18 @@ internal static class AFasfasfasa
             AlignmentX = AlignmentX.Left,
             AlignmentY = AlignmentY.Top,
             Stretch = Stretch.None,
+            Visual = border
         };
-        rootVisualBrush.Visual = border;
-
          
         insideElements = new Dictionary<string, DependencyObject>();
+        insideElements.Add("ContentVisualBrushScaleTransform", contentVisualBrushScaleTransform);
+        insideElements.Add("ContentVisualBrushTranslateTransform", contentVisualBrushTranslateTransform);
         insideElements.Add("ContentVisualBrush", contentVisualBrush);
-        insideElements.Add("PathScaleTransform", pathScaleTransform);
         insideElements.Add("Rectangle", rectangle);
         insideElements.Add("Border", border);
         insideElements.Add("Path", path);
         insideElements.Add("RootVisualBrush", rootVisualBrush);
         foreach (var item in circlePathGeometryInsideElements) insideElements.Add(item.Key, item.Value);
-
 
         return rootVisualBrush;
     }
