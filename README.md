@@ -10,27 +10,38 @@
 
 ## Examples
 ```XML
-<Rectangle ap:SolarEclipse.ThemeChangingSubscribe="True"/>
+<Window.Resources>
+    <lungo:ThemeColorsDictionary x:Key="ToggleButtonThemeColor">
+        <Color x:Key="Dark">#512BD4</Color>
+        <Color x:Key="Light">Red</Color>
+    </lungo:ThemeColorsDictionary>
+
+    <lungo:ThemeColorsDictionary x:Key="RectangleThemeColor">
+        <Color x:Key="Dark">#1e1e1e</Color>
+        <Color x:Key="Light">#ffffff</Color>
+    </lungo:ThemeColorsDictionary>
+</Window.Resources>
 ```
+```XML
+<Rectangle Fill="{lungo:ThemeColorResource RectangleThemeColor}" Width="100" Height="200"
+           HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+<ToggleButton x:Name="themeChanger" Height="20" Width="40" Margin="0,8,20,0"
+              Background="{lungo:ThemeColorResource ToggleButtonThemeColor}"
+              HorizontalAlignment="Right" VerticalAlignment="Top" 
+              Checked="OnDarkChecked" Unchecked="OnLightChecked"/>
+```
+
 
 ```C#
-private void OnTestButtonClicked(object sender, RoutedEventArgs e)
-{
-    GeneralTransform generalTransform = themeChangerButton.TransformToVisual((Visual)themeChangerButton.Parent);
-    Rect rect = generalTransform.TransformBounds(new Rect(themeChangerButton.RenderSize));
+private void OnDarkChecked(object sender, RoutedEventArgs e)
+    => SolarEclipseService.ChangeTheme(themeChanger, "Light", 5_000);
 
-    if (isDarkTheme)
-    {
-        SolarEclipseService.ChangeTheme(rect, (Color)FindResource("Light"));
-    }
-    else
-    {
-        SolarEclipseService.ChangeTheme(rect, (Color)FindResource("Dark"));
-    }
-
-    isDarkTheme = !isDarkTheme;
-}
+private void OnLightChecked(object sender, RoutedEventArgs e)
+    => SolarEclipseService.ChangeTheme(themeChanger, "Dark", 5_000);
 ```
 ## Preview
-https://user-images.githubusercontent.com/69314237/187296510-b0cf2c2e-9027-4913-8c8d-aeca574de47b.mp4
+https://user-images.githubusercontent.com/69314237/189699019-de1778a5-3608-4947-b3b0-02512929a050.mp4
+
+
 
