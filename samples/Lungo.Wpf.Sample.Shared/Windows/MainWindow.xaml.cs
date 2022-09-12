@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Lungo.Wpf.Services;
+using System.Windows;
 using System.Windows.Media;
 
 namespace Lungo.Wpf.Sample.Windows
@@ -16,11 +17,11 @@ namespace Lungo.Wpf.Sample.Windows
         {
             if (isDarkTheme)
             {
-                SolarEclipseService.ChangeTheme(themeChanger, (Color)FindResource("BaseLight"));
+                SolarEclipseService.ChangeTheme(themeChanger, "Light");
             }
             else
             {
-                SolarEclipseService.ChangeTheme(themeChanger, (Color)FindResource("BaseDark"));
+                SolarEclipseService.ChangeTheme(themeChanger, "Dark");
             }
 
             isDarkTheme = !isDarkTheme;

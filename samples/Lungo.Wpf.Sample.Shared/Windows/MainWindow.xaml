@@ -4,38 +4,41 @@
 
 
     <Window.Resources>
-        <lungo:ThemeColorsDictionary x:Key="ButtonColor">
+        <lungo:ThemeColorsDictionary x:Key="ButtonThemeColor">
             <Color x:Key="Dark">#512BD4</Color>
             <Color x:Key="Light">Red</Color>
         </lungo:ThemeColorsDictionary>
-        
-        <Color x:Key="BaseDark">#2b2731</Color>
-        <Color x:Key="RectangleDark">#161e28</Color>
 
-        <Color x:Key="BaseLight">#cac4b8</Color>
-        <Color x:Key="RectangleLight">#cac4b8</Color>
+        <lungo:ThemeColorsDictionary x:Key="RectangleThemeColor">
+            <Color x:Key="Dark">#1e1e1e</Color>
+            <Color x:Key="Light">Pink</Color>
+        </lungo:ThemeColorsDictionary>
+
+        <lungo:ThemeColorsDictionary x:Key="GridThemeColor">
+            <Color x:Key="Dark">#2b2731</Color>
+            <Color x:Key="Light">#cac4b8</Color>
+        </lungo:ThemeColorsDictionary>
+
+        <!--<Color x:Key="RectangleDark">#161e28</Color>-->
+
     </Window.Resources>
 
-    <Grid Background="#2b2731">
-        <Canvas x:Name="canvas"
-                lungo:SolarEclipse.ThemeChangingSubscribe="True">
+    <Grid Background="{lungo:ThemeColorResource GridThemeColor}">
+        <Canvas x:Name="canvas">
 
-            <Rectangle x:Name="rectangle0" Fill="#1e1e1e" Stroke="Orange" Width="100" Height="200" Canvas.Left="94" Canvas.Top="142" RadiusX="20" RadiusY="20"
-                       HorizontalAlignment="Left" VerticalAlignment="Top"
-                       lungo:SolarEclipse.ThemeChangingSubscribe="True"/>
+            <Rectangle x:Name="rectangle0" Fill="{lungo:ThemeColorResource RectangleThemeColor}" Stroke="Orange" Width="100" Height="200" Canvas.Left="94" Canvas.Top="142" RadiusX="20" RadiusY="20"
+                       HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
-            <Rectangle x:Name="rectangle1" Fill="#1e1e1e" Stroke="Orange" Width="100" Height="200" Canvas.Left="294" Canvas.Top="142"
-                       HorizontalAlignment="Left" VerticalAlignment="Top"
-                       lungo:SolarEclipse.ThemeChangingSubscribe="True"/>
+            <Rectangle x:Name="rectangle1" Fill="{lungo:ThemeColorResource RectangleThemeColor}" Stroke="Orange" Width="100" Height="200" Canvas.Left="294" Canvas.Top="142"
+                       HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
-            <Rectangle x:Name="rectangle2" Fill="#1e1e1e" Stroke="Orange" Width="100" Height="200" Canvas.Left="492" Canvas.Top="142"
-                       HorizontalAlignment="Left" VerticalAlignment="Top"
-                       lungo:SolarEclipse.ThemeChangingSubscribe="True"/>
+            <Rectangle x:Name="rectangle2" Fill="{lungo:ThemeColorResource RectangleThemeColor}" Stroke="Orange" Width="100" Height="200" Canvas.Left="492" Canvas.Top="142"
+                       HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
         </Canvas>
 
         <Button x:Name="themeChanger" Content="Изменить тему" Height="50" Width="100" Click="OnThemeChengerClicked"
-                VerticalAlignment="Top" HorizontalAlignment="Left" Background="{lungo:ThemeColorResource ButtonColor}">
+                VerticalAlignment="Top" HorizontalAlignment="Left" Background="{lungo:ThemeColorResource ButtonThemeColor}">
             <Button.RenderTransform>
                 <TranslateTransform X="360" Y="440"/>
             </Button.RenderTransform>
