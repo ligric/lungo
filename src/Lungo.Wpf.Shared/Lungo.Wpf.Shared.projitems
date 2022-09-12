@@ -9,7 +9,11 @@
     <Import_RootNamespace>Lungo.Wpf</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)AttachedProperties\SolarEclipse.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SolarEclipseService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\ThemeColorsInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\ThemeVisualBrushInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\ThemeResourcesService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ThemeColorResource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ThemeColorsDictionary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\SolarEclipseService.cs" />
   </ItemGroup>
 </Project>

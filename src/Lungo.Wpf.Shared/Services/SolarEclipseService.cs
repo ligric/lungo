@@ -1,35 +1,21 @@
-﻿using System;
+﻿using Lungo.Wpf.Data;
+using Lungo.Wpf.Services;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Media3D;
 
-namespace Lungo.Wpf;
+namespace Lungo.Wpf.Services;
 
-internal class BackgroundInfo
-{
-    public VisualBrush CurrentDrawingBrush { get; }
 
-    public IReadOnlyDictionary<string, DependencyObject> InsideElements { get; }
-
-    public BackgroundInfo(VisualBrush currentDrawingBrush, Dictionary<string, DependencyObject> insideElements)
-    {
-        CurrentDrawingBrush = currentDrawingBrush;
-        InsideElements = insideElements;
-    }
-}
 
 public class SolarEclipseService
 {
-    private static readonly Dictionary<FrameworkElement, BackgroundInfo> backgroundInfos = new Dictionary<FrameworkElement, BackgroundInfo>();
+    private static readonly Dictionary<FrameworkElement, ThemeVisualBrushInfo> backgroundInfos = new Dictionary<FrameworkElement, ThemeVisualBrushInfo>();
 
     public void AddElement(FrameworkElement element)
     {
@@ -57,7 +43,12 @@ public class SolarEclipseService
             ((Border)element).Background = brush;
         }
 
-        backgroundInfos.Add(element, new BackgroundInfo(brush, insideElements));
+        //backgroundInfos.Add(element, new ThemeVisualBrushInfo(brush, insideElements));
+    }
+
+    internal void AddElement(FrameworkElement element, VisualBrush brush, Dictionary<string, DependencyObject> insideElements)
+    {
+        backgroundInfos.Add(element, new ThemeVisualBrushInfo(brush, insideElements));
     }
 
     public void RemoveElement(FrameworkElement element)
@@ -65,18 +56,21 @@ public class SolarEclipseService
         throw new NotImplementedException();
     }
 
-    public static void ChangeTheme(FrameworkElement changerElement, Color newColor, double milliseconds = 1_000)
+    public static void ChangeTheme(FrameworkElement changerElement, string themeKey, double milliseconds = 1_000)
     {
         double GetR(Size size) =>
             Math.Sqrt(2 * (size.Width * size.Width) + 2 * (size.Height * size.Height));
 
+
+        IEnumerable<ThemeColorsInfo> themeColorsInfo = ThemeResourcesService.ResourceReferences.Where(x => x.Themes.ContainsKey(themeKey));
+
         Rect changerElementRect = changerElement.GetElementRectFromParent();
         Point changerElementCenter = new Point(changerElementRect.Left + changerElement.ActualWidth / 2, changerElementRect.Top + changerElement.ActualHeight / 2);
 
-        foreach (KeyValuePair<FrameworkElement, BackgroundInfo> item in backgroundInfos)
+        foreach (KeyValuePair<FrameworkElement, ThemeVisualBrushInfo> item in backgroundInfos)
         {
             FrameworkElement frameworkElement = item.Key;
-            BackgroundInfo backgroundInfo = item.Value;
+            ThemeVisualBrushInfo backgroundInfo = item.Value;
 
             VisualBrush rootVisualBrush = (VisualBrush)backgroundInfo.InsideElements["RootVisualBrush"];
             Border border = (Border)backgroundInfo.InsideElements["Border"];
@@ -85,7 +79,39 @@ public class SolarEclipseService
             System.Windows.Shapes.Path path = (System.Windows.Shapes.Path)backgroundInfo.InsideElements["Path"];
             System.Windows.Shapes.Rectangle rectangle = (System.Windows.Shapes.Rectangle)backgroundInfo.InsideElements["Rectangle"];
 
-            path.Fill = new SolidColorBrush(newColor);
+            bool isHas = false;
+            SolidColorBrush newSolidBrushColor = new SolidColorBrush();
+            foreach (ThemeColorsInfo themeColor in themeColorsInfo)
+            {
+                if (themeColor.Element == frameworkElement)
+                {
+                    newSolidBrushColor = new SolidColorBrush(themeColor.Themes[themeKey]);
+                    path.Fill = newSolidBrushColor;
+                    isHas = true;
+                    break;
+                }
+            }
+
+            if (!isHas)
+            {
+                var waitingBackgroudDiscreteObjectKeyFrame = new DiscreteObjectKeyFrame()
+                {
+                    KeyTime = TimeSpan.FromMilliseconds(milliseconds),
+                    Value = new SolidColorBrush()
+                };
+
+                var waitingBackgroudObjectAnimationUsingKeyFrames = new ObjectAnimationUsingKeyFrames();
+                waitingBackgroudObjectAnimationUsingKeyFrames.KeyFrames.Add(waitingBackgroudDiscreteObjectKeyFrame);
+
+                waitingBackgroudObjectAnimationUsingKeyFrames.Completed += (s, e) =>
+                {
+                    border.BeginAnimation(Border.BackgroundProperty, null);
+                    rectangle.Visibility = Visibility.Collapsed;
+                };
+                border.BeginAnimation(Border.BackgroundProperty, waitingBackgroudObjectAnimationUsingKeyFrames);
+                return;
+            }
+
             rectangle.Visibility = Visibility.Visible;
 
             Rect elementRect = frameworkElement.GetElementRectFromParent();
@@ -130,7 +156,7 @@ public class SolarEclipseService
 
             contentVisualBrushScaleTransformX.Completed += (s, e) =>
             {
-                border.Background = new SolidColorBrush(newColor);
+                border.Background = newSolidBrushColor;
                 contentVisualBrushScaleTransformX.BeginAnimation(ScaleTransform.ScaleXProperty, null);
                 contentVisualBrushScaleTransformY.BeginAnimation(ScaleTransform.ScaleYProperty, null);
                 contentVisualBrushTranslateTransformX.BeginAnimation(ScaleTransform.ScaleXProperty, null);
