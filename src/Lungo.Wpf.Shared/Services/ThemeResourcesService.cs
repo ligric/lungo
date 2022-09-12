@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lungo.Wpf.Data;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -10,20 +11,20 @@ namespace Lungo.Wpf.Services
 {
     internal class ThemeResourcesService
     {
-        private static string _currentTheme = String.Empty;
-        private static readonly Collection<ThemeReferenceInfo> resourceReferences = new Collection<ThemeReferenceInfo>();
-        public static ReadOnlyCollection<ThemeReferenceInfo> ResourceReferences => new(resourceReferences);
+        private static string? _currentTheme;
+        private static readonly Collection<ThemeColorsInfo> resourceReferences = new Collection<ThemeColorsInfo>();
+        public static ReadOnlyCollection<ThemeColorsInfo> ResourceReferences => new(resourceReferences);
 
         public static event EventHandler<CollectionChangeEventArgs>? ResourceReferencesChanged;
         public static event EventHandler<string>? CurrentThemeChanged;
 
-        public static string CurrentTheme
+        public static string? CurrentTheme
         {
             get => _currentTheme;
             set => ChangeCurrentTheme(ref _currentTheme, value);
         }
 
-        internal static void ChangeCurrentTheme(ref string _currentTheme, string key)
+        internal static void ChangeCurrentTheme(ref string? _currentTheme, string? key)
         {
             if (_currentTheme == key)
                 return;
@@ -44,7 +45,7 @@ namespace Lungo.Wpf.Services
             if (CurrentTheme == null)
                 CurrentTheme = value.First().Key;
 
-            var themeReferenceInfo = new ThemeReferenceInfo(element, value);
+            var themeReferenceInfo = new ThemeColorsInfo(element, value);
             resourceReferences.Add(themeReferenceInfo);
             ResourceReferencesChanged?.Invoke(null, new CollectionChangeEventArgs(CollectionChangeAction.Add, themeReferenceInfo));
         }
@@ -55,15 +56,5 @@ namespace Lungo.Wpf.Services
         }
     }
 
-    internal class ThemeReferenceInfo
-    {
-        public FrameworkElement Element { get; }
-        public ThemeColorsDictionary ThemeColorsDictionary { get; }
 
-        public ThemeReferenceInfo(FrameworkElement element, ThemeColorsDictionary themeColorsDictionary)
-        {
-            Element = element;
-            ThemeColorsDictionary = themeColorsDictionary;
-        }
-    }
 }
