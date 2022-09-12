@@ -2,7 +2,12 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+#if __WINUI__
+using Microsoft.UI.Xaml;
+using Windows.UI;
+#else
 using System.Windows.Media;
+#endif
 
 namespace Lungo.Wpf.Data;
 

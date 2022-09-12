@@ -17,15 +17,20 @@
 
 	<!-- Common Project Properties -->
 	<PropertyGroup>
-		<CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
-		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+		<!--<CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>-->
+		<!--<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>-->
 		<LangVersion>10.0</LangVersion>
 		<Nullable>enable</Nullable>
 		<NoWarn>$(NoWarn);NU1008;NU1701</NoWarn>
 	</PropertyGroup>
 
-	<PropertyGroup>
+	<!--<PropertyGroup>
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 		<CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
-	</PropertyGroup>
+	</PropertyGroup>-->
+
+	<ItemGroup>
+		<Compile Include="$(MSBuildThisFileDirectory)/Nullable.cs" />
+		<Compile Include="$(MSBuildThisFileDirectory)/InitProperty.cs" />
+	</ItemGroup>
 </Project>
