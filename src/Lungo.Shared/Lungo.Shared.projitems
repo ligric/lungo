@@ -3,17 +3,17 @@
   <PropertyGroup>
     <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <HasSharedItems>true</HasSharedItems>
-    <SharedGUID>92947f5d-8bf2-4f00-8c21-01a6f0c74eef</SharedGUID>
+    <SharedGUID>64500ace-783c-4515-97f5-b162a3a9fce0</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Lungo.Wpf</Import_RootNamespace>
+    <Import_RootNamespace>Lungo.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Data\ThemeColorsInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ThemeVisualBrushInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\SolarEclipseService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ThemeResourcesService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ThemeColorResource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ThemeColorsDictionary.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\SolarEclipseService.cs" />
   </ItemGroup>
 </Project>
