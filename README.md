@@ -29,16 +29,16 @@
 <ToggleButton x:Name="themeChanger" Height="20" Width="40" Margin="0,8,20,0"
               Background="{lungo:ThemeColorResource ToggleButtonThemeColor}"
               HorizontalAlignment="Right" VerticalAlignment="Top" 
-              Checked="OnDarkChecked" Unchecked="OnLightChecked"/>
+              Checked="OnLightChecked" Unchecked="OnDarkChecked"/>
 ```
 
 
 ```C#
 private void OnDarkChecked(object sender, RoutedEventArgs e)
-    => SolarEclipseService.ChangeTheme(themeChanger, "Light", 5_000);
+    => SolarEclipseService.ChangeTheme(themeChanger, "Dark", 5_000);
 
 private void OnLightChecked(object sender, RoutedEventArgs e)
-    => SolarEclipseService.ChangeTheme(themeChanger, "Dark", 5_000);
+    => SolarEclipseService.ChangeTheme(themeChanger, "Light", 5_000);
 ```
 ## Preview
 https://user-images.githubusercontent.com/69314237/189699019-de1778a5-3608-4947-b3b0-02512929a050.mp4
