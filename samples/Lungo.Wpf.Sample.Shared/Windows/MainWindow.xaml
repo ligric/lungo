@@ -3,14 +3,14 @@
         xmlns:lungo="clr-namespace:Lungo.Wpf;assembly=Lungo" >
 
     <Window.Resources>
-        <lungo:ThemeColorsDictionary x:Key="ButtonThemeColor">
+        <lungo:ThemeColorsDictionary x:Key="ToggleButtonThemeColor">
             <Color x:Key="Dark">#512BD4</Color>
             <Color x:Key="Light">Red</Color>
         </lungo:ThemeColorsDictionary>
 
         <lungo:ThemeColorsDictionary x:Key="RectangleThemeColor">
             <Color x:Key="Dark">#1e1e1e</Color>
-            <Color x:Key="Light">Pink</Color>
+            <Color x:Key="Light">#ffffff</Color>
         </lungo:ThemeColorsDictionary>
     </Window.Resources>
 
@@ -40,7 +40,7 @@
         </Canvas>
 
         <ToggleButton x:Name="themeChanger" Grid.Column="1" Grid.Row="0" Height="20" Margin="0,8,20,0"
-                      Background="{lungo:ThemeColorResource ButtonThemeColor}"
+                      Background="{lungo:ThemeColorResource ToggleButtonThemeColor}"
                       HorizontalAlignment="Right" VerticalAlignment="Top" 
                       Checked="OnDarkChecked" Unchecked="OnLightChecked"/>
 
