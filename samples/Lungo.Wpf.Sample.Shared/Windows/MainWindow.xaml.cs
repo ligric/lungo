@@ -1,30 +1,19 @@
 ﻿using Lungo.Wpf.Services;
 using System.Windows;
-using System.Windows.Media;
 
-namespace Lungo.Wpf.Sample.Windows
+namespace Lungo.Wpf.Sample.Windows;
+
+public sealed partial class MainWindow : Window
 {
-    public sealed partial class MainWindow : Window
+    public MainWindow() => this.InitializeComponent();
+
+    private void OnDarkChecked(object sender, RoutedEventArgs e)
     {
-        private bool isDarkTheme = true;
+        SolarEclipseService.ChangeTheme(themeChanger, "Light");
+    }
 
-        public MainWindow()
-        {
-            this.InitializeComponent();
-        }
-
-        private void OnThemeChengerClicked(object sender, RoutedEventArgs e)
-        {
-            if (isDarkTheme)
-            {
-                SolarEclipseService.ChangeTheme(themeChanger, "Light");
-            }
-            else
-            {
-                SolarEclipseService.ChangeTheme(themeChanger, "Dark");
-            }
-
-            isDarkTheme = !isDarkTheme;
-        }
+    private void OnLightChecked(object sender, RoutedEventArgs e)
+    {
+        SolarEclipseService.ChangeTheme(themeChanger, "Dark");
     }
 }
