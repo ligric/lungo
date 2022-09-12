@@ -123,7 +123,7 @@ public class SolarEclipseService
             //                                    Animation
             //----------------------------------------------------------------------------------------
             Size windowSize = Application.Current.MainWindow.RenderSize;
-            double newContentVisualBrushScale = GetR(windowSize);
+            double newContentVisualBrushScale = GetR(windowSize) * 1.4;
 
             var contentVisualBrushScaleTransformX = new DoubleAnimation()
             {
