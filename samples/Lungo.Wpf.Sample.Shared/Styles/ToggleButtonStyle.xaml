@@ -31,12 +31,14 @@
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Padding" Value="1"/>
+        <Setter Property="MinHeight" Value="20"/>
+        <Setter Property="MinWidth" Value="40"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
                     <Viewbox>
                         <Grid>
-                            <Border Height="50" Width="100" CornerRadius="25" Padding="2" x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <Border Height="20" Width="40" CornerRadius="10" Padding="2" x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
                                 <Grid>
                                     <Ellipse x:Name="PART_Ellipse" Width="{Binding ActualHeight, Mode=OneWay, RelativeSource={RelativeSource Self}}"
                                              Fill="{DynamicResource Button.Ellipse.Fill}" Stroke="{DynamicResource Button.Ellipse.Stroke}"
@@ -50,7 +52,7 @@
                                     <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                                 </Grid>
                             </Border>
-                            <Border Height="50" Width="100" CornerRadius="25" x:Name="borderTop" Background="{DynamicResource Button.MouseOver.Background}" SnapsToDevicePixels="true">
+                            <Border Height="20" Width="40" CornerRadius="10" x:Name="borderTop" Background="{DynamicResource Button.MouseOver.Background}" SnapsToDevicePixels="true">
                                 <Border.Style>
                                     <Style TargetType="Border">
                                         <Setter Property="Opacity" Value="0"/>
