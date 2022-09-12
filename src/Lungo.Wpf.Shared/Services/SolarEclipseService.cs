@@ -64,7 +64,7 @@ public class SolarEclipseService
 
         IEnumerable<ThemeColorsInfo> themeColorsInfo = ThemeResourcesService.ResourceReferences.Where(x => x.Themes.ContainsKey(themeKey));
 
-        Rect changerElementRect = changerElement.GetElementRectFromParent();
+        Rect changerElementRect = changerElement.GetElementRectFromWindow();
         Point changerElementCenter = new Point(changerElementRect.Left + changerElement.ActualWidth / 2, changerElementRect.Top + changerElement.ActualHeight / 2);
 
         foreach (KeyValuePair<FrameworkElement, ThemeVisualBrushInfo> item in backgroundInfos)
@@ -114,7 +114,7 @@ public class SolarEclipseService
 
             rectangle.Visibility = Visibility.Visible;
 
-            Rect elementRect = frameworkElement.GetElementRectFromParent();
+            Rect elementRect = frameworkElement.GetElementRectFromWindow();
             double elementCoefficientX = elementRect.Left / border.ActualWidth;
             double elementCoefficientY = elementRect.Top / border.ActualHeight;
             rootVisualBrush.Viewbox = new Rect(elementCoefficientX, elementCoefficientY, 1, 1);
@@ -186,11 +186,19 @@ internal static class FrameworkElementExtansions
         return generalTransform.TransformBounds(new Rect(element.RenderSize));
     }
 
-    public static Rect GetElementRectFromParent(this FrameworkElement element)
-    {
-        GeneralTransform generalTransform = element.TransformToVisual((Visual)element.Parent);
-        return generalTransform.TransformBounds(new Rect(element.RenderSize));
-    }
+    //public static Rect GetElementRectFromParent(this FrameworkElement element)
+    //{
+    //    GeneralTransform generalTransform;
+    //    if (element.Parent is null)
+    //    {
+    //        generalTransform = element.TransformToVisual(element);
+    //    }
+    //    else
+    //    {
+    //        generalTransform = element.TransformToVisual((Visual)element.Parent);
+    //    }
+    //    return generalTransform.TransformBounds(new Rect(element.RenderSize));
+    //}
 
     public static Rect GetElementRectFrom(this FrameworkElement element, Visual visual)
     {
