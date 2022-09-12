@@ -8,6 +8,9 @@
 | Lungo.Uno   | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.Uno.svg?style=flat)](https://www.nuget.org/packages/Lungo.Uno/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.Uno.svg)](https://www.nuget.org/packages/Lungo.Uno) |
 | Lungo.Maui   | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.Maui.svg?style=flat)](https://www.nuget.org/packages/Lungo.Maui/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.Maui.svg)](https://www.nuget.org/packages/Lungo.Maui) |
 
+## Preview
+https://user-images.githubusercontent.com/69314237/189699019-de1778a5-3608-4947-b3b0-02512929a050.mp4
+
 ## Example
 ```XML
 <Window.Resources>
@@ -40,8 +43,6 @@ private void OnDarkChecked(object sender, RoutedEventArgs e)
 private void OnLightChecked(object sender, RoutedEventArgs e)
     => SolarEclipseService.ChangeTheme(themeChanger, "Light", 5_000);
 ```
-## Preview
-https://user-images.githubusercontent.com/69314237/189699019-de1778a5-3608-4947-b3b0-02512929a050.mp4
 
 
 
