@@ -9,11 +9,11 @@ public sealed partial class MainWindow : Window
 
     private void OnDarkChecked(object sender, RoutedEventArgs e)
     {
-        SolarEclipseService.ChangeTheme(themeChanger, "Light");
+        SolarEclipseService.ChangeTheme(themeChanger, "Dark");
     }
 
     private void OnLightChecked(object sender, RoutedEventArgs e)
     {
-        SolarEclipseService.ChangeTheme(themeChanger, "Dark");
+        SolarEclipseService.ChangeTheme(themeChanger, "Light");
     }
 }

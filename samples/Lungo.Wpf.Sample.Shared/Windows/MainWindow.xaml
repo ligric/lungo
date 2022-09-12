@@ -42,7 +42,7 @@
         <ToggleButton x:Name="themeChanger" Grid.Column="1" Grid.Row="0" Height="20" Margin="0,8,20,0"
                       Background="{lungo:ThemeColorResource ToggleButtonThemeColor}"
                       HorizontalAlignment="Right" VerticalAlignment="Top" 
-                      Checked="OnDarkChecked" Unchecked="OnLightChecked"/>
+                      Checked="OnLightChecked" Unchecked="OnDarkChecked"/> 
 
     </Grid>
 
