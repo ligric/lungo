@@ -6,7 +6,8 @@
 | Lungo.Wpf   | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.Wpf.svg?style=flat)](https://www.nuget.org/packages/Lungo.Wpf/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.Wpf.svg)](https://www.nuget.org/packages/Lungo.Wpf) |
 | Lungo.Uwp   | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.Uwp.svg?style=flat)](https://www.nuget.org/packages/Lungo.Uwp/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.Uwp.svg)](https://www.nuget.org/packages/Lungo.Uwp) |
 | Lungo.Uno   | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.Uno.svg?style=flat)](https://www.nuget.org/packages/Lungo.Uno/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.Uno.svg)](https://www.nuget.org/packages/Lungo.Uno) |
-| Lungo.Maui   | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.Maui.svg?style=flat)](https://www.nuget.org/packages/Lungo.Maui/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.Maui.svg)](https://www.nuget.org/packages/Lungo.Maui) |
+| Lungo.WinUI   | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.WinUI.svg?style=flat)](https://www.nuget.org/packages/Lungo.WinUI/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.WinUI.svg)](https://www.nuget.org/packages/Lungo.WinUI) |
+| Lungo.Uno.WinUI   | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.Uno.WinUI.svg?style=flat)](https://www.nuget.org/packages/Lungo.Uno.WinUI/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.Uno.WinUI.svg)](https://www.nuget.org/packages/Lungo.Uno.WinUI) |
 
 ## Preview
 https://user-images.githubusercontent.com/69314237/189699019-de1778a5-3608-4947-b3b0-02512929a050.mp4
