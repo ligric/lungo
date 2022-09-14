@@ -15,11 +15,6 @@ https://user-images.githubusercontent.com/69314237/189699019-de1778a5-3608-4947-
 ## Example
 ```XML
 <Window.Resources>
-    <lungo:ThemeColorsDictionary x:Key="ToggleButtonThemeColor">
-        <Color x:Key="Dark">#512BD4</Color>
-        <Color x:Key="Light">Red</Color>
-    </lungo:ThemeColorsDictionary>
-
     <lungo:ThemeColorsDictionary x:Key="RectangleThemeColor">
         <Color x:Key="Dark">#1e1e1e</Color>
         <Color x:Key="Light">#ffffff</Color>
@@ -31,7 +26,6 @@ https://user-images.githubusercontent.com/69314237/189699019-de1778a5-3608-4947-
            HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
 <ToggleButton x:Name="themeChanger" Height="20" Width="40" Margin="0,8,20,0"
-              Background="{lungo:ThemeColorResource ToggleButtonThemeColor}"
               HorizontalAlignment="Right" VerticalAlignment="Top" 
               Checked="OnLightChecked" Unchecked="OnDarkChecked"/>
 ```
