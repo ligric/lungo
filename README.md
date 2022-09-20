@@ -2,8 +2,8 @@
 
 | package | version  | downloads | graphics engine |
 | ---------------|:-------------:|:-------------:|:-------------:|
-| Lungo         | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.svg?style=flat)](https://www.nuget.org/packages/Lungo/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.svg)](https://www.nuget.org/packages/Lungo) | Native |
-| Lungo.Wpf   | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.Wpf.svg?style=flat)](https://www.nuget.org/packages/Lungo.Wpf/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.Wpf.svg)](https://www.nuget.org/packages/Lungo.Wpf) | [SkiaSharp](https://github.com/mono/SkiaSharp) |
+| Lungo         | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.svg?style=flat)](https://www.nuget.org/packages/Lungo/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.svg)](https://www.nuget.org/packages/Lungo) |  |
+| Lungo.Wpf   | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.Wpf.svg?style=flat)](https://www.nuget.org/packages/Lungo.Wpf/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.Wpf.svg)](https://www.nuget.org/packages/Lungo.Wpf) | Native |
 | Lungo.Uwp   | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.Uwp.svg?style=flat)](https://www.nuget.org/packages/Lungo.Uwp/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.Uwp.svg)](https://www.nuget.org/packages/Lungo.Uwp) | [SkiaSharp](https://github.com/mono/SkiaSharp) |
 | Lungo.Uno   | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.Uno.svg?style=flat)](https://www.nuget.org/packages/Lungo.Uno/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.Uno.svg)](https://www.nuget.org/packages/Lungo.Uno) | [SkiaSharp](https://github.com/mono/SkiaSharp) |
 | Lungo.WinUI   | [![NuGet Status](https://img.shields.io/nuget/v/Lungo.WinUI.svg?style=flat)](https://www.nuget.org/packages/Lungo.WinUI/) | [![NuGet Status](https://img.shields.io/nuget/dt/Lungo.WinUI.svg)](https://www.nuget.org/packages/Lungo.WinUI) | [SkiaSharp](https://github.com/mono/SkiaSharp) |
