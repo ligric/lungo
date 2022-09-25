@@ -1,9 +1,15 @@
-﻿#if WPF
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
-using System.Windows.Media;
+
+#if WPF
+using FrameworkElement = System.Windows.FrameworkElement;
+using Color = System.Windows.Media.Color;
+#else
+using FrameworkElement = Microsoft.UI.Xaml.FrameworkElement;
+using Color = Windows.UI.Color;
+#endif
+
 
 namespace Lungo.Wpf.Data;
 
@@ -18,4 +24,3 @@ internal class ThemeColorsInfo
         Themes = new ReadOnlyDictionary<string, Color>(themes.ToDictionary(x => x.Key, x => x.Value));
     }
 }
-#endif
