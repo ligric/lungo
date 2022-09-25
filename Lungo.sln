@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lungo.Wpf", "src\Lungo.Wpf\
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Lungo.Shared", "src\Lungo.Shared\Lungo.Shared.shproj", "{64500ACE-783C-4515-97F5-B162A3A9FCE0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lungo.WinUI", "src\Lungo.WinUI\Lungo.WinUI.csproj", "{E09B0A1A-1D9C-4737-AEFE-6A8F33B1DC38}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lungo.Uno.WinUI", "src\Lungo.Uno.WinUI\Lungo.Uno.WinUI.csproj", "{B9C67C5B-D74D-4598-A281-4162D1CD55D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +21,14 @@ Global
 		{B6521703-2DB9-4625-8E3C-2EAA84866420}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6521703-2DB9-4625-8E3C-2EAA84866420}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6521703-2DB9-4625-8E3C-2EAA84866420}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E09B0A1A-1D9C-4737-AEFE-6A8F33B1DC38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E09B0A1A-1D9C-4737-AEFE-6A8F33B1DC38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E09B0A1A-1D9C-4737-AEFE-6A8F33B1DC38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E09B0A1A-1D9C-4737-AEFE-6A8F33B1DC38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9C67C5B-D74D-4598-A281-4162D1CD55D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9C67C5B-D74D-4598-A281-4162D1CD55D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9C67C5B-D74D-4598-A281-4162D1CD55D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9C67C5B-D74D-4598-A281-4162D1CD55D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -27,5 +39,7 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		src\Lungo.Shared\Lungo.Shared.projitems*{64500ace-783c-4515-97f5-b162a3a9fce0}*SharedItemsImports = 13
 		src\Lungo.Shared\Lungo.Shared.projitems*{b6521703-2db9-4625-8e3c-2eaa84866420}*SharedItemsImports = 5
+		src\Lungo.Shared\Lungo.Shared.projitems*{b9c67c5b-d74d-4598-a281-4162d1cd55d8}*SharedItemsImports = 5
+		src\Lungo.Shared\Lungo.Shared.projitems*{e09b0a1a-1d9c-4737-aefe-6a8f33b1dc38}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal
