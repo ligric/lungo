@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if WPF
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,3 +17,4 @@ namespace Lungo.Wpf
     {
     }
 }
+#endif

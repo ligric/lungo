@@ -1,4 +1,5 @@
-﻿using Lungo.Wpf.Data;
+﻿#if WPF
+using Lungo.Wpf.Data;
 using Lungo.Wpf.Services;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,6 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 
 namespace Lungo.Wpf.Services;
-
-
 
 public class SolarEclipseService
 {
@@ -313,3 +312,4 @@ internal static class AFasfasfasa
         return new PathGeometry(pathFigures);
     }
 }
+#endif

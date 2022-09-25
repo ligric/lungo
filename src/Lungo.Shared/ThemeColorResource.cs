@@ -1,4 +1,5 @@
-﻿using Lungo.Wpf.Services;
+﻿#if WPF
+using Lungo.Wpf.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -55,8 +56,5 @@ namespace Lungo.Wpf
             return brush;
         }
     }
-
-
-
-
 }
+#endif

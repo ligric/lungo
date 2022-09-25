@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Windows.Media;
+﻿#if WPF
+using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Media;
 
 namespace Lungo.Wpf.Data;
 
@@ -16,3 +17,4 @@ internal class ThemeVisualBrushInfo
         InsideElements = insideElements;
     }
 }
+#endif

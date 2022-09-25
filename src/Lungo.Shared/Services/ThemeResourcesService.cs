@@ -1,10 +1,9 @@
-﻿using Lungo.Wpf.Data;
+﻿#if WPF
+using Lungo.Wpf.Data;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Windows;
 
 namespace Lungo.Wpf.Services
@@ -55,6 +54,5 @@ namespace Lungo.Wpf.Services
             throw new NotImplementedException();
         }
     }
-
-
 }
+#endif
