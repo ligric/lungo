@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "Lungo.Uno.WinUI.Sample.Windows": {
+      "commandName": "MsixPackage"
+    }
+  }
+}

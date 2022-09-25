@@ -1,13 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
 	<PropertyGroup>
+		<UseWPF>true</UseWPF>
 		<AssemblyName>Lungo</AssemblyName>
 		<RootNamespace>Lungo</RootNamespace>
 		<TargetFrameworks>netcoreapp3.0;netcoreapp3.1;net451;net452;net46;net461;net462;net47;net471;net472;net48;net5.0-windows;net6.0-windows</TargetFrameworks>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<NoWarn>SYSLIB0014;SYSLIB0020;SYSLIB0021;SYSLIB0022;SYSLIB0023;SYSLIB0032;0067;0649;1591;MSB3061;SYSLIB0003;SYSLIB0004;CS8632;MSB3245;MSB3243;CS8632;CS8073;CS0108;CS0436;MSB3245;3243;3245;0436</NoWarn>
 		<MSBuildWarningsAsMessages>NETSDK1138</MSBuildWarningsAsMessages>
-		<TargetFile>Themes\Theme.xaml</TargetFile>
+		<DefineConstants>WPF</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -15,6 +16,6 @@
 		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Lungo.xml</DocumentationFile>
 	</PropertyGroup>
 
-	<Import Project="..\Lungo.Wpf.Shared\Lungo.Wpf.Shared.projitems" Label="Shared" />
+	<Import Project="..\Lungo.Shared\Lungo.Shared.projitems" Label="Shared" />
 
 </Project>
