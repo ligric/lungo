@@ -35,4 +35,7 @@
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnablePreviewMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Lungo.WinUI\Lungo.WinUI.csproj" />
+  </ItemGroup>
 </Project>

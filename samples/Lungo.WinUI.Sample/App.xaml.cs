@@ -6,10 +6,7 @@ namespace Lungo.WinUI.Sample
     {
         private Window? m_window;
 
-        public App()
-        {
-            this.InitializeComponent();
-        }
+        public App() => this.InitializeComponent();
 
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {

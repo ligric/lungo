@@ -1,12 +1,8 @@
 ﻿using Microsoft.UI.Xaml;
 
-namespace Lungo.WinUI.Sample
+namespace Lungo.WinUI.Sample;
+
+public sealed partial class MainWindow : Window
 {
-    public sealed partial class MainWindow : Window
-    {
-        public MainWindow()
-        {
-            this.InitializeComponent();
-        }
-    }
+    public MainWindow() => this.InitializeComponent();
 }
