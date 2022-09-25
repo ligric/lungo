@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Lungo.WinUI.Sample (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Lungo.WinUI.Sample (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

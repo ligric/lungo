@@ -27,19 +27,23 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Lungo.Uno.WinUI.Sample.Shar
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platforms", "Platforms", "{3B682E0D-32EB-432F-BD68-12D267E6DDFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lungo.Uno.WinUI.Sample.Wasm", "samples\Lungo.Uno.WinUI.Sample\Lungo.Uno.WinUI.Sample.Wasm\Lungo.Uno.WinUI.Sample.Wasm.csproj", "{C7D9A6D0-A5A5-4866-94E8-90CCB4740752}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lungo.Uno.WinUI.Sample.Wasm", "samples\Lungo.Uno.WinUI.Sample\Lungo.Uno.WinUI.Sample.Wasm\Lungo.Uno.WinUI.Sample.Wasm.csproj", "{C7D9A6D0-A5A5-4866-94E8-90CCB4740752}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lungo.Uno.WinUI.Sample.Mobile", "samples\Lungo.Uno.WinUI.Sample\Lungo.Uno.WinUI.Sample.Mobile\Lungo.Uno.WinUI.Sample.Mobile.csproj", "{2D2085F4-0204-4647-8F0E-E6091F6C6A1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lungo.Uno.WinUI.Sample.Mobile", "samples\Lungo.Uno.WinUI.Sample\Lungo.Uno.WinUI.Sample.Mobile\Lungo.Uno.WinUI.Sample.Mobile.csproj", "{2D2085F4-0204-4647-8F0E-E6091F6C6A1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lungo.Uno.WinUI.Sample.Skia.Gtk", "samples\Lungo.Uno.WinUI.Sample\Lungo.Uno.WinUI.Sample.Skia.Gtk\Lungo.Uno.WinUI.Sample.Skia.Gtk.csproj", "{91B7E6CF-4A9F-444D-A235-B98E1E117387}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lungo.Uno.WinUI.Sample.Skia.Gtk", "samples\Lungo.Uno.WinUI.Sample\Lungo.Uno.WinUI.Sample.Skia.Gtk\Lungo.Uno.WinUI.Sample.Skia.Gtk.csproj", "{91B7E6CF-4A9F-444D-A235-B98E1E117387}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lungo.Uno.WinUI.Sample.Skia.Linux.FrameBuffer", "samples\Lungo.Uno.WinUI.Sample\Lungo.Uno.WinUI.Sample.Skia.Linux.FrameBuffer\Lungo.Uno.WinUI.Sample.Skia.Linux.FrameBuffer.csproj", "{0257584D-A5EB-47E0-97FB-5968F35A2ACE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lungo.Uno.WinUI.Sample.Skia.Linux.FrameBuffer", "samples\Lungo.Uno.WinUI.Sample\Lungo.Uno.WinUI.Sample.Skia.Linux.FrameBuffer\Lungo.Uno.WinUI.Sample.Skia.Linux.FrameBuffer.csproj", "{0257584D-A5EB-47E0-97FB-5968F35A2ACE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lungo.Uno.WinUI.Sample.Windows", "samples\Lungo.Uno.WinUI.Sample\Lungo.Uno.WinUI.Sample.Windows\Lungo.Uno.WinUI.Sample.Windows.csproj", "{280CD480-BA0A-4135-B0FD-180C238F30F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lungo.Uno.WinUI.Sample.Windows", "samples\Lungo.Uno.WinUI.Sample\Lungo.Uno.WinUI.Sample.Windows\Lungo.Uno.WinUI.Sample.Windows.csproj", "{280CD480-BA0A-4135-B0FD-180C238F30F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lungo.Uno.WinUI.Sample.Skia.Wpf", "samples\Lungo.Uno.WinUI.Sample\Lungo.Uno.WinUI.Sample.Skia.Wpf\Lungo.Uno.WinUI.Sample.Skia.Wpf.csproj", "{8539CE31-9B5F-422E-969E-70D6F4748C09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lungo.Uno.WinUI.Sample.Skia.Wpf", "samples\Lungo.Uno.WinUI.Sample\Lungo.Uno.WinUI.Sample.Skia.Wpf\Lungo.Uno.WinUI.Sample.Skia.Wpf.csproj", "{8539CE31-9B5F-422E-969E-70D6F4748C09}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lungo.Uno.WinUI.Sample", "Lungo.Uno.WinUI.Sample", "{87BA3127-48C8-49C0-8771-66567C85F362}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lungo.WinUI.Sample", "samples\Lungo.WinUI.Sample\Lungo.WinUI.Sample.csproj", "{C5C939AD-6940-448D-A5CC-D0D879EA0C76}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lungo.WinUI", "src\Lungo.WinUI\Lungo.WinUI.csproj", "{C4014D61-7EBE-43CC-B453-2FBDD85A3059}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -213,6 +217,46 @@ Global
 		{8539CE31-9B5F-422E-969E-70D6F4748C09}.Release|x64.Build.0 = Release|Any CPU
 		{8539CE31-9B5F-422E-969E-70D6F4748C09}.Release|x86.ActiveCfg = Release|Any CPU
 		{8539CE31-9B5F-422E-969E-70D6F4748C09}.Release|x86.Build.0 = Release|Any CPU
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Debug|Any CPU.Build.0 = Debug|x64
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Debug|Any CPU.Deploy.0 = Debug|x64
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Debug|arm64.ActiveCfg = Debug|arm64
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Debug|arm64.Build.0 = Debug|arm64
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Debug|arm64.Deploy.0 = Debug|arm64
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Debug|x64.ActiveCfg = Debug|x64
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Debug|x64.Build.0 = Debug|x64
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Debug|x64.Deploy.0 = Debug|x64
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Debug|x86.ActiveCfg = Debug|x86
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Debug|x86.Build.0 = Debug|x86
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Debug|x86.Deploy.0 = Debug|x86
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Release|Any CPU.ActiveCfg = Release|x64
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Release|Any CPU.Build.0 = Release|x64
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Release|Any CPU.Deploy.0 = Release|x64
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Release|arm64.ActiveCfg = Release|arm64
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Release|arm64.Build.0 = Release|arm64
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Release|arm64.Deploy.0 = Release|arm64
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Release|x64.ActiveCfg = Release|x64
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Release|x64.Build.0 = Release|x64
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Release|x64.Deploy.0 = Release|x64
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Release|x86.ActiveCfg = Release|x86
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Release|x86.Build.0 = Release|x86
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76}.Release|x86.Deploy.0 = Release|x86
+		{C4014D61-7EBE-43CC-B453-2FBDD85A3059}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4014D61-7EBE-43CC-B453-2FBDD85A3059}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4014D61-7EBE-43CC-B453-2FBDD85A3059}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{C4014D61-7EBE-43CC-B453-2FBDD85A3059}.Debug|arm64.Build.0 = Debug|Any CPU
+		{C4014D61-7EBE-43CC-B453-2FBDD85A3059}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C4014D61-7EBE-43CC-B453-2FBDD85A3059}.Debug|x64.Build.0 = Debug|Any CPU
+		{C4014D61-7EBE-43CC-B453-2FBDD85A3059}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C4014D61-7EBE-43CC-B453-2FBDD85A3059}.Debug|x86.Build.0 = Debug|Any CPU
+		{C4014D61-7EBE-43CC-B453-2FBDD85A3059}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4014D61-7EBE-43CC-B453-2FBDD85A3059}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4014D61-7EBE-43CC-B453-2FBDD85A3059}.Release|arm64.ActiveCfg = Release|Any CPU
+		{C4014D61-7EBE-43CC-B453-2FBDD85A3059}.Release|arm64.Build.0 = Release|Any CPU
+		{C4014D61-7EBE-43CC-B453-2FBDD85A3059}.Release|x64.ActiveCfg = Release|Any CPU
+		{C4014D61-7EBE-43CC-B453-2FBDD85A3059}.Release|x64.Build.0 = Release|Any CPU
+		{C4014D61-7EBE-43CC-B453-2FBDD85A3059}.Release|x86.ActiveCfg = Release|Any CPU
+		{C4014D61-7EBE-43CC-B453-2FBDD85A3059}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -231,6 +275,8 @@ Global
 		{280CD480-BA0A-4135-B0FD-180C238F30F8} = {3B682E0D-32EB-432F-BD68-12D267E6DDFC}
 		{8539CE31-9B5F-422E-969E-70D6F4748C09} = {3B682E0D-32EB-432F-BD68-12D267E6DDFC}
 		{87BA3127-48C8-49C0-8771-66567C85F362} = {B9FA32DA-2ADB-4C4A-A5F7-E8D81DC7E827}
+		{C5C939AD-6940-448D-A5CC-D0D879EA0C76} = {B9FA32DA-2ADB-4C4A-A5F7-E8D81DC7E827}
+		{C4014D61-7EBE-43CC-B453-2FBDD85A3059} = {8EE70B47-8749-4040-8A51-8733C713C588}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31C0B654-F611-4FA4-AD53-348F9B5EB0C3}
@@ -245,6 +291,7 @@ Global
 		samples\Lungo.Uno.WinUI.Sample\Lungo.Uno.WinUI.Sample.Shared\Lungo.Uno.WinUI.Sample.Shared.projitems*{8539ce31-9b5f-422e-969e-70d6f4748c09}*SharedItemsImports = 5
 		src\Lungo.Shared\Lungo.Shared.projitems*{8e5b502d-b9d3-4c4c-abc1-b33f62c71e6c}*SharedItemsImports = 5
 		samples\Lungo.Uno.WinUI.Sample\Lungo.Uno.WinUI.Sample.Shared\Lungo.Uno.WinUI.Sample.Shared.projitems*{91b7e6cf-4a9f-444d-a235-b98e1e117387}*SharedItemsImports = 5
+		src\Lungo.Shared\Lungo.Shared.projitems*{c4014d61-7ebe-43cc-b453-2fbdd85a3059}*SharedItemsImports = 5
 		samples\Lungo.Uno.WinUI.Sample\Lungo.Uno.WinUI.Sample.Shared\Lungo.Uno.WinUI.Sample.Shared.projitems*{c7d9a6d0-a5a5-4866-94e8-90ccb4740752}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal
