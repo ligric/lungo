@@ -14,12 +14,12 @@ https://user-images.githubusercontent.com/69314237/189699019-de1778a5-3608-4947-
 
 ## Example
 ```XML
-<Window.Resources>
+<ResourceDictionary>
     <lungo:ThemeColorsDictionary x:Key="RectangleThemeColor">
         <Color x:Key="Dark">#1e1e1e</Color>
         <Color x:Key="Light">#ffffff</Color>
     </lungo:ThemeColorsDictionary>
-</Window.Resources>
+</ResourceDictionary>
 ```
 ```XML
 <Rectangle Fill="{lungo:ThemeColorResource RectangleThemeColor}" Width="100" Height="200"
